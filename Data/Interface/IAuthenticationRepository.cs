@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Warrior.Handlers.Enums;
 
 namespace Data.Interface
 {
@@ -19,5 +20,25 @@ namespace Data.Interface
         /// <param name="username"></param>
         /// <returns>Authentication model</returns>
         AuthModel validateUser(string username);
+
+        /// <summary>
+        /// Create new authentication model
+        /// </summary>
+        /// <param name="auth_model">Authentication model</param>
+        /// <returns></returns>
+        TransactionResult create(AuthModel auth_model);
+
+        /// <summary>
+        /// Gets all the rols
+        /// </summary>
+        /// <returns>A list of rols</returns>
+        IList<Rol> getAllRols();
+
+        /// <summary>
+        /// Delete authentication register
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        TransactionResult deleteAuth(int id);
     }
 }

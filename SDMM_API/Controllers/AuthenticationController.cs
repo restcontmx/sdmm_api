@@ -49,5 +49,27 @@ namespace SDMM_API.Controllers
                 return Request.CreateResponse(HttpStatusCode.Unauthorized, data);
             }
         }
+
+        /// <summary>
+        /// Get all the rols pettition route
+        /// </summary>
+        /// <returns>A dictionary with data or error message</returns>
+        [Route("api/auth/rols")]
+        [HttpGet]
+        public HttpResponseMessage listRols() {
+            try
+            {
+                IDictionary<string, IList<Rol>> data = new Dictionary<string, IList<Rol>>();
+                data.Add("data", authentication_service.getAllRols());
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
     }// End of Authentication controller class
 }

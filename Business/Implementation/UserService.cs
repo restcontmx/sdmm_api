@@ -42,9 +42,14 @@ namespace Business.Implementation
         /// </summary>
         /// <param name="id"> pirmary field of the model </param>
         /// <returns></returns>
-        public User detail(int id)
+        public AuthModel detail(int id)
         {
-            return user_repository.detail(id);
+            User temp_user = user_repository.detail(id);
+
+            if (temp_user != null)
+            {
+                return authentication_repository.validateUser(user_repository.detail(id).username);
+            } return null;
         }
 
         /// <summary>
@@ -54,7 +59,17 @@ namespace Business.Implementation
         /// <returns></returns>
         public TransactionResult create(UserVo user)
         {
-            return user_repository.create(UserAdapter.voToObject(user));
+            TransactionResult user_tr = user_repository.create(UserAdapter.voToObject(user));
+            if (user_tr == TransactionResult.CREATED) {
+                return authentication_repository.create(new AuthModel
+                {
+                    rol = new Rol
+                    {
+                        id = user.rol
+                    },
+                    user = user_repository.getUserByUserName(user.username)
+                });
+            }return user_tr;
         }
 
         /// <summary>
@@ -74,7 +89,10 @@ namespace Business.Implementation
         /// <returns></returns>
         public TransactionResult delete(int id)
         {
-            return user_repository.delete(id);
+            TransactionResult tr_auth = authentication_repository.deleteAuth(id);
+            if (tr_auth == TransactionResult.DELETED) {
+                return user_repository.delete(id);
+            }return tr_auth;
         }
 
         /// <summary>
@@ -93,6 +111,15 @@ namespace Business.Implementation
             {
                 return password.Equals(authentication_model.user.password) ? authentication_model : null;
             }return null;
+        }
+
+        /// <summary>
+        /// Get all the roles from the repository
+        /// </summary>
+        /// <returns>A list of rols</returns>
+        public IList<Rol> getAllRols()
+        {
+            return authentication_repository.getAllRols();
         }
     }
 }

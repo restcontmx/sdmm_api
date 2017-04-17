@@ -87,9 +87,7 @@ namespace SDMM_API.Modules
         private bool Authenticate(string credentialValues) {
             try
             {
-                var credentials = Encoding
-                                        .GetEncoding("utf-8")
-                                        .GetString(Convert.FromBase64String(credentialValues));
+                var credentials = Encoding.GetEncoding("utf-8").GetString(Convert.FromBase64String(credentialValues));
                 var values = credentials.Split(':');
                 if (ValidateUser(username: values[0], password: values[1])) {
                     SetPrincipal(new GenericPrincipal(new GenericIdentity(values[0]), null));

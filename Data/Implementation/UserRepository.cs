@@ -10,10 +10,53 @@ using System.Data;
 namespace Data.Implementation
 {
     /// <summary>
-    /// user repository implementation
+    /// user repository and authentication repository implementations
     /// </summary>
     public class UserRepository : IUserRepository, IAuthenticationRepository
     {
+        /// <summary>
+        /// Create new authentication model
+        /// </summary>
+        /// <param name="auth_model"></param>
+        /// <returns></returns>
+        public TransactionResult create(AuthModel auth_model)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_createAuthentication", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("user_id", auth_model.user.id));
+                    command.Parameters.Add(new SqlParameter("rol_id", auth_model.rol.id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
         /// <summary>
         /// Create object on the db
         /// </summary>
@@ -89,6 +132,44 @@ namespace Data.Implementation
                 }
                 catch (Exception ex) {
                     if (connection != null) {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Delete authentication
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public TransactionResult deleteAuth(int id)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_deleteAuthentication", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("user_id", id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.DELETED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
                         connection.Close();
                     }
                     return TransactionResult.ERROR;
@@ -177,6 +258,92 @@ namespace Data.Implementation
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Gets all the rols
+        /// </summary>
+        /// <returns>A list of rols</returns>
+        public IList<Rol> getAllRols()
+        {
+            SqlConnection connection = null;
+            IList<Rol> objects = new List<Rol>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRols", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new Rol
+                        {
+                            id = int.Parse( row[0].ToString() ),
+                            name = row[1].ToString(),
+                            description = row[2].ToString(),
+                            value = int.Parse( row[3].ToString() )
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get user by user name 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public User getUserByUserName(string username)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getUserByUserName", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("username", username));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+                    return new User
+                    {
+                        id = int.Parse(row[0].ToString()),
+                        username = row[1].ToString(),
+                        password = row[2].ToString(),
+                        first_name = row[3].ToString(),
+                        second_name = row[4].ToString(),
+                        email = row[5].ToString(),
+                        timestamp = Convert.ToDateTime(row[6].ToString()),
+                        updated = Convert.ToDateTime(row[7].ToString())
+                    };
+
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return null;
+                }
+            }
         }
 
         /// <summary>

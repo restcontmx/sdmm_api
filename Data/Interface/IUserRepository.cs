@@ -42,5 +42,12 @@ namespace Data.Interface
         /// <param name="id">Integer for id field on the db</param>
         /// <returns>Transaction result; success case should be DELETED</returns>
         TransactionResult delete(int id);
+
+        /// <summary>
+        /// Get user by username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        User getUserByUserName(string username);
     }
 }

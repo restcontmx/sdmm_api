@@ -55,10 +55,10 @@ namespace SDMM_API.Controllers
         [HttpGet]
         public HttpResponseMessage detail(int id)
         {
-            User user = user_service.detail(id);
+            AuthModel user = user_service.detail(id);
             if (user != null)
             {
-                IDictionary<string, User> data = new Dictionary<string, User>();
+                IDictionary<string, AuthModel> data = new Dictionary<string, AuthModel>();
                 data.Add("data", user);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }

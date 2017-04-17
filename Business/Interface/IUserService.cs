@@ -25,7 +25,7 @@ namespace Business.Interface
         /// </summary>
         /// <param name="id"> primary field on the db</param>
         /// <returns></returns>
-        User detail(int id);
+        AuthModel detail(int id);
 
         /// <summary>
         /// Creates object on repository
