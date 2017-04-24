@@ -11,8 +11,16 @@ using Models.Auth;
 
 namespace Data.Implementation
 {
+    /// <summary>
+    /// Empleado repository implementation
+    /// </summary>
     public class EmpleadoRepository : IEmpleadoRepository
     {
+        /// <summary>
+        /// Create new object on the db
+        /// </summary>
+        /// <param name="empleado"></param>
+        /// <returns></returns>
         public TransactionResult create(Empleado empleado)
         {
             SqlConnection connection = null;
