@@ -88,7 +88,7 @@ namespace SDMM_API.Controllers
             else if (tr == TransactionResult.EXISTS)
             {
                 data.Add("message", "Object already existed.");
-                return Request.CreateResponse(HttpStatusCode.Forbidden, data);
+                return Request.CreateResponse(HttpStatusCode.Conflict, data);
             }
             else
             {

@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Business.Interface;
 using Ninject;
+using Models.Auth;
 
 namespace SDMM_API.Modules
 {
@@ -89,8 +90,9 @@ namespace SDMM_API.Modules
             {
                 var credentials = Encoding.GetEncoding("utf-8").GetString(Convert.FromBase64String(credentialValues));
                 var values = credentials.Split(':');
-                if (ValidateUser(username: values[0], password: values[1])) {
-                    SetPrincipal(new GenericPrincipal(new GenericIdentity(values[0]), null));
+                AuthModel auth_model = authentication_service.validateUser(values[0], values[1]);
+                if( auth_model != null ) { 
+                    SetPrincipal(new GenericPrincipal(new GenericIdentity(auth_model.id.ToString()), null));
                     return true;
                 }return false;
             }

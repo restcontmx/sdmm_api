@@ -100,9 +100,33 @@
     <Compile Include="Auth\AuthModel.cs" />
     <Compile Include="Auth\Rol.cs" />
     <Compile Include="Auth\User.cs" />
+    <Compile Include="Catalogs\Categoria.cs" />
+    <Compile Include="Catalogs\DetalleVale.cs" />
+    <Compile Include="Catalogs\Empleado.cs" />
+    <Compile Include="Catalogs\Nivel.cs" />
+    <Compile Include="Catalogs\Presupuesto.cs" />
+    <Compile Include="Catalogs\ProcesoMinero.cs" />
+    <Compile Include="Catalogs\Producto.cs" />
+    <Compile Include="Catalogs\Proveedor.cs" />
+    <Compile Include="Catalogs\SubNivel.cs" />
+    <Compile Include="Catalogs\TipoEmpleado.cs" />
+    <Compile Include="Catalogs\TipoProducto.cs" />
+    <Compile Include="Catalogs\Vale.cs" />
     <Compile Include="Dummy\Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VOs\CategoriaVo.cs" />
+    <Compile Include="VOs\DetalleValeVo.cs" />
+    <Compile Include="VOs\EmpleadoVo.cs" />
+    <Compile Include="VOs\NivelVo.cs" />
+    <Compile Include="VOs\PresupuestoVo.cs" />
+    <Compile Include="VOs\ProcesoMineroVo.cs" />
+    <Compile Include="VOs\ProductoVo.cs" />
+    <Compile Include="VOs\ProveedorVo.cs" />
+    <Compile Include="VOs\SubNivelVo.cs" />
+    <Compile Include="VOs\TipoEmpleadoVo.cs" />
+    <Compile Include="VOs\TipoProductoVo.cs" />
     <Compile Include="VOs\UserVo.cs" />
+    <Compile Include="VOs\ValeVo.cs" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

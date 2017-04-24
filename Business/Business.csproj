@@ -100,13 +100,47 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\CategoriaAdapter.cs" />
+    <Compile Include="Adapters\DetalleValeAdapter.cs" />
+    <Compile Include="Adapters\EmpleadoAdapter.cs" />
+    <Compile Include="Adapters\NivelAdapter.cs" />
+    <Compile Include="Adapters\PresupuestoAdapter.cs" />
+    <Compile Include="Adapters\ProcesoMineroAdapter.cs" />
+    <Compile Include="Adapters\ProductoAdapter.cs" />
+    <Compile Include="Adapters\ProveedorAdapter.cs" />
+    <Compile Include="Adapters\SubNivelAdapter.cs" />
+    <Compile Include="Adapters\TipoEmpleadoAdapter.cs" />
+    <Compile Include="Adapters\TipoProductoAdapter.cs" />
     <Compile Include="Adapters\UserAdapter.cs" />
+    <Compile Include="Adapters\ValeAdapter.cs" />
     <Compile Include="Helpers\NInjectHelper.cs" />
+    <Compile Include="Implementation\CategoriaService.cs" />
     <Compile Include="Implementation\DummyService.cs" />
+    <Compile Include="Implementation\EmpleadoService.cs" />
+    <Compile Include="Implementation\NivelService.cs" />
+    <Compile Include="Implementation\PresupuestoService.cs" />
+    <Compile Include="Implementation\ProcesoMineroService.cs" />
+    <Compile Include="Implementation\ProductoService.cs" />
+    <Compile Include="Implementation\ProveedorService.cs" />
+    <Compile Include="Implementation\SubNivelService.cs" />
+    <Compile Include="Implementation\TipoEmpleadoService.cs" />
+    <Compile Include="Implementation\TipoProductoService.cs" />
     <Compile Include="Implementation\UserService.cs" />
+    <Compile Include="Implementation\ValeService.cs" />
     <Compile Include="Interface\IAuthenticationService.cs" />
+    <Compile Include="Interface\ICategoriaService.cs" />
     <Compile Include="Interface\IDummyService.cs" />
+    <Compile Include="Interface\IEmpleadoService.cs" />
+    <Compile Include="Interface\INivelService.cs" />
+    <Compile Include="Interface\IPresupuestoService.cs" />
+    <Compile Include="Interface\IProcesoMineroService.cs" />
+    <Compile Include="Interface\IProductoService.cs" />
+    <Compile Include="Interface\IProveedorService.cs" />
+    <Compile Include="Interface\ISubNivelService.cs" />
+    <Compile Include="Interface\ITipoEmpleadoService.cs" />
+    <Compile Include="Interface\ITipoProductoService.cs" />
     <Compile Include="Interface\IUserService.cs" />
+    <Compile Include="Interface\IValeService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

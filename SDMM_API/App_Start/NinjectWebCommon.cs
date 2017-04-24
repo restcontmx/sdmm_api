@@ -73,6 +73,17 @@ namespace SDMM_API.App_Start
             kernel.Bind<IUserService>().To<UserService>();
             kernel.Bind<IAuthenticationService>().To<UserService>();
             kernel.Bind<IDummyService>().To<DummyService>();
+            kernel.Bind<IProveedorService>().To<ProveedorService>();
+            kernel.Bind<IEmpleadoService>().To<EmpleadoService>();
+            kernel.Bind<IProductoService>().To<ProductoService>();
+            kernel.Bind<INivelService>().To<NivelService>();
+            kernel.Bind<ISubNivelService>().To<SubNivelService>();
+            kernel.Bind<IProcesoMineroService>().To<ProcesoMineroService>();
+            kernel.Bind<IPresupuestoService>().To<PresupuestoService>();
+            kernel.Bind<ICategoriaService>().To<CategoriaService>();
+            kernel.Bind<ITipoEmpleadoService>().To<TipoEmpleadoService>();
+            kernel.Bind<ITipoProductoService>().To<TipoProductoService>();
+            kernel.Bind<IValeService>().To<ValeService>();
         }
     }
 }

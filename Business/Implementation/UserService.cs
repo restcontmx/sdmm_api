@@ -1,8 +1,5 @@
 ﻿using Business.Interface;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Models.Auth;
 using Data.Interface;
 using Models.VOs;
@@ -45,7 +42,6 @@ namespace Business.Implementation
         public AuthModel detail(int id)
         {
             User temp_user = user_repository.detail(id);
-
             if (temp_user != null)
             {
                 return authentication_repository.validateUser(user_repository.detail(id).username);

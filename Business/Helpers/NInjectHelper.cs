@@ -11,6 +11,17 @@ namespace Business.Helpers
             kernel.Bind<IDummyRepository>().To<DummyRepository>();
             kernel.Bind<IUserRepository>().To<UserRepository>();
             kernel.Bind<IAuthenticationRepository>().To<UserRepository>();
+            kernel.Bind<IProveedorRepository>().To<ProveedorRepository>();
+            kernel.Bind<IEmpleadoRepository>().To<EmpleadoRepository>();
+            kernel.Bind<IProductoRepository>().To<ProductoRepository>();
+            kernel.Bind<INivelRepository>().To<NivelRepository>();
+            kernel.Bind<ISubNivelRepository>().To<SubNivelRepository>();
+            kernel.Bind<IProcesoMineroRepository>().To<ProcesoMineroRepository>();
+            kernel.Bind<IPresupuestoRepository>().To<PresupuestoRepository>();
+            kernel.Bind<ICategoriaRepository>().To<CategoriaRepository>();
+            kernel.Bind<ITipoEmpleadoRepository>().To<TipoEmpleadoRepository>();
+            kernel.Bind<ITipoProductoRepository>().To<TipoProductoRepository>();
+            kernel.Bind<IValeRepository>().To<ValeRepository>();
         }
     }
 }
