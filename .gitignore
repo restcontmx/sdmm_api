@@ -286,3 +286,10 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+SDMM_API/Web.config
+SDMM_API/packages.config
+Business/packages.config
+Data/packages.config
+Warrior/packages.config
+Models/packages.config
