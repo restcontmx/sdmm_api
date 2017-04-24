@@ -4,6 +4,9 @@ using System;
 
 namespace Business.Adapters
 {
+    /// <summary>
+    /// Empleado adapter 
+    /// </summary>
     public static class EmpleadoAdapter
     {
         public static EmpleadoVo objectToVo(Empleado obj)
@@ -13,6 +16,11 @@ namespace Business.Adapters
             };
         }
 
+        /// <summary>
+        /// Void object to object
+        /// </summary>
+        /// <param name="vo"></param>
+        /// <returns></returns>
         public static Empleado voToObject(EmpleadoVo vo)
         {
             return new Empleado
