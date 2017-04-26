@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\CategoriaAdapter.cs" />
+    <Compile Include="Adapters\CuentaAdapter.cs" />
     <Compile Include="Adapters\DetalleValeAdapter.cs" />
     <Compile Include="Adapters\EmpleadoAdapter.cs" />
     <Compile Include="Adapters\NivelAdapter.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Adapters\ValeAdapter.cs" />
     <Compile Include="Helpers\NInjectHelper.cs" />
     <Compile Include="Implementation\CategoriaService.cs" />
+    <Compile Include="Implementation\CuentaService.cs" />
     <Compile Include="Implementation\DummyService.cs" />
     <Compile Include="Implementation\EmpleadoService.cs" />
     <Compile Include="Implementation\NivelService.cs" />
@@ -129,6 +131,7 @@
     <Compile Include="Implementation\ValeService.cs" />
     <Compile Include="Interface\IAuthenticationService.cs" />
     <Compile Include="Interface\ICategoriaService.cs" />
+    <Compile Include="Interface\ICuentaService.cs" />
     <Compile Include="Interface\IDummyService.cs" />
     <Compile Include="Interface\IEmpleadoService.cs" />
     <Compile Include="Interface\INivelService.cs" />

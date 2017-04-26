@@ -192,6 +192,7 @@
     <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\BasicApiController.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
+    <Compile Include="Controllers\CuentaController.cs" />
     <Compile Include="Controllers\DummyController.cs" />
     <Compile Include="Controllers\EmpleadoController.cs" />
     <Compile Include="Controllers\NivelController.cs" />

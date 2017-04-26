@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\CategoriaRepository.cs" />
+    <Compile Include="Implementation\CuentaRepository.cs" />
     <Compile Include="Implementation\DummyRepository.cs" />
     <Compile Include="Implementation\EmpleadoRepository.cs" />
     <Compile Include="Implementation\NivelRepository.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Implementation\ValeRepository.cs" />
     <Compile Include="Interface\IAuthenticationRepository.cs" />
     <Compile Include="Interface\ICategoriaRepository.cs" />
+    <Compile Include="Interface\ICuentaRepository.cs" />
     <Compile Include="Interface\IDummyRepository.cs" />
     <Compile Include="Interface\IEmpleadoRepository.cs" />
     <Compile Include="Interface\INivelRepository.cs" />

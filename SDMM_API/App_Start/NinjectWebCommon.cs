@@ -84,6 +84,8 @@ namespace SDMM_API.App_Start
             kernel.Bind<ITipoEmpleadoService>().To<TipoEmpleadoService>();
             kernel.Bind<ITipoProductoService>().To<TipoProductoService>();
             kernel.Bind<IValeService>().To<ValeService>();
+
+            kernel.Bind<ICuentaService>().To<CuentaService>();
         }
     }
 }
