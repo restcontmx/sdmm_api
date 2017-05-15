@@ -86,6 +86,7 @@ namespace SDMM_API.App_Start
             kernel.Bind<IValeService>().To<ValeService>();
 
             kernel.Bind<ICuentaService>().To<CuentaService>();
+            kernel.Bind<ICajaService>().To<CajaService>();
         }
     }
 }

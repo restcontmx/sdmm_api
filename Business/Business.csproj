@@ -100,6 +100,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\CajaAdapter.cs" />
     <Compile Include="Adapters\CategoriaAdapter.cs" />
     <Compile Include="Adapters\CuentaAdapter.cs" />
     <Compile Include="Adapters\DetalleValeAdapter.cs" />
@@ -109,12 +110,14 @@
     <Compile Include="Adapters\ProcesoMineroAdapter.cs" />
     <Compile Include="Adapters\ProductoAdapter.cs" />
     <Compile Include="Adapters\ProveedorAdapter.cs" />
+    <Compile Include="Adapters\RegistroDetalleAdapter.cs" />
     <Compile Include="Adapters\SubNivelAdapter.cs" />
     <Compile Include="Adapters\TipoEmpleadoAdapter.cs" />
     <Compile Include="Adapters\TipoProductoAdapter.cs" />
     <Compile Include="Adapters\UserAdapter.cs" />
     <Compile Include="Adapters\ValeAdapter.cs" />
     <Compile Include="Helpers\NInjectHelper.cs" />
+    <Compile Include="Implementation\CajaService.cs" />
     <Compile Include="Implementation\CategoriaService.cs" />
     <Compile Include="Implementation\CuentaService.cs" />
     <Compile Include="Implementation\DummyService.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="Implementation\UserService.cs" />
     <Compile Include="Implementation\ValeService.cs" />
     <Compile Include="Interface\IAuthenticationService.cs" />
+    <Compile Include="Interface\ICajaService.cs" />
     <Compile Include="Interface\ICategoriaService.cs" />
     <Compile Include="Interface\ICuentaService.cs" />
     <Compile Include="Interface\IDummyService.cs" />

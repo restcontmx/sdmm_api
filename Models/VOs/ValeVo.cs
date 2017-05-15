@@ -18,6 +18,7 @@ namespace Models.VOs
         public int cargador1_id { get; set; }
         public int cargador2_id { get; set; }
         public IList<DetalleValeVo> detalles { get; set; }
+        public int cuenta_id { get; set; }
         public string timestamp { get; set; }
         public string updated { get; set; }
     }

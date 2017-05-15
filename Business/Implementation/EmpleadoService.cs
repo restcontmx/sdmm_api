@@ -16,7 +16,7 @@ namespace Business.Implementation
         public EmpleadoService(IEmpleadoRepository empleado_repository) {
             this.empleado_repository = empleado_repository;
         }
-
+        
         public TransactionResult create(EmpleadoVo empleado_vo, User user_log)
         {
             Empleado empleado = EmpleadoAdapter.voToObject(empleado_vo);

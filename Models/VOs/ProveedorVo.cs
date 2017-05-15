@@ -21,6 +21,7 @@ namespace Models.VOs
         public string localidad { get; set; }
         public string ciudad { get; set; }
         public string estado { get; set; }
+        public string folio { get; set; }
         public string timestamp { get; set; }
         public string updated { get; set; }
         public int user_id { get; set; }

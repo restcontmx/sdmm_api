@@ -28,6 +28,7 @@ namespace Business.Adapters
                 ciudad = obj.ciudad,
                 estado = obj.estado,
                 user_id = obj.user.id,
+                folio = obj.folio,
                 timestamp = obj.timestamp.ToString(),
                 updated = obj.updated.ToString()
             };
@@ -51,6 +52,7 @@ namespace Business.Adapters
                 localidad = vo.localidad,
                 ciudad = vo.ciudad,
                 estado = vo.estado,
+                folio = vo.folio,
                 user = new Models.Auth.User { id = vo.user_id }
             };
         }

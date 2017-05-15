@@ -92,7 +92,7 @@ namespace SDMM_API.Modules
                 var values = credentials.Split(':');
                 AuthModel auth_model = authentication_service.validateUser(values[0], values[1]);
                 if( auth_model != null ) { 
-                    SetPrincipal(new GenericPrincipal(new GenericIdentity(auth_model.id.ToString()), null));
+                    SetPrincipal(new GenericPrincipal(new GenericIdentity(auth_model.user.id.ToString()), null));
                     return true;
                 }return false;
             }

@@ -18,6 +18,7 @@ namespace Models.Catalogs
         public Empleado polvorero { get; set; }
         public Empleado cargador1 { get; set; }
         public Empleado cargador2 { get; set; }
+        public Cuenta cuenta { get; set; }
         public IList<DetalleVale> detalles { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }

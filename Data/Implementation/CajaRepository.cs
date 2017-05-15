@@ -1,19 +1,26 @@
 ﻿using Data.Interface;
+using Models.Catalogs;
 using System;
 using System.Collections.Generic;
-using Models.Catalogs;
-using Warrior.Handlers.Enums;
-using Warrior.Data;
-using System.Data.SqlClient;
 using System.Configuration;
 using System.Data;
-using Models.Auth;
+using System.Data.SqlClient;
+using Warrior.Data;
+using Warrior.Handlers.Enums;
 
 namespace Data.Implementation
 {
-    public class CuentaRepository : ICuentaRepository
+    /// <summary>
+    /// Caja repository implementation
+    /// </summary>
+    public class CajaRepository : ICajaRepository
     {
-        public TransactionResult create(Cuenta cuenta)
+        /// <summary>
+        /// Create object on the db
+        /// </summary>
+        /// <param name="caja"></param>
+        /// <returns></returns>
+        public TransactionResult create(Caja caja)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
@@ -21,11 +28,15 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_createCuenta", connection);
+                    SqlCommand command = new SqlCommand("sp_createCaja", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(cuenta.nombre)));
-                    command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(cuenta.numero)));
-                    command.Parameters.Add(new SqlParameter("user_id", cuenta.user.id));
+                    command.Parameters.Add(new SqlParameter("folio_ini", Validations.defaultString(caja.folio_ini)));
+                    command.Parameters.Add(new SqlParameter("folio_fin", Validations.defaultString(caja.folio_fin)));
+                    command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(caja.codigo)));
+                    command.Parameters.Add(new SqlParameter("cantidad", caja.cantidad));
+                    command.Parameters.Add(new SqlParameter("producto_id", caja.producto.id));
+                    //command.Parameters.Add(new SqlParameter("active", Validations.setBooleanValue(caja.active)));
+                    command.Parameters.Add(new SqlParameter("user_id", caja.user.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -52,6 +63,11 @@ namespace Data.Implementation
             }
         }
 
+        /// <summary>
+        /// Delete object by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public TransactionResult delete(int id)
         {
             SqlConnection connection = null;
@@ -60,7 +76,7 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_deleteCuenta", connection);
+                    SqlCommand command = new SqlCommand("sp_deleteCaja", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id", id));
                     command.ExecuteNonQuery();
@@ -85,7 +101,12 @@ namespace Data.Implementation
             }
         }
 
-        public Cuenta detail(int id)
+        /// <summary>
+        /// Retrieve object from the db
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Caja detail(int id)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
@@ -93,23 +114,17 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_cuentaDetail", connection);
+                    SqlCommand command = new SqlCommand("sp_cajaDetail", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id", id));
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     DataRow row = data_set.Tables[0].Rows[0];
-                    return new Cuenta
+                    return new Caja
                     {
                         id = int.Parse(row[0].ToString()),
-                        nombre = row[1].ToString(),
-                        numero = row[2].ToString(),  
-                        user = new User { id = int.Parse( row[3].ToString() ) },                      
-                        timestamp = Convert.ToDateTime(row[4].ToString()),
-                        updated = Convert.ToDateTime(row[5].ToString())
                     };
-
                 }
                 catch (Exception ex)
                 {
@@ -121,31 +136,38 @@ namespace Data.Implementation
                 }
             }
         }
-
-        public IList<Cuenta> getAll()
+        /// <summary>
+        /// Get all objects
+        /// </summary>
+        /// <returns></returns>
+        public IList<Caja> getAll()
         {
             SqlConnection connection = null;
-            IList<Cuenta> objects = new List<Cuenta>();
+            IList<Caja> objects = new List<Caja>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
             {
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_getAllCuenta", connection);
+                    SqlCommand command = new SqlCommand("sp_getAllCaja", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
-                        objects.Add(new Cuenta
+                        objects.Add(new Caja
                         {
                             id = int.Parse(row[0].ToString()),
-                            nombre = row[1].ToString(),
-                            numero = row[2].ToString(),
-                         
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString())
+                            codigo = row[1].ToString(),
+                            folio_ini = row[2].ToString(),
+                            folio_fin = row[3].ToString(),
+                            cantidad = int.Parse(row[4].ToString()),
+                            producto = new Producto { id = int.Parse(row[5].ToString()) },
+                            user = new Models.Auth.User { id = int.Parse(row[6].ToString()) },
+                            active = int.Parse(row[7].ToString()) == 1 ? true : false,
+                            timestamp = Convert.ToDateTime(row[8].ToString()),
+                            updated = Convert.ToDateTime(row[9].ToString())
                         });
                     }
                     return objects;
@@ -162,7 +184,12 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult update(Cuenta cuenta)
+        /// <summary>
+        /// Update object on the db
+        /// </summary>
+        /// <param name="caja"></param>
+        /// <returns></returns>
+        public TransactionResult update(Caja caja)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
@@ -170,11 +197,16 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_updateCuenta", connection);
+                    SqlCommand command = new SqlCommand("sp_updateCaja", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(cuenta.nombre)));
-                    command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(cuenta.numero)));
-                    command.Parameters.Add(new SqlParameter("id", cuenta.id));
+                    command.Parameters.Add(new SqlParameter("folio_ini", Validations.defaultString(caja.folio_ini)));
+                    command.Parameters.Add(new SqlParameter("folio_fin", Validations.defaultString(caja.folio_fin)));
+                    command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(caja.codigo)));
+                    command.Parameters.Add(new SqlParameter("cantidad", caja.cantidad));
+                    command.Parameters.Add(new SqlParameter("producto_id", caja.producto.id));
+                    command.Parameters.Add(new SqlParameter("active", Validations.setBooleanValue(caja.active)));
+                    command.Parameters.Add(new SqlParameter("id", caja.id));
+
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
                 }

@@ -22,6 +22,7 @@ namespace Models.Catalogs
         public string localidad { get; set; }
         public string ciudad { get; set; }
         public string estado { get; set; }
+        public string folio { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
         public User user { get; set; }

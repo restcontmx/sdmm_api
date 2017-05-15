@@ -24,6 +24,7 @@ namespace Business.Helpers
             kernel.Bind<IValeRepository>().To<ValeRepository>();
 
             kernel.Bind<ICuentaRepository>().To<CuentaRepository>();
+            kernel.Bind<ICajaRepository>().To<CajaRepository>();
         }
     }
 }

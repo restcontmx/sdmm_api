@@ -33,6 +33,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("cargador1_id", vale.cargador1.id));
                     command.Parameters.Add(new SqlParameter("cargador2_id", vale.cargador2.id));
                     command.Parameters.Add(new SqlParameter("user_id", vale.user.id));
+                    command.Parameters.Add(new SqlParameter("cuenta_id", vale.cuenta.id));
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
@@ -75,6 +76,45 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("vale_id", detalle.vale.id));
                     command.Parameters.Add(new SqlParameter("producto_id", detalle.producto.id));
                     command.Parameters.Add(new SqlParameter("cantidad", detalle.cantidad));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        public TransactionResult createRegistroDetalle(RegistroDetalle registro)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_createRegistroDetalle", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("detallevale_id", registro.detallevale.id));
+                    command.Parameters.Add(new SqlParameter("folio", registro.folio));
+                    command.Parameters.Add(new SqlParameter("user_id", registro.user.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -168,7 +208,8 @@ namespace Data.Implementation
                             ap_materno = row[11].ToString()
                         },
                         cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                        cargador2 = new Empleado { id = int.Parse(row[13].ToString()) }
+                        cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                        cuenta = new Cuenta { id = int.Parse(row[14].ToString()) }
                     };
 
                 }
@@ -220,7 +261,8 @@ namespace Data.Implementation
                                 ap_materno = row[11].ToString()
                             },
                             cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) }
+                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                            cuenta = new Cuenta { id = int.Parse(row[14].ToString()) }
                         });
                     }
                     return objects;
@@ -263,6 +305,47 @@ namespace Data.Implementation
                             },
                             cantidad = int.Parse(row[3].ToString()),
                             vale = new Vale { id = int.Parse(row[4].ToString()) }
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        public IList<RegistroDetalle> getAllRegistersByDetalle(int detalle_id)
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroDetalleByDetalleValeId", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("detallevale_id", detalle_id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            detallevale = new DetalleVale { id = int.Parse( row[2].ToString() ) },
+                            user = new User { id = int.Parse(row[3].ToString()) },
+                            timestamp = Convert.ToDateTime(row[4].ToString()),
+                            updated = Convert.ToDateTime(row[5].ToString())
                         });
                     }
                     return objects;

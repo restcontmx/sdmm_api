@@ -3,6 +3,7 @@ using Models.Catalogs;
 using Models.VOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -10,25 +11,30 @@ using Warrior.Handlers.Enums;
 
 namespace SDMM_API.Controllers
 {
-    public class EmpleadoController : BasicApiController
+    public class CajaController : BasicApiController
     {
-        private IEmpleadoService empleado_service;
-        public EmpleadoController( IEmpleadoService empleado_service ) {
-            this.empleado_service = empleado_service;
+        public ICajaService caja_service;
+
+        /// <summary>
+        /// Caja Controller constructor
+        /// </summary>
+        /// <param name="caja_service"></param>
+        public CajaController(ICajaService caja_service) {
+            this.caja_service = caja_service;
         }
 
         /// <summary>
         /// Get all objects route
         /// </summary>
         /// <returns></returns>
-        [Route("api/empleado/")]
+        [Route("api/caja/")]
         [HttpGet]
         public HttpResponseMessage list()
         {
             try
             {
-                IDictionary<string, IList<Empleado>> data = new Dictionary<string, IList<Empleado>>();
-                data.Add("data", empleado_service.getAll());
+                IDictionary<string, IList<Caja>> data = new Dictionary<string, IList<Caja>>();
+                data.Add("data", caja_service.getAll());
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -44,14 +50,14 @@ namespace SDMM_API.Controllers
         /// </summary>
         /// <param name="id">primary field on the db</param>
         /// <returns></returns>
-        [Route("api/empleado/{id}")]
+        [Route("api/caja/{id}")]
         [HttpGet]
         public HttpResponseMessage detail(int id)
         {
-            Empleado empleado = empleado_service.detail(id);
+            Caja empleado = caja_service.detail(id);
             if (empleado != null)
             {
-                IDictionary<string, Empleado> data = new Dictionary<string, Empleado>();
+                IDictionary<string, Caja> data = new Dictionary<string, Caja>();
                 data.Add("data", empleado);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
@@ -66,13 +72,13 @@ namespace SDMM_API.Controllers
         /// <summary>
         /// Create object pettition
         /// </summary>
-        /// <param name="empleado_vo"></param>
+        /// <param name="caja_vo"></param>
         /// <returns></returns>
-        [Route("api/empleado/")]
+        [Route("api/caja/")]
         [HttpPost]
-        public HttpResponseMessage create([FromBody] EmpleadoVo empleado_vo)
+        public HttpResponseMessage create([FromBody] CajaVo caja_vo)
         {
-            TransactionResult tr = empleado_service.create(empleado_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            TransactionResult tr = caja_service.create(caja_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
             {
@@ -94,13 +100,13 @@ namespace SDMM_API.Controllers
         /// <summary>
         /// Update object request
         /// </summary>
-        /// <param name="empleado_vo"></param>
+        /// <param name="caja_vo"></param>
         /// <returns></returns>
-        [Route("api/empleado/")]
+        [Route("api/caja/")]
         [HttpPut]
-        public HttpResponseMessage update([FromBody] EmpleadoVo empleado_vo)
+        public HttpResponseMessage update([FromBody] CajaVo caja_vo)
         {
-            TransactionResult tr = empleado_service.update(empleado_vo);
+            TransactionResult tr = caja_service.update(caja_vo);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.OK)
             {
@@ -119,11 +125,11 @@ namespace SDMM_API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Route("api/empleado/{id}")]
+        [Route("api/caja/{id}")]
         [HttpDelete]
         public HttpResponseMessage delete(int id)
         {
-            TransactionResult tr = empleado_service.delete(id);
+            TransactionResult tr = caja_service.delete(id);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.DELETED)
             {

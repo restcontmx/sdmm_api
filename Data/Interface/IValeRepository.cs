@@ -18,5 +18,7 @@ namespace Data.Interface
         TransactionResult delete(int id);
         IList<DetalleVale> getAllDetalles(int vale_id);
         TransactionResult createDetalle(DetalleVale detalle);
+        IList<RegistroDetalle> getAllRegistersByDetalle(int detalle_id);
+        TransactionResult createRegistroDetalle(RegistroDetalle registro);
     }
 }
