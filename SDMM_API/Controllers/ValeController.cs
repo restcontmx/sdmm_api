@@ -152,7 +152,7 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage createRegistroBunch([FromBody]  RegistersVo registros )
         {
-            Console.Write( Request.Content );
+            Console.WriteLine( Request.Content );
             TransactionResult tr = vale_service.createRegistroDetalleByList(registros.registrodetalles_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
@@ -171,5 +171,8 @@ namespace SDMM_API.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
         }
+
+
+       
     }
 }

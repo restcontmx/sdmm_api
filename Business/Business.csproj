@@ -76,8 +76,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Ninject">
-      <HintPath>..\..\..\..\..\Downloads\CF-RU6401English\demo\c#\UHFReader288En v1.1\bin\Debug\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -104,6 +105,7 @@
     <Compile Include="Adapters\CategoriaAdapter.cs" />
     <Compile Include="Adapters\CuentaAdapter.cs" />
     <Compile Include="Adapters\DetalleValeAdapter.cs" />
+    <Compile Include="Adapters\DevolucionAdapter.cs" />
     <Compile Include="Adapters\EmpleadoAdapter.cs" />
     <Compile Include="Adapters\NivelAdapter.cs" />
     <Compile Include="Adapters\PresupuestoAdapter.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="Implementation\CajaService.cs" />
     <Compile Include="Implementation\CategoriaService.cs" />
     <Compile Include="Implementation\CuentaService.cs" />
+    <Compile Include="Implementation\DevolucionService.cs" />
     <Compile Include="Implementation\DummyService.cs" />
     <Compile Include="Implementation\EmpleadoService.cs" />
     <Compile Include="Implementation\NivelService.cs" />
@@ -136,6 +139,7 @@
     <Compile Include="Interface\ICajaService.cs" />
     <Compile Include="Interface\ICategoriaService.cs" />
     <Compile Include="Interface\ICuentaService.cs" />
+    <Compile Include="Interface\IDevolucionService.cs" />
     <Compile Include="Interface\IDummyService.cs" />
     <Compile Include="Interface\IEmpleadoService.cs" />
     <Compile Include="Interface\INivelService.cs" />
