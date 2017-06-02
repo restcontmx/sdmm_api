@@ -53,6 +53,31 @@ namespace SDMM_API.Controllers
             }
         }
 
-        
+
+        /// <summary>
+        /// Get DetalleDevByCaja by flolio caja
+        /// </summary>
+        /// <param name="folio"></param>
+        /// <returns></returns>
+        [Route("api/devolucion/detalleCaja/{folio}")]
+        [HttpGet]
+        public HttpResponseMessage listDetails(string folio)
+        {
+            DetalleDevByCajaVo detalle = devolucion_service.getDetalleByCaja(folio);
+            if (detalle != null)
+            {
+                IDictionary<string, DetalleDevByCajaVo> data = new Dictionary<string, DetalleDevByCajaVo>();
+                data.Add("data", detalle);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", "Object not found.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
     }
 }

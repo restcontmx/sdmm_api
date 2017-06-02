@@ -103,6 +103,7 @@
     <Compile Include="Catalogs\Caja.cs" />
     <Compile Include="Catalogs\Categoria.cs" />
     <Compile Include="Catalogs\Cuenta.cs" />
+    <Compile Include="Catalogs\DetalleDevByCaja.cs" />
     <Compile Include="Catalogs\DetalleVale.cs" />
     <Compile Include="Catalogs\Devolucion.cs" />
     <Compile Include="Catalogs\Empleado.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="VOs\CajaVo.cs" />
     <Compile Include="VOs\CategoriaVo.cs" />
     <Compile Include="VOs\CuentaVo.cs" />
+    <Compile Include="VOs\DetalleDevByCajaVo.cs" />
     <Compile Include="VOs\DetalleValeVo.cs" />
     <Compile Include="VOs\DevolucionVo.cs" />
     <Compile Include="VOs\EmpleadoVo.cs" />

@@ -104,6 +104,7 @@
     <Compile Include="Adapters\CajaAdapter.cs" />
     <Compile Include="Adapters\CategoriaAdapter.cs" />
     <Compile Include="Adapters\CuentaAdapter.cs" />
+    <Compile Include="Adapters\DetalleDevByCajaAdapter.cs" />
     <Compile Include="Adapters\DetalleValeAdapter.cs" />
     <Compile Include="Adapters\DevolucionAdapter.cs" />
     <Compile Include="Adapters\EmpleadoAdapter.cs" />
@@ -168,7 +169,17 @@
       <Name>Warrior</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

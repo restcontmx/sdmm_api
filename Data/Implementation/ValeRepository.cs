@@ -342,10 +342,10 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
-                            detallevale = new DetalleVale { id = int.Parse( row[2].ToString() ) },
-                            user = new User { id = int.Parse(row[3].ToString()) },
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString())
+                            detallevale = new DetalleVale { id = int.Parse( row[3].ToString() ) },
+                            user = new User { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
                         });
                     }
                     return objects;

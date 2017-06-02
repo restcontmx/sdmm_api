@@ -13,6 +13,7 @@ namespace Business.Interface
     public interface IDevolucionService
     {
         TransactionResult create(DevolucionVo devolucion_vo, User user_log);
+        DetalleDevByCajaVo getDetalleByCaja(string folio);
 
         /* IList<Devolucion> getAll();
          Devolucion detail(int id);
@@ -20,7 +21,7 @@ namespace Business.Interface
          TransactionResult delete(int id);*/
 
 
-        
+
 
     }
 }

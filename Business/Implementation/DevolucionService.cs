@@ -30,6 +30,11 @@ namespace Business.Implementation
             devolucion.user = user_log;
             return devolucion_repository.create(devolucion);
         }
-           
+
+        public DetalleDevByCajaVo getDetalleByCaja(string folio)
+        {
+            return DetalleDevByCajaAdapter.objectToVo(devolucion_repository.getDetalleByCaja(folio));
+        }
+
     }
 }

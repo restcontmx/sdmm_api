@@ -293,3 +293,6 @@ Business/packages.config
 Data/packages.config
 Warrior/packages.config
 Models/packages.config
+/Business/web.Release.config
+/Business/web.Debug.config
+/Business/web.config

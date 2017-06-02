@@ -53,5 +53,41 @@ namespace Data.Implementation
                 }
             }
         }
+
+
+        public DetalleDevByCaja getDetalleByCaja(string folio)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getDetailsByFolioCaja", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("folioC", folio));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+                    return new DetalleDevByCaja
+                    {
+                        nombreP = row[0].ToString(),
+                        empresa = row[1].ToString(),
+                        vale = new Vale { id =  int.Parse(row[2].ToString()) }
+                        
+                    };
+
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return null;
+                }
+            }
+        }
     }
 }
