@@ -22,7 +22,7 @@ namespace Data.Implementation
         public TransactionResult create(AuthModel auth_model)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -65,7 +65,7 @@ namespace Data.Implementation
         public TransactionResult create(User user)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -111,7 +111,7 @@ namespace Data.Implementation
         public TransactionResult delete(int id)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -147,7 +147,7 @@ namespace Data.Implementation
         public TransactionResult deleteAuth(int id)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -185,7 +185,7 @@ namespace Data.Implementation
         public User detail(int id)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -226,7 +226,7 @@ namespace Data.Implementation
         {
             SqlConnection connection = null;
             IList<User> objects = new List<User>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString)) {
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString)) {
                 try
                 {
                     connection.Open();
@@ -268,7 +268,7 @@ namespace Data.Implementation
         {
             SqlConnection connection = null;
             IList<Rol> objects = new List<Rol>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -310,7 +310,7 @@ namespace Data.Implementation
         public User getUserByUserName(string username)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -354,7 +354,7 @@ namespace Data.Implementation
         public TransactionResult update(User user)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString)) {
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString)) {
                 try
                 {
                     connection.Open();
@@ -398,7 +398,7 @@ namespace Data.Implementation
         public AuthModel validateUser(string username)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {

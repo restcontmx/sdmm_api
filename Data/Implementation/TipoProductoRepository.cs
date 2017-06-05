@@ -17,7 +17,7 @@ namespace Data.Implementation
         public TransactionResult create(TipoProducto tipoproducto)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -56,7 +56,7 @@ namespace Data.Implementation
         public TransactionResult delete(int id)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -89,7 +89,7 @@ namespace Data.Implementation
         public TipoProducto detail(int id)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -125,7 +125,7 @@ namespace Data.Implementation
         {
             SqlConnection connection = null;
             IList<TipoProducto> objects = new List<TipoProducto>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
@@ -162,7 +162,7 @@ namespace Data.Implementation
         public TransactionResult update(TipoProducto tipoproducto)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CAPSTONE_DB"].ConnectionString))
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
