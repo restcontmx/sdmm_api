@@ -18,7 +18,8 @@ namespace Business.Adapters
                 polvorero = new Empleado { id = vo.polvorero_id},
                 cargador1 = new Empleado { id = vo.cargador1_id },
                 cargador2 = new Empleado { id = vo.cargador2_id },
-                cuenta = new Cuenta { id = vo.cuenta_id }
+                cuenta = new Cuenta { id = vo.cuenta_id },
+                active = vo.active
             };
         }
     }

@@ -122,6 +122,17 @@ namespace Business.Implementation
             return vale_repository.getAllDetalles(vale_id);
         }
 
+        public IList<RegistroDetalle> getAllRegistersByFolioCaja(string folioCaja)
+        {
+            return vale_repository.getAllRegistersByFolioCaja(folioCaja);
+        }
+
+        public IList<RegistroDetalle> getAllRegistersSacos()
+        {
+            return vale_repository.getAllRegistersSacos();
+        }
+
+
         /// <summary>
         /// Update vale
         /// </summary>
@@ -130,6 +141,11 @@ namespace Business.Implementation
         public TransactionResult update(ValeVo vale_vo)
         {
             return vale_repository.update(ValeAdapter.voToObject(vale_vo));
+        }
+
+        public TransactionResult updateStatus(ValeVo vale_vo)
+        {
+            return vale_repository.updateStatus(ValeAdapter.voToObject(vale_vo));
         }
     }
 }

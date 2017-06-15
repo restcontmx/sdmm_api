@@ -173,6 +173,78 @@ namespace SDMM_API.Controllers
         }
 
 
-       
+        /// <summary>
+        /// Create object pettition
+        /// </summary>
+        /// <param name="empleado_vo"></param>
+        /// <returns></returns>
+        [Route("api/vale/updateactive/")]
+        [HttpPut]
+        public HttpResponseMessage updateActive([FromBody] ValeVo vale_vo)
+        {
+            vale_vo.active = 0;
+            TransactionResult tr = vale_service.updateStatus(vale_vo);
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.OK)
+            {
+                data.Add("message", "Object updated.");
+                data.Add("status", "1");
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
+        /// <summary>
+        /// List registers by detalle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/vale/detalle/registro/caja/{id}")]
+        [HttpGet]
+        public HttpResponseMessage listRegistersByCaja(string id)
+        {
+            try
+            {
+                IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
+                data.Add("data", vale_service.getAllRegistersByFolioCaja(id));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/vale/detalle/registro/sacos/")]
+        [HttpGet]
+        public HttpResponseMessage listRegistersSacos()
+        {
+            try
+            {
+                IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
+                data.Add("data", vale_service.getAllRegistersSacos());
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
     }
 }

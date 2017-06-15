@@ -27,7 +27,6 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("turno", Validations.defaultString(vale.turno)));
                     command.Parameters.Add(new SqlParameter("lugar", Validations.defaultString(vale.lugar)));
-                    
                     command.Parameters.Add(new SqlParameter("compania_id", vale.compania.id));
                     command.Parameters.Add(new SqlParameter("polvorero_id", vale.polvorero.id));
                     command.Parameters.Add(new SqlParameter("cargador1_id", vale.cargador1.id));
@@ -104,13 +103,28 @@ namespace Data.Implementation
 
         public TransactionResult createRegistroDetalle(RegistroDetalle registro)
         {
+            bool changePro = false;
+
+            if(registro.folio.Length > 16)
+            {
+                changePro = true;
+            }
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
+                    SqlCommand command;
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_createRegistroDetalle", connection);
+                    if (changePro)
+                    {
+                        command = new SqlCommand("sp_createRegistroDetalleBulto", connection);
+                    }
+                    else
+                    {
+                        command = new SqlCommand("sp_createRegistroDetalle", connection);
+                    }
+                    
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("detallevale_id", registro.detallevale.id));
                     command.Parameters.Add(new SqlParameter("folio", registro.folio));
@@ -240,30 +254,35 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
-                        objects.Add(new Vale
+                        int active = int.Parse(row[15].ToString());
+
+                        if (active != 0)
                         {
-                            id = int.Parse(row[0].ToString()),
-                            turno = row[1].ToString(),
-                            lugar = row[2].ToString(),
-                            user = new User { id = int.Parse(row[3].ToString()) },
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString()),
-                            compania = new Proveedor
+                            objects.Add(new Vale
                             {
-                                id = int.Parse(row[6].ToString()),
-                                nombre_comercial = row[7].ToString()
-                            },
-                            polvorero = new Empleado
-                            {
-                                id = int.Parse(row[8].ToString()),
-                                nombre = row[9].ToString(),
-                                ap_paterno = row[10].ToString(),
-                                ap_materno = row[11].ToString()
-                            },
-                            cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
-                            cuenta = new Cuenta { id = int.Parse(row[14].ToString()) }
-                        });
+                                id = int.Parse(row[0].ToString()),
+                                turno = row[1].ToString(),
+                                lugar = row[2].ToString(),
+                                user = new User { id = int.Parse(row[3].ToString()) },
+                                timestamp = Convert.ToDateTime(row[4].ToString()),
+                                updated = Convert.ToDateTime(row[5].ToString()),
+                                compania = new Proveedor
+                                {
+                                    id = int.Parse(row[6].ToString()),
+                                    nombre_comercial = row[7].ToString()
+                                },
+                                polvorero = new Empleado
+                                {
+                                    id = int.Parse(row[8].ToString()),
+                                    nombre = row[9].ToString(),
+                                    ap_paterno = row[10].ToString(),
+                                    ap_materno = row[11].ToString()
+                                },
+                                cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
+                                cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                                cuenta = new Cuenta { id = int.Parse(row[14].ToString()) }
+                            });
+                        }
                     }
                     return objects;
 
@@ -362,9 +381,189 @@ namespace Data.Implementation
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vale"></param>
+        /// <returns></returns>
+        public IList<RegistroDetalle> getAllRegistersByFolioCaja(string folioCaja)
+        {
+            int folioIni = int.Parse(folioCaja.Substring(9, 6));
+            int folioFin = int.Parse(folioCaja.Substring(15, 6));
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroDetalleByFolioCaja", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("folioCaja", folioCaja));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        RegistroDetalle rgd = new RegistroDetalle
+                                            {
+                                                id = int.Parse(row[0].ToString()),
+                                                folio = row[1].ToString(),
+                                                detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
+                                                user = new User { id = int.Parse(row[4].ToString()) },
+                                                timestamp = Convert.ToDateTime(row[5].ToString()),
+                                                updated = Convert.ToDateTime(row[6].ToString())
+                                            };
+
+                        int folioS = int.Parse(rgd.folio.Substring(10, 6));
+
+                        if (folioS <= folioFin && folioS >= folioIni)
+                        {
+                            objects.Add(rgd);
+                        }
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vale"></param>
+        /// <returns></returns>
+        public IList<RegistroDetalle> getAllRegistersSacos()
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroSacos", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        RegistroDetalle rgd = new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
+                            user = new User { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        };
+
+                        objects.Add(rgd);
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
         public TransactionResult update(Vale vale)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_updateVale", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("id ", vale.id));
+                    command.Parameters.Add(new SqlParameter("compania_id", vale.compania.id));
+                    command.Parameters.Add(new SqlParameter("turno", Validations.defaultString(vale.turno)));
+                    command.Parameters.Add(new SqlParameter("lugar", Validations.defaultString(vale.lugar)));
+                    command.Parameters.Add(new SqlParameter("polvorero_id", vale.polvorero.id));
+                    command.Parameters.Add(new SqlParameter("cargador1_id", vale.cargador1.id));
+                    command.Parameters.Add(new SqlParameter("cargador2_id", vale.cargador2.id));
+                    command.Parameters.Add(new SqlParameter("cuenta_id", vale.cuenta.id));
+                    command.Parameters.Add(new SqlParameter("active", vale.active));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.OK;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        public TransactionResult updateStatus(Vale vale)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_updateValeStatus", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("id ", vale.id));
+                    command.Parameters.Add(new SqlParameter("active", vale.active));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.OK;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
         }
     }
 }
