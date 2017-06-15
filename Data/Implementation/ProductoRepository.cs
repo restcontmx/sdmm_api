@@ -116,7 +116,12 @@ namespace Data.Implementation
                         costo = decimal.Parse(row[5].ToString()),
                         peso = decimal.Parse(row[6].ToString()),
                         modo = row[7].ToString(),
-                        user = new Models.Auth.User { id = int.Parse(row[8].ToString()) },
+                        user = new Models.Auth.User
+                        {
+                            id = int.Parse(row[8].ToString()),
+                            first_name = row[15].ToString(),
+                            second_name = row[16].ToString()
+                        },
                         timestamp = Convert.ToDateTime(row[9].ToString()),
                         updated = Convert.ToDateTime(row[10].ToString()),
                         tipo_producto = new TipoProducto

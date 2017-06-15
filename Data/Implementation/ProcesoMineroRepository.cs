@@ -104,7 +104,14 @@ namespace Data.Implementation
                         id = int.Parse(row[0].ToString()),
                         nombre = row[1].ToString(),
                         codigo = row[2].ToString(),
-                        user = new User { id = int.Parse(row[3].ToString()) },
+                        user = new User
+                        {
+                            id = int.Parse(row[3].ToString()),
+
+                            first_name = row[6].ToString(),
+                            second_name = row[7].ToString()
+
+                        },
                         timestamp = Convert.ToDateTime(row[4].ToString()),
                         updated = Convert.ToDateTime(row[5].ToString())
                     };

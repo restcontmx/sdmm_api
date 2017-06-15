@@ -107,23 +107,29 @@ namespace Data.Implementation
                     return new Presupuesto
                     {
                         id = int.Parse(row[0].ToString()),
-                        presupuesto = decimal.Parse( row[1].ToString() ),
+                        presupuesto = decimal.Parse(row[1].ToString()),
                         stock = int.Parse(row[2].ToString()),
-                        year = int.Parse( row[3].ToString() ),
-                        user = new User { id = int.Parse(row[4].ToString()) },
+                        year = int.Parse(row[3].ToString()),
+                        user = new User
+                        {
+                            id = int.Parse(row[4].ToString()),
+                            first_name = row[16].ToString(),
+                            second_name = row[17].ToString()
+                        },
                         timestamp = Convert.ToDateTime(row[5].ToString()),
                         updated = Convert.ToDateTime(row[6].ToString()),
-                        producto = new Producto {
+                        producto = new Producto
+                        {
                             id = int.Parse(row[7].ToString()),
-                            tipo_producto = new TipoProducto { id = int.Parse(row[8].ToString())},
+                            tipo_producto = new TipoProducto { id = int.Parse(row[8].ToString()) },
                             presentacion = row[9].ToString(),
                             codigo = row[10].ToString(),
                             nombre = row[11].ToString(),
-                            cantidad = int.Parse( row[12].ToString() ),
-                            costo = decimal.Parse( row[13].ToString() ),
-                            peso = decimal.Parse( row[14].ToString() ),
+                            cantidad = int.Parse(row[12].ToString()),
+                            costo = decimal.Parse(row[13].ToString()),
+                            peso = decimal.Parse(row[14].ToString()),
                             modo = row[15].ToString()
-                        } 
+                        }
                     };
 
                 }

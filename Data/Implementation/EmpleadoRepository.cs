@@ -128,7 +128,12 @@ namespace Data.Implementation
                         ingreso = Convert.ToDateTime(row[7].ToString()),
                         salida = Convert.ToDateTime(row[8].ToString()),
                         status = int.Parse(row[9].ToString()) == 0 ? false : true,
-                        user = new User { id = int.Parse(row[10].ToString()) },
+                        user = new User
+                        {
+                            id = int.Parse(row[10].ToString()),
+                            first_name = row[17].ToString(),
+                            second_name = row[18].ToString()
+                        },
                         timestamp = Convert.ToDateTime(row[11].ToString()),
                         updated = Convert.ToDateTime(row[12].ToString()),
                         tipo_empleado = new TipoEmpleado
