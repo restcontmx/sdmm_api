@@ -68,5 +68,18 @@ namespace Business.Implementation
         {
             return caja_repository.update(CajaAdapter.voToObject(caja_vo));
         }
+
+        /// <summary>
+        /// Create object on the repository
+        /// </summary>
+        /// <param name="obs_vo"></param>
+        /// <param name="user_log"></param>
+        /// <returns></returns>
+        public TransactionResult createObservacion(ObservacionVo obs_vo, User user_log)
+        {
+            Observacion obs = ObservacionAdapter.voToObject(obs_vo);
+            obs.user = user_log;
+            return caja_repository.createObservacion(obs);
+        }
     }
 }

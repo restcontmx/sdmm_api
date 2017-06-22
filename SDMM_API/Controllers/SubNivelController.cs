@@ -101,7 +101,7 @@ namespace SDMM_API.Controllers
         [HttpPut]
         public HttpResponseMessage update([FromBody] SubNivelVo subnivel_vo)
         {
-            TransactionResult tr = subnivel_service.update(subnivel_vo);
+            TransactionResult tr = subnivel_service.update(subnivel_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.OK)
             {

@@ -142,5 +142,34 @@ namespace SDMM_API.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
         }
+
+
+        /// <summary>
+        /// Create object pettition
+        /// </summary>
+        /// <param name="obs_vo"></param>
+        /// <returns></returns>
+        [Route("api/caja/observacion/")]
+        [HttpPost]
+        public HttpResponseMessage createObservacion([FromBody] ObservacionVo obs_vo)
+        {
+            TransactionResult tr = caja_service.createObservacion(obs_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.CREATED)
+            {
+                data.Add("message", "Object created.");
+                return Request.CreateResponse(HttpStatusCode.Created, data);
+            }
+            else if (tr == TransactionResult.EXISTS)
+            {
+                data.Add("message", "Object already existed.");
+                return Request.CreateResponse(HttpStatusCode.Conflict, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
     }
 }

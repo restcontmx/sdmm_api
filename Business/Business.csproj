@@ -109,6 +109,7 @@
     <Compile Include="Adapters\DevolucionAdapter.cs" />
     <Compile Include="Adapters\EmpleadoAdapter.cs" />
     <Compile Include="Adapters\NivelAdapter.cs" />
+    <Compile Include="Adapters\ObservacionAdapter.cs" />
     <Compile Include="Adapters\PresupuestoAdapter.cs" />
     <Compile Include="Adapters\ProcesoMineroAdapter.cs" />
     <Compile Include="Adapters\ProductoAdapter.cs" />

@@ -196,6 +196,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("status", subnivel.status ? 1 : 0));
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(subnivel.nombre)));
                     command.Parameters.Add(new SqlParameter("id", subnivel.id));
+                    command.Parameters.Add(new SqlParameter("user_id", subnivel.user.id));
                     command.Parameters.Add(new SqlParameter("nivel_id", subnivel.nivel.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;

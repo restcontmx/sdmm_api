@@ -167,7 +167,8 @@ namespace Data.Implementation
                             user = new Models.Auth.User { id = int.Parse(row[6].ToString()) },
                             active = int.Parse(row[7].ToString()) == 1 ? true : false,
                             timestamp = Convert.ToDateTime(row[8].ToString()),
-                            updated = Convert.ToDateTime(row[9].ToString())
+                            updated = Convert.ToDateTime(row[9].ToString()),
+                            revision = int.Parse(row[10].ToString())
                         });
                     }
                     return objects;
@@ -209,6 +210,51 @@ namespace Data.Implementation
 
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Create object on the db
+        /// </summary>
+        /// <param name="obs"></param>
+        /// <returns></returns>
+        public TransactionResult createObservacion(Observacion obs)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_createObservacionCaja", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("comentarios", obs.comentarios));
+                    command.Parameters.Add(new SqlParameter("caja_id", obs.caja.id));
+                    command.Parameters.Add(new SqlParameter("user_id", obs.user.id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
                 }
                 catch (SqlException ex)
                 {

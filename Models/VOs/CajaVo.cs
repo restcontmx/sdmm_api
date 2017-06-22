@@ -20,5 +20,8 @@ namespace Models.VOs
 
         public int producto_id { get; set; }
         public int user_id { get; set; }
+
+        //Esto se obtiene si el producto requiere revision
+        public int revision { get; set; }
     }
 }

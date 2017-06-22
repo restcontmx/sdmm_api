@@ -20,9 +20,11 @@ namespace Business.Interface
         TransactionResult delete(int id);
         IList<DetalleVale> getDetailsByValeId(int vale_id);
         IList<RegistroDetalle> getAllRegistersByDetalle(int detalle_id);
+        IList<RegistroDetalle> getAllRegistersOverByDetalle(int detalle_id);
         IList<RegistroDetalle> getAllRegistersByFolioCaja(string folioCaja);
         IList<RegistroDetalle> getAllRegistersSacos();
         TransactionResult createRegistroDetalle(RegistroDetalleVo registro_vo, User user_log);
+        TransactionResult createRegistroDetalleOver(RegistroDetalleVo registro_vo, User user_log);
         TransactionResult createRegistroDetalleByList(IList<RegistroDetalleVo> registrodetalles_vo, User user);
     }
 }

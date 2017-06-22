@@ -64,6 +64,19 @@ namespace Business.Implementation
             return vale_repository.createRegistroDetalle(registro);
         }
 
+        /// <summary>
+        /// Create registro detalle 
+        /// </summary>
+        /// <param name="registro_vo"></param>
+        /// <param name="user_log"></param>
+        /// <returns></returns>
+        public TransactionResult createRegistroDetalleOver(RegistroDetalleVo registro_vo, User user_log)
+        {
+            RegistroDetalle registro = RegistroDetalleAdapter.voToObject(registro_vo);
+            registro.user = user_log;
+            return vale_repository.createRegistroDetalleOver(registro);
+        }
+
         public TransactionResult createRegistroDetalleByList(IList<RegistroDetalleVo> registrodetalles_vo, User user)
         {
             foreach (RegistroDetalleVo registro in registrodetalles_vo) {
@@ -73,13 +86,19 @@ namespace Business.Implementation
             }return TransactionResult.CREATED;
         }
 
-        /// <summary>
         /// Delete vale
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public TransactionResult delete(int id)
         {
+            IList<DetalleVale> detallesAux = vale_repository.getAllDetalles(id);
+            foreach (DetalleVale d in detallesAux)
+            {
+                //vale_repository.updateDetalleVale(DetalleValeAdapter.voToObject(d));
+                vale_repository.deleteRegistroDetalle(d.id);
+            }
+
             return vale_repository.delete(id);
         }
 
@@ -113,6 +132,17 @@ namespace Business.Implementation
         }
 
         /// <summary>
+        /// get all registers over by detalle id
+        /// </summary>
+        /// <param name="detalle_id"></param>
+        /// <returns></returns>
+        public IList<RegistroDetalle> getAllRegistersOverByDetalle(int detalle_id)
+        {
+            return vale_repository.getAllRegistersOverByDetalle(detalle_id);
+        }
+
+
+        /// <summary>
         /// Get Details by vale id
         /// </summary>
         /// <param name="vale_id"></param>
@@ -140,6 +170,21 @@ namespace Business.Implementation
         /// <returns></returns>
         public TransactionResult update(ValeVo vale_vo)
         {
+
+            vale_repository.deleteDetalleVale(vale_vo.id);
+
+            var tr = TransactionResult.CREATED;
+
+            foreach (DetalleValeVo dvo in vale_vo.detalles)
+            {
+                dvo.vale_id = vale_vo.id;
+                tr = vale_repository.createDetalle(DetalleValeAdapter.voToObject(dvo));
+                if (tr != TransactionResult.CREATED)
+                {
+                    return tr;
+                }
+            }
+
             return vale_repository.update(ValeAdapter.voToObject(vale_vo));
         }
 

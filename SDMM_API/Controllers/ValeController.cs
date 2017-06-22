@@ -76,6 +76,31 @@ namespace SDMM_API.Controllers
             }
         }
 
+        // <summary>
+        /// Get vale detalle by vale id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/vale/{id}")]
+        [HttpGet]
+        public HttpResponseMessage detail(int id)
+        {
+            Vale vale = vale_service.detail(id);
+            vale.detalles = vale_service.getDetailsByValeId(id);
+            if (vale != null)
+            {
+                IDictionary<string, Vale> data = new Dictionary<string, Vale>();
+                data.Add("data", vale);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", "Object not found.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
         /// <summary>
         /// Get vale detalle by vale id
         /// </summary>
@@ -121,6 +146,29 @@ namespace SDMM_API.Controllers
         }
 
         /// <summary>
+        /// List registers by detalle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/vale/detalle/registro/over/{id}")]
+        [HttpGet]
+        public HttpResponseMessage listRegistersOver(int id)
+        {
+            try
+            {
+                IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
+                data.Add("data", vale_service.getAllRegistersOverByDetalle(id));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
         /// Create register
         /// </summary>
         /// <param name="registrodetalle_vo"></param>
@@ -130,6 +178,34 @@ namespace SDMM_API.Controllers
         public HttpResponseMessage createRegistro([FromBody] RegistroDetalleVo registrodetalle_vo)
         {
             TransactionResult tr = vale_service.createRegistroDetalle(registrodetalle_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.CREATED)
+            {
+                data.Add("message", "Object created.");
+                return Request.CreateResponse(HttpStatusCode.Created, data);
+            }
+            else if (tr == TransactionResult.EXISTS)
+            {
+                data.Add("message", "Object already existed.");
+                return Request.CreateResponse(HttpStatusCode.Conflict, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Create register
+        /// </summary>
+        /// <param name="registrodetalle_vo"></param>
+        /// <returns></returns>
+        [Route("api/vale/detalle/registro/especial/")]
+        [HttpPost]
+        public HttpResponseMessage createRegistroEspecial([FromBody] RegistroDetalleVo registrodetalle_vo)
+        {
+            TransactionResult tr = vale_service.createRegistroDetalleOver(registrodetalle_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
             {
@@ -246,5 +322,54 @@ namespace SDMM_API.Controllers
         }
 
 
+        ////////////// update vale controller 
+        /// <summary>
+        /// Create object pettition
+        /// </summary>
+        /// <param name="empleado_vo"></param>
+        /// <returns></returns>
+        [Route("api/vale/")]
+        [HttpPut]
+        public HttpResponseMessage update([FromBody] ValeVo vale)
+        {
+
+            TransactionResult tr = vale_service.update(vale);
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.OK)
+            {
+                data.Add("message", "Object updated.");
+                data.Add("status", "1");
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+
+        }
+
+        /// <summary>
+        /// Delete object request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/vale/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage delete(int id)
+        {
+            TransactionResult tr = vale_service.delete(id);
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.DELETED)
+            {
+                data.Add("message", "Object deleted.");
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
     }
 }

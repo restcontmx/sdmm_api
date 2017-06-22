@@ -24,11 +24,11 @@ namespace Business.Implementation
             this.devolucion_repository = devolucion_repository;
         }
 
-        public TransactionResult create(DevolucionVo devolucion_vo, User user_log)
+        public TransactionResult createP(DevolucionVo devolucion_vo, User user_log)
         {
             Devolucion devolucion = DevolucionAdapter.voToObject(devolucion_vo);
             devolucion.user = user_log;
-            return devolucion_repository.create(devolucion);
+            return devolucion_repository.createP(devolucion);
         }
 
         public DetalleDevByCajaVo getDetalleByCaja(string folio)

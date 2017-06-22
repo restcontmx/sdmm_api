@@ -155,6 +155,51 @@ namespace Data.Implementation
             }
         }
 
+
+        public TransactionResult createRegistroDetalleOver(RegistroDetalle registro)
+        {
+
+            string folioCaja = registro.folio.Substring(16, 30);
+
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    SqlCommand command;
+                    connection.Open();
+                    command = new SqlCommand("sp_createRegistroDetalleOver", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("detallevale_id", registro.detallevale.id));
+                    command.Parameters.Add(new SqlParameter("folio", registro.folio));
+                    command.Parameters.Add(new SqlParameter("codigoCaja", folioCaja));
+                    command.Parameters.Add(new SqlParameter("user_id", registro.user.id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
         public TransactionResult delete(int id)
         {
             SqlConnection connection = null;
@@ -208,14 +253,25 @@ namespace Data.Implementation
                         id = int.Parse(row[0].ToString()),
                         turno = row[1].ToString(),
                         lugar = row[2].ToString(),
-                        user = new User { id = int.Parse(row[3].ToString()) },
+                        user = new User
+                        {
+                            id = int.Parse(row[3].ToString())
+                        ,
+
+                            first_name = row[15].ToString(),
+                            second_name = row[16].ToString()
+
+
+                        },
                         timestamp = Convert.ToDateTime(row[4].ToString()),
                         updated = Convert.ToDateTime(row[5].ToString()),
-                        compania = new Proveedor {
+                        compania = new Proveedor
+                        {
                             id = int.Parse(row[6].ToString()),
                             nombre_comercial = row[7].ToString()
                         },
-                        polvorero = new Empleado {
+                        polvorero = new Empleado
+                        {
                             id = int.Parse(row[8].ToString()),
                             nombre = row[9].ToString(),
                             ap_paterno = row[10].ToString(),
@@ -223,7 +279,8 @@ namespace Data.Implementation
                         },
                         cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
                         cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
-                        cuenta = new Cuenta { id = int.Parse(row[14].ToString()) }
+                        cuenta = new Cuenta { id = int.Parse(row[14].ToString()) },
+                        active = int.Parse(row[17].ToString())
                     };
 
                 }
@@ -254,35 +311,33 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
-                        int active = int.Parse(row[15].ToString());
 
-                        if (active != 0)
+                        objects.Add(new Vale
                         {
-                            objects.Add(new Vale
+                            id = int.Parse(row[0].ToString()),
+                            turno = row[1].ToString(),
+                            lugar = row[2].ToString(),
+                            user = new User { id = int.Parse(row[3].ToString()) },
+                            timestamp = Convert.ToDateTime(row[4].ToString()),
+                            updated = Convert.ToDateTime(row[5].ToString()),
+                            compania = new Proveedor
                             {
-                                id = int.Parse(row[0].ToString()),
-                                turno = row[1].ToString(),
-                                lugar = row[2].ToString(),
-                                user = new User { id = int.Parse(row[3].ToString()) },
-                                timestamp = Convert.ToDateTime(row[4].ToString()),
-                                updated = Convert.ToDateTime(row[5].ToString()),
-                                compania = new Proveedor
-                                {
-                                    id = int.Parse(row[6].ToString()),
-                                    nombre_comercial = row[7].ToString()
-                                },
-                                polvorero = new Empleado
-                                {
-                                    id = int.Parse(row[8].ToString()),
-                                    nombre = row[9].ToString(),
-                                    ap_paterno = row[10].ToString(),
-                                    ap_materno = row[11].ToString()
-                                },
-                                cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                                cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
-                                cuenta = new Cuenta { id = int.Parse(row[14].ToString()) }
-                            });
-                        }
+                                id = int.Parse(row[6].ToString()),
+                                nombre_comercial = row[7].ToString()
+                            },
+                            polvorero = new Empleado
+                            {
+                                id = int.Parse(row[8].ToString()),
+                                nombre = row[9].ToString(),
+                                ap_paterno = row[10].ToString(),
+                                ap_materno = row[11].ToString()
+                            },
+                            cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
+                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                            cuenta = new Cuenta { id = int.Parse(row[14].ToString()) },
+                            active = int.Parse(row[15].ToString())
+                    });
+                       
                     }
                     return objects;
 
@@ -381,6 +436,47 @@ namespace Data.Implementation
             }
         }
 
+        public IList<RegistroDetalle> getAllRegistersOverByDetalle(int detalle_id)
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroDetalleOverByDetalleValeId", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("detallevale_id", detalle_id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
+                            user = new User { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -403,17 +499,18 @@ namespace Data.Implementation
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
+
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
                         RegistroDetalle rgd = new RegistroDetalle
-                                            {
-                                                id = int.Parse(row[0].ToString()),
-                                                folio = row[1].ToString(),
-                                                detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
-                                                user = new User { id = int.Parse(row[4].ToString()) },
-                                                timestamp = Convert.ToDateTime(row[5].ToString()),
-                                                updated = Convert.ToDateTime(row[6].ToString())
-                                            };
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
+                            user = new User { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        };
 
                         int folioS = int.Parse(rgd.folio.Substring(10, 6));
 
@@ -421,7 +518,30 @@ namespace Data.Implementation
                         {
                             objects.Add(rgd);
                         }
+
                     }
+
+                    SqlCommand command2 = new SqlCommand("sp_getAllRegistroDetaOverlleByFolioCaja", connection);
+                    command2.CommandType = CommandType.StoredProcedure;
+                    command2.Parameters.Add(new SqlParameter("folioCaja", folioCaja));
+                    SqlDataAdapter data_adapter2 = new SqlDataAdapter(command2);
+                    DataSet data_set2 = new DataSet();
+                    data_adapter2.Fill(data_set2);
+                    foreach (DataRow row in data_set2.Tables[0].Rows)
+                    {
+                        RegistroDetalle rgd = new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
+                            user = new User { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        };
+
+                        objects.Add(rgd);
+                    }
+
                     return objects;
 
                 }
@@ -556,6 +676,73 @@ namespace Data.Implementation
                     return TransactionResult.NOT_PERMITTED;
                 }
                 catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+
+        public TransactionResult deleteRegistroDetalle(int id)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_deleteRegistroDetalle", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("idDetalleVale", id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.DELETED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        public TransactionResult deleteDetalleVale(int id)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_deleteDetalleVale", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("idVale", id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.DELETED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch (Exception ex)
                 {
                     if (connection != null)
                     {

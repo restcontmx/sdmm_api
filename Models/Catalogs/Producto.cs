@@ -17,5 +17,6 @@ namespace Models.Catalogs
         public User user { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
+        public int revision { get; set; }
     }
 }

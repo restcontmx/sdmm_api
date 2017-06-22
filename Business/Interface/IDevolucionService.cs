@@ -12,7 +12,7 @@ namespace Business.Interface
 {
     public interface IDevolucionService
     {
-        TransactionResult create(DevolucionVo devolucion_vo, User user_log);
+        TransactionResult createP(DevolucionVo devolucion_vo, User user_log);
         DetalleDevByCajaVo getDetalleByCaja(string folio);
 
         /* IList<Devolucion> getAll();

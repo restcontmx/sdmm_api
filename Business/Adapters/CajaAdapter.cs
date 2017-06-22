@@ -33,7 +33,8 @@ namespace Business.Adapters
                 cantidad = vo.cantidad,
                 active = vo.active,
                 producto = new Producto { id = vo.producto_id },
-                user = new Models.Auth.User { id = vo.user_id }
+                user = new Models.Auth.User { id = vo.user_id },
+                revision =  vo.revision
             };
         }
 

@@ -26,14 +26,13 @@ namespace SDMM_API.Controllers
             this.devolucion_service = devolucion_service;
         }
 
-        //Crear Devolucion
+        //Crear Devolucion de Producto
 
-        [Route("api/devolucion/")]
+        [Route("api/devolucion/producto/")]
         [HttpPost]
-        public HttpResponseMessage createDevolucion([FromBody] DevolucionVo devolucion_vo)
+        public HttpResponseMessage createDevolucionP([FromBody] DevolucionVo devolucion_vo)
         {
-            Console.Write("Aquí mero ando!");
-            TransactionResult tr = devolucion_service.create(devolucion_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            TransactionResult tr = devolucion_service.createP(devolucion_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
             {

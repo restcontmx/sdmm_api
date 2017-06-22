@@ -17,11 +17,15 @@ namespace Data.Interface
         TransactionResult update(Vale vale);
         TransactionResult updateStatus(Vale vale);
         TransactionResult delete(int id);
+        TransactionResult deleteRegistroDetalle(int id);
+        TransactionResult deleteDetalleVale(int id);
         IList<DetalleVale> getAllDetalles(int vale_id);
         TransactionResult createDetalle(DetalleVale detalle);
         IList<RegistroDetalle> getAllRegistersByDetalle(int detalle_id);
+        IList<RegistroDetalle> getAllRegistersOverByDetalle(int detalle_id);
         IList<RegistroDetalle> getAllRegistersByFolioCaja(string folioCaja);
         IList<RegistroDetalle> getAllRegistersSacos();
         TransactionResult createRegistroDetalle(RegistroDetalle registro);
+        TransactionResult createRegistroDetalleOver(RegistroDetalle registro);
     }
 }

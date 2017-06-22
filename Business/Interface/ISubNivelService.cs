@@ -11,7 +11,7 @@ namespace Business.Interface
         IList<SubNivel> getAll();
         SubNivel detail(int id);
         TransactionResult create(SubNivelVo subnivel_vo, User user_log);
-        TransactionResult update(SubNivelVo subnivel_vo);
+        TransactionResult update(SubNivelVo subnivel_vo, User user_log);
         TransactionResult delete(int id);
     }
 }

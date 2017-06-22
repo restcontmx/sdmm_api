@@ -21,5 +21,8 @@ namespace Models.Catalogs
 
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
+
+        //Esto se obtiene si el producto requiere revision
+        public int revision { get; set; }
     }
 }

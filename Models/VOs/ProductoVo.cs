@@ -19,6 +19,7 @@ namespace Models.VOs
         public int user_id { get; set; }
         public string timestamp { get; set; }
         public string updated { get; set; }
+        public int revision { get; set; }
 
     }
 }

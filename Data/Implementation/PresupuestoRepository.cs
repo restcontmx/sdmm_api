@@ -205,7 +205,7 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_updateEmpleado", connection);
+                    SqlCommand command = new SqlCommand("sp_updatePresupuesto", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("producto_id", presupuesto.producto.id));
                     command.Parameters.Add(new SqlParameter("presupuesto", presupuesto.presupuesto));

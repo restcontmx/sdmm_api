@@ -29,7 +29,8 @@ namespace Business.Adapters
                 costo = vo.costo,
                 peso = vo.peso,
                 modo = vo.modo,
-                user = new Models.Auth.User { id = vo.user_id }
+                user = new Models.Auth.User { id = vo.user_id },
+                revision =  vo.revision
             };
         }
     }

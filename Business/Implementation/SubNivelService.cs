@@ -39,9 +39,12 @@ namespace Business.Implementation
             return subnivel_repository.getAll();
         }
 
-        public TransactionResult update(SubNivelVo subnivel_vo)
+        public TransactionResult update(SubNivelVo subnivel_vo, User user_log)
         {
-            return subnivel_repository.update(SubNivelAdapter.voToObject(subnivel_vo));
+            SubNivel obj = SubNivelAdapter.voToObject(subnivel_vo);
+            obj.user = user_log;
+
+            return subnivel_repository.update(obj);
         }
     }
 }

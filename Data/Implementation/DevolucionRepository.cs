@@ -15,7 +15,7 @@ namespace Data.Implementation
     public class DevolucionRepository : IDevolucionRepository
     {
 
-        public TransactionResult create(Devolucion devolucion)
+        public TransactionResult createP(Devolucion devolucion)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))

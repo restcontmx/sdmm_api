@@ -31,6 +31,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("peso", producto.peso));
                     command.Parameters.Add(new SqlParameter("modo", producto.modo));
                     command.Parameters.Add(new SqlParameter("tipoproducto_id", producto.tipo_producto.id));
+                    command.Parameters.Add(new SqlParameter("revision", producto.revision));
                     command.Parameters.Add(new SqlParameter("user_id", producto.user.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
@@ -130,7 +131,9 @@ namespace Data.Implementation
                             name = row[12].ToString(),
                             description = row[13].ToString(),
                             value = int.Parse(row[14].ToString())
-                        }
+                        },
+                        revision  = int.Parse(row[17].ToString())
+
                     };
 
                 }
@@ -180,7 +183,8 @@ namespace Data.Implementation
                                 name = row[12].ToString(),
                                 description = row[13].ToString(),
                                 value = int.Parse(row[14].ToString())
-                            }
+                            },
+                            revision = int.Parse(row[15].ToString())
                         });
                     }
                     return objects;
@@ -206,6 +210,7 @@ namespace Data.Implementation
                 {
                     connection.Open();
                     SqlCommand command = new SqlCommand("sp_updateProducto", connection);
+                    command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("presentacion", producto.presentacion));
                     command.Parameters.Add(new SqlParameter("codigo", producto.codigo));
                     command.Parameters.Add(new SqlParameter("nombre", producto.nombre));
@@ -214,6 +219,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("peso", producto.peso));
                     command.Parameters.Add(new SqlParameter("modo", producto.modo));
                     command.Parameters.Add(new SqlParameter("tipoproducto_id", producto.tipo_producto.id));
+                    command.Parameters.Add(new SqlParameter("revision", producto.revision));
                     command.Parameters.Add(new SqlParameter("id", producto.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
