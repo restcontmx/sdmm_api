@@ -13,6 +13,7 @@ namespace Business.Adapters
                 id = vo.id,
                 proveedor = new Proveedor { id = vo.compania_id },
                 folio = vo.folio,
+                tipo = vo.tipo,
                 user = new User { id = vo.user_id}
                 
             };

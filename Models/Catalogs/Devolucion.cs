@@ -14,6 +14,8 @@ namespace Models.Catalogs
 
         public string folio { get; set; }
 
+        public int tipo { get; set; }
+
 
         public User user { get; set; }
         public DateTime timestamp { get; set; }
