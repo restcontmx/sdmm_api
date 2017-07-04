@@ -223,5 +223,38 @@ namespace Data.Implementation
                 }
             }
         }
+
+
+        public IList<string> getNombresLugares()
+        {
+            SqlConnection connection = null;
+            IList<string> objects = new List<string>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllSubNivel", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(row[8].ToString() + "-" + row[7].ToString() + "-" + row[1].ToString());
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
     }
 }

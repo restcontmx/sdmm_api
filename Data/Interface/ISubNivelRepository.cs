@@ -11,5 +11,6 @@ namespace Data.Interface
         TransactionResult create(SubNivel subnivel);
         TransactionResult update(SubNivel subnivel);
         TransactionResult delete(int id);
+        IList<string> getNombresLugares();
     }
 }

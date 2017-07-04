@@ -46,5 +46,10 @@ namespace Business.Implementation
 
             return subnivel_repository.update(obj);
         }
+
+        public IList<string> getNombresLugares()
+        {
+            return subnivel_repository.getNombresLugares();
+        }
     }
 }
