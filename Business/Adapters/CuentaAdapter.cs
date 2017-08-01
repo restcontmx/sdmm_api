@@ -20,6 +20,7 @@ namespace Business.Adapters
                 nombre = vo.nombre,
                 numero = vo.numero,
                 user = new Models.Auth.User { id = vo.user_id }
+
             };
         }
     }

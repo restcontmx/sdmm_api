@@ -9,9 +9,9 @@ namespace Models.Catalogs
     public class Categoria
     {
         public int id { get; set; }
-        public Nivel nivel { get; set; }
         public ProcesoMinero procesominero { get; set; }
         public string nombre { get; set; }
+        public string numero { get; set; }
         public User user { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }

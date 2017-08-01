@@ -13,6 +13,7 @@ namespace Models.Catalogs
         public DetalleVale detallevale { get; set; }
 
         public string folio { get; set; }
+        public int turno { get; set; }
 
         public User user { get; set; }
         public DateTime timestamp { get; set; }

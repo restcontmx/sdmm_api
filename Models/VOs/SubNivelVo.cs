@@ -11,6 +11,8 @@ namespace Models.VOs
         public int nivel_id { get; set; }
         public string nombre { get; set; }
         public int status { get; set; }
+        public int cuenta_id { get; set; }
+        public int categoria_id { get; set; }
         public int user_id { get; set; }
     }
 }

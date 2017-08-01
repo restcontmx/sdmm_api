@@ -28,7 +28,22 @@ namespace Business.Implementation
         {
             Devolucion devolucion = DevolucionAdapter.voToObject(devolucion_vo);
             devolucion.user = user_log;
-            return devolucion_repository.createP(devolucion);
+            int id =  devolucion_repository.createP(devolucion);
+            if (id > 0)
+            {
+                var tr = TransactionResult.CREATED;
+                foreach (RegistroDetalleDevVo rvo in devolucion_vo.registros)
+                {
+                    rvo.devolucion_id = id;
+                    tr = devolucion_repository.createRegistroDetalleDev(RegistroDetalleDevAdapter.voToObject(rvo));
+                    if (tr != TransactionResult.CREATED)
+                    {
+                        return tr;
+                    }
+                }
+                return tr;
+            }
+            return TransactionResult.ERROR;
         }
 
         public DetalleDevByCajaVo getDetalleByCaja(string folio)

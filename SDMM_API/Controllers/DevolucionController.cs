@@ -37,7 +37,6 @@ namespace SDMM_API.Controllers
             if (tr == TransactionResult.CREATED)
             {
                 data.Add("message", "Object created.");
-                //data.Add("message", "Que quiubo que.");
                 return Request.CreateResponse(HttpStatusCode.Created, data);
             }
             else if (tr == TransactionResult.EXISTS)

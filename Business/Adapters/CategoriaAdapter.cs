@@ -17,10 +17,10 @@ namespace Business.Adapters
             return new Categoria
             {
                 id = vo.id,
-                nivel = new Nivel { id = vo.nivel_id },
                 procesominero = new ProcesoMinero { id = vo.procesominero_id },
                 nombre = vo.nombre,
-                user = new Models.Auth.User { id = vo.user_id }
+                user = new Models.Auth.User { id = vo.user_id },
+                numero = vo.numero
             };
         }
     }

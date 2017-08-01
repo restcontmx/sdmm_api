@@ -6,14 +6,15 @@ using System.Web;
 using Models.Catalogs;
 using Warrior.Handlers.Enums;
 using System.Data.SqlClient;
-using System.Data;
 using System.Configuration;
+using Warrior.Data;
+using System.Data;
 
 namespace Data.Implementation
 {
-    public class ProductoRepository : IProductoRepository
+    public class SegmentoProductoRepository : ISegmentoProductoRepository
     {
-        public TransactionResult create(Producto producto)
+        public TransactionResult create(SegmentoProducto segmentoproducto)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -21,17 +22,10 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_createProducto", connection);
+                    SqlCommand command = new SqlCommand("sp_createSegmentoProducto", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("codigo", producto.codigo));
-                    command.Parameters.Add(new SqlParameter("nombre", producto.nombre));
-                    command.Parameters.Add(new SqlParameter("costo", producto.costo));
-                    command.Parameters.Add(new SqlParameter("peso", producto.peso));
-                    command.Parameters.Add(new SqlParameter("tipoproducto_id", producto.tipo_producto.id));
-                    command.Parameters.Add(new SqlParameter("proveedor_id", producto.proveedor.id));
-                    command.Parameters.Add(new SqlParameter("segmentoproducto_id", producto.segmento.id));
-                    command.Parameters.Add(new SqlParameter("revision", producto.revision));
-                    command.Parameters.Add(new SqlParameter("user_id", producto.user.id));
+                    command.Parameters.Add(new SqlParameter("name", segmentoproducto.name));
+                    command.Parameters.Add(new SqlParameter("description", Validations.defaultString(segmentoproducto.description)));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -66,7 +60,7 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_deleteProducto", connection);
+                    SqlCommand command = new SqlCommand("sp_deleteSegmentoProducto", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id", id));
                     command.ExecuteNonQuery();
@@ -91,7 +85,7 @@ namespace Data.Implementation
             }
         }
 
-        public Producto detail(int id)
+        public SegmentoProducto detail(int id)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -99,48 +93,18 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_productoDetail", connection);
+                    SqlCommand command = new SqlCommand("sp_segmentoProductoDetail", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id", id));
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     DataRow row = data_set.Tables[0].Rows[0];
-                    return new Producto
+                    return new SegmentoProducto
                     {
                         id = int.Parse(row[0].ToString()),
-                        codigo = row[1].ToString(),
-                        nombre = row[2].ToString(),
-                        costo = decimal.Parse(row[3].ToString()),
-                        peso = decimal.Parse(row[4].ToString()),
-                        revision = int.Parse(row[5].ToString()),
-                        proveedor = new Proveedor
-                        {
-                            id = int.Parse(row[6].ToString()),
-                            nombre_comercial = row[17].ToString()
-                        },
-                        segmento = new SegmentoProducto
-                        {
-                            id = int.Parse(row[7].ToString()),
-                            name = row[18].ToString()
-                        },
-                        user = new Models.Auth.User
-                        {
-                            id = int.Parse(row[8].ToString()),
-                            first_name = row[15].ToString(),
-                            second_name = row[16].ToString()
-                        },
-                        timestamp = Convert.ToDateTime(row[9].ToString()),
-                        updated = Convert.ToDateTime(row[10].ToString()),
-                        tipo_producto = new TipoProducto
-                        {
-                            id = int.Parse(row[11].ToString()),
-                            name = row[12].ToString(),
-                            description = row[13].ToString(),
-                            value = int.Parse(row[14].ToString())
-                        }
-                        
-
+                        name = row[1].ToString(),
+                        description = row[2].ToString()
                     };
 
                 }
@@ -155,50 +119,27 @@ namespace Data.Implementation
             }
         }
 
-        public IList<Producto> getAll()
+        public IList<SegmentoProducto> getAll()
         {
             SqlConnection connection = null;
-            IList<Producto> objects = new List<Producto>();
+            IList<SegmentoProducto> objects = new List<SegmentoProducto>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_getAllProducto", connection);
+                    SqlCommand command = new SqlCommand("sp_getAllSegmentoProductos", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
-                        objects.Add(new Producto
+                        objects.Add(new SegmentoProducto
                         {
                             id = int.Parse(row[0].ToString()),
-                            codigo = row[1].ToString(),
-                            nombre = row[2].ToString(),
-                            costo = decimal.Parse(row[3].ToString()),
-                            peso = decimal.Parse(row[4].ToString()),
-                            revision = int.Parse(row[5].ToString()),
-                            proveedor =  new Proveedor
-                            {
-                                id = int.Parse(row[6].ToString()),
-                                nombre_comercial = row[15].ToString()
-                            },
-                            segmento = new SegmentoProducto
-                            {
-                                id = int.Parse(row[7].ToString()),
-                                name = row[16].ToString()
-                            },
-                            user = new Models.Auth.User { id = int.Parse(row[8].ToString()) },
-                            timestamp = Convert.ToDateTime(row[9].ToString()),
-                            updated = Convert.ToDateTime(row[10].ToString()),
-                            tipo_producto = new TipoProducto
-                            {
-                                id = int.Parse(row[11].ToString()),
-                                name = row[12].ToString(),
-                                description = row[13].ToString(),
-                                value = int.Parse(row[14].ToString())
-                            }
+                            name = row[1].ToString(),
+                            description = row[2].ToString()
                         });
                     }
                     return objects;
@@ -215,7 +156,7 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult update(Producto producto)
+        public TransactionResult update(SegmentoProducto segmentoproducto)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -223,17 +164,11 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_updateProducto", connection);
+                    SqlCommand command = new SqlCommand("sp_updateSegmentoProducto", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("codigo", producto.codigo));
-                    command.Parameters.Add(new SqlParameter("nombre", producto.nombre));
-                    command.Parameters.Add(new SqlParameter("costo", producto.costo));
-                    command.Parameters.Add(new SqlParameter("peso", producto.peso));
-                    command.Parameters.Add(new SqlParameter("proveedor_id", producto.proveedor.id));
-                    command.Parameters.Add(new SqlParameter("segmentoproducto_id", producto.segmento.id));
-                    command.Parameters.Add(new SqlParameter("tipoproducto_id", producto.tipo_producto.id));
-                    command.Parameters.Add(new SqlParameter("revision", producto.revision));
-                    command.Parameters.Add(new SqlParameter("id", producto.id));
+                    command.Parameters.Add(new SqlParameter("name", segmentoproducto.name));
+                    command.Parameters.Add(new SqlParameter("description", Validations.defaultString(segmentoproducto.description)));
+                    command.Parameters.Add(new SqlParameter("id", segmentoproducto.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
                 }

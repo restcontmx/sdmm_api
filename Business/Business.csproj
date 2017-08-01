@@ -103,6 +103,7 @@
   <ItemGroup>
     <Compile Include="Adapters\CajaAdapter.cs" />
     <Compile Include="Adapters\CategoriaAdapter.cs" />
+    <Compile Include="Adapters\CompaniaAdapter.cs" />
     <Compile Include="Adapters\CuentaAdapter.cs" />
     <Compile Include="Adapters\DetalleDevByCajaAdapter.cs" />
     <Compile Include="Adapters\DetalleValeAdapter.cs" />
@@ -115,6 +116,8 @@
     <Compile Include="Adapters\ProductoAdapter.cs" />
     <Compile Include="Adapters\ProveedorAdapter.cs" />
     <Compile Include="Adapters\RegistroDetalleAdapter.cs" />
+    <Compile Include="Adapters\RegistroDetalleDevAdapter.cs" />
+    <Compile Include="Adapters\SegmentoProductoAdapter.cs" />
     <Compile Include="Adapters\SubNivelAdapter.cs" />
     <Compile Include="Adapters\TipoEmpleadoAdapter.cs" />
     <Compile Include="Adapters\TipoProductoAdapter.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="Helpers\NInjectHelper.cs" />
     <Compile Include="Implementation\CajaService.cs" />
     <Compile Include="Implementation\CategoriaService.cs" />
+    <Compile Include="Implementation\CompaniaService.cs" />
     <Compile Include="Implementation\CuentaService.cs" />
     <Compile Include="Implementation\DevolucionService.cs" />
     <Compile Include="Implementation\DummyService.cs" />
@@ -132,6 +136,7 @@
     <Compile Include="Implementation\ProcesoMineroService.cs" />
     <Compile Include="Implementation\ProductoService.cs" />
     <Compile Include="Implementation\ProveedorService.cs" />
+    <Compile Include="Implementation\SegmentoProductoService.cs" />
     <Compile Include="Implementation\SubNivelService.cs" />
     <Compile Include="Implementation\TipoEmpleadoService.cs" />
     <Compile Include="Implementation\TipoProductoService.cs" />
@@ -140,6 +145,7 @@
     <Compile Include="Interface\IAuthenticationService.cs" />
     <Compile Include="Interface\ICajaService.cs" />
     <Compile Include="Interface\ICategoriaService.cs" />
+    <Compile Include="Interface\ICompaniaService.cs" />
     <Compile Include="Interface\ICuentaService.cs" />
     <Compile Include="Interface\IDevolucionService.cs" />
     <Compile Include="Interface\IDummyService.cs" />
@@ -149,6 +155,7 @@
     <Compile Include="Interface\IProcesoMineroService.cs" />
     <Compile Include="Interface\IProductoService.cs" />
     <Compile Include="Interface\IProveedorService.cs" />
+    <Compile Include="Interface\ISegmentoProductoService.cs" />
     <Compile Include="Interface\ISubNivelService.cs" />
     <Compile Include="Interface\ITipoEmpleadoService.cs" />
     <Compile Include="Interface\ITipoProductoService.cs" />

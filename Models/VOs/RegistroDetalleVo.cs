@@ -12,6 +12,7 @@ namespace Models.VOs
         public int detallevale_id { get; set; }
 
         public string folio { get; set; }
+        public int turno { get; set; }
 
         public int user_id { get; set; }
         public string timestamp { get; set; }
