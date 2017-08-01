@@ -1,19 +1,17 @@
 ﻿using Data.Interface;
+using Models.Catalogs;
 using System;
 using System.Collections.Generic;
-using Models.Catalogs;
-using Warrior.Handlers.Enums;
-using System.Data.SqlClient;
-using System.Data;
 using System.Configuration;
-using Models.Auth;
+using System.Data;
+using System.Data.SqlClient;
 using Warrior.Data;
-
+using Warrior.Handlers.Enums;
 namespace Data.Implementation
 {
-    public class CategoriaRepository : ICategoriaRepository
+    public class InventarioRepository : IInventarioRepository
     {
-        public TransactionResult create(Categoria categoria)
+        public TransactionResult create(Inventario inventario)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -21,12 +19,10 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_createCategoria", connection);
+                    SqlCommand command = new SqlCommand("sp_createInventario", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("procesominero_id", categoria.procesominero.id));
-                    command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString( categoria.nombre )));
-                    command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(categoria.numero)));
-                    command.Parameters.Add(new SqlParameter("user_id", categoria.user.id));
+                    command.Parameters.Add(new SqlParameter("producto_id", inventario.producto.id));
+                    command.Parameters.Add(new SqlParameter("cantidad", inventario.cantidad));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -61,7 +57,7 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_deleteCategoria", connection);
+                    SqlCommand command = new SqlCommand("sp_deleteInventariox", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id", id));
                     command.ExecuteNonQuery();
@@ -86,37 +82,28 @@ namespace Data.Implementation
             }
         }
 
-        public Categoria detail(int id)
+        public Inventario detail(int id)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_categoriaDetail", connection);
+                    /*connection.Open();
+                    SqlCommand command = new SqlCommand("sp_segmentoProductoDetail", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id", id));
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     DataRow row = data_set.Tables[0].Rows[0];
-                    return new Categoria
+                    return new SegmentoProducto
                     {
                         id = int.Parse(row[0].ToString()),
-                        nombre = row[1].ToString(),
-                        numero = row[2].ToString(),
-                        user = new User { id = int.Parse(row[3].ToString()) },
-                        timestamp = Convert.ToDateTime(row[4].ToString()),
-                        updated = Convert.ToDateTime(row[5].ToString()),
-                        procesominero = new ProcesoMinero
-                        {
-                            id = int.Parse(row[6].ToString()),
-                            nombre = row[7].ToString(),
-                            codigo = row[8].ToString()
-                        }
-
-                    };
+                        name = row[1].ToString(),
+                        description = row[2].ToString()
+                    };*/
+                    return new Inventario();
 
                 }
                 catch (Exception ex)
@@ -130,39 +117,32 @@ namespace Data.Implementation
             }
         }
 
-        public IList<Categoria> getAll()
+        public IList<Inventario> getAll()
         {
             SqlConnection connection = null;
-            IList<Categoria> objects = new List<Categoria>();
+            IList<SegmentoProducto> objects = new List<SegmentoProducto>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_getAllCategoria", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
-                    DataSet data_set = new DataSet();
-                    data_adapter.Fill(data_set);
-                    foreach (DataRow row in data_set.Tables[0].Rows)
-                    {
-                        objects.Add(new Categoria
-                        {
-                            id = int.Parse(row[0].ToString()),
-                            nombre = row[1].ToString(),
-                            numero = row[2].ToString(),
-                            user = new User { id = int.Parse(row[3].ToString()) },
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString()),
-                            procesominero = new ProcesoMinero {
-                                id = int.Parse(row[6].ToString()),
-                                nombre = row[7].ToString(),
-                                codigo = row[8].ToString()
-                            }
+                    /* connection.Open();
+                     SqlCommand command = new SqlCommand("sp_getAllSegmentoProductos", connection);
+                     command.CommandType = CommandType.StoredProcedure;
+                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                     DataSet data_set = new DataSet();
+                     data_adapter.Fill(data_set);
+                     foreach (DataRow row in data_set.Tables[0].Rows)
+                     {
+                         objects.Add(new SegmentoProducto
+                         {
+                             id = int.Parse(row[0].ToString()),
+                             name = row[1].ToString(),
+                             description = row[2].ToString()
+                         });
+                     }
+                     return objects;*/
 
-                        });
-                    }
-                    return objects;
+                    return null;
 
                 }
                 catch (SqlException ex)
@@ -171,26 +151,25 @@ namespace Data.Implementation
                     {
                         connection.Close();
                     }
-                    return objects;
+                    return null;
                 }
             }
         }
 
-        public TransactionResult update(Categoria categoria)
+        public TransactionResult update(Inventario inventario)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_updateCategoria", connection);
+                    /*connection.Open();
+                    SqlCommand command = new SqlCommand("sp_updateSegmentoProducto", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("id", categoria.id));
-                    command.Parameters.Add(new SqlParameter("procesominero_id", categoria.procesominero.id));
-                    command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(categoria.nombre)));
-                    command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(categoria.numero)));
-                    command.ExecuteNonQuery();
+                    command.Parameters.Add(new SqlParameter("name", segmentoproducto.name));
+                    command.Parameters.Add(new SqlParameter("description", Validations.defaultString(segmentoproducto.description)));
+                    command.Parameters.Add(new SqlParameter("id", segmentoproducto.id));
+                    command.ExecuteNonQuery();*/
                     return TransactionResult.OK;
                 }
                 catch (SqlException ex)

@@ -9,8 +9,9 @@ namespace Data.Interface
 {
     public interface IDevolucionRepository
     {
-        TransactionResult createP(Devolucion devolucion);
+        int createP(Devolucion devolucion);
         DetalleDevByCaja getDetalleByCaja(string folio);
+        TransactionResult createRegistroDetalleDev(RegistroDetalleDev registro);
        /* IList<Devolucion> getAll();
         Devolucion detail(int id);
         TransactionResult update(Devolucion devolucion);

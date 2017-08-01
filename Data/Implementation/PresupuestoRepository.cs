@@ -113,8 +113,8 @@ namespace Data.Implementation
                         user = new User
                         {
                             id = int.Parse(row[4].ToString()),
-                            first_name = row[16].ToString(),
-                            second_name = row[17].ToString()
+                            first_name = row[13].ToString(),
+                            second_name = row[14].ToString()
                         },
                         timestamp = Convert.ToDateTime(row[5].ToString()),
                         updated = Convert.ToDateTime(row[6].ToString()),
@@ -122,13 +122,10 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[7].ToString()),
                             tipo_producto = new TipoProducto { id = int.Parse(row[8].ToString()) },
-                            presentacion = row[9].ToString(),
-                            codigo = row[10].ToString(),
-                            nombre = row[11].ToString(),
-                            cantidad = int.Parse(row[12].ToString()),
-                            costo = decimal.Parse(row[13].ToString()),
-                            peso = decimal.Parse(row[14].ToString()),
-                            modo = row[15].ToString()
+                            codigo = row[9].ToString(),
+                            nombre = row[10].ToString(),
+                            costo = decimal.Parse(row[11].ToString()),
+                            peso = decimal.Parse(row[12].ToString())
                         }
                     };
 
@@ -173,13 +170,10 @@ namespace Data.Implementation
                             {
                                 id = int.Parse(row[7].ToString()),
                                 tipo_producto = new TipoProducto { id = int.Parse(row[8].ToString()) },
-                                presentacion = row[9].ToString(),
-                                codigo = row[10].ToString(),
-                                nombre = row[11].ToString(),
-                                cantidad = int.Parse(row[12].ToString()),
-                                costo = decimal.Parse(row[13].ToString()),
-                                peso = decimal.Parse(row[14].ToString()),
-                                modo = row[15].ToString()
+                                codigo = row[9].ToString(),
+                                nombre = row[10].ToString(),
+                                costo = decimal.Parse(row[11].ToString()),
+                                peso = decimal.Parse(row[12].ToString())
                             }
                         });
                     }

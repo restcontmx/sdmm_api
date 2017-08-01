@@ -25,14 +25,13 @@ namespace Data.Implementation
                     connection.Open();
                     SqlCommand command = new SqlCommand("sp_createVale", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("turno", Validations.defaultString(vale.turno)));
-                    command.Parameters.Add(new SqlParameter("lugar", Validations.defaultString(vale.lugar)));
+                    command.Parameters.Add(new SqlParameter("turno", vale.turno));
                     command.Parameters.Add(new SqlParameter("compania_id", vale.compania.id));
                     command.Parameters.Add(new SqlParameter("polvorero_id", vale.polvorero.id));
                     command.Parameters.Add(new SqlParameter("cargador1_id", vale.cargador1.id));
                     command.Parameters.Add(new SqlParameter("cargador2_id", vale.cargador2.id));
                     command.Parameters.Add(new SqlParameter("user_id", vale.user.id));
-                    command.Parameters.Add(new SqlParameter("cuenta_id", vale.cuenta.id));
+                    command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
@@ -248,40 +247,111 @@ namespace Data.Implementation
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     DataRow row = data_set.Tables[0].Rows[0];
-                    return new Vale
+
+                    bool authEmpty = true;
+
+                    //Revisa si la autorización está vacía
+                    string aux2 = row[22].ToString();
+
+                    if(aux2 == String.Empty || aux2 == null)
                     {
-                        id = int.Parse(row[0].ToString()),
-                        turno = row[1].ToString(),
-                        lugar = row[2].ToString(),
-                        user = new User
-                        {
-                            id = int.Parse(row[3].ToString())
-                        ,
+                        authEmpty = false;
+                    }
 
-                            first_name = row[15].ToString(),
-                            second_name = row[16].ToString()
-
-
-                        },
-                        timestamp = Convert.ToDateTime(row[4].ToString()),
-                        updated = Convert.ToDateTime(row[5].ToString()),
-                        compania = new Proveedor
+                    if (authEmpty)
+                    {
+                        return new Vale
                         {
-                            id = int.Parse(row[6].ToString()),
-                            nombre_comercial = row[7].ToString()
-                        },
-                        polvorero = new Empleado
+                            id = int.Parse(row[0].ToString()),
+                            turno = int.Parse(row[1].ToString()),
+                            user = new User
+                            {
+                                id = int.Parse(row[2].ToString()),
+                                first_name = row[14].ToString(),
+                                second_name = row[15].ToString()
+                            },
+                            timestamp = Convert.ToDateTime(row[3].ToString()),
+                            updated = Convert.ToDateTime(row[4].ToString()),
+                            compania = new Compania
+                            {
+                                id = int.Parse(row[6].ToString()),
+                                nombre_sistema = row[7].ToString()
+                            },
+                            polvorero = new Empleado
+                            {
+                                id = int.Parse(row[8].ToString()),
+                                nombre = row[9].ToString(),
+                                ap_paterno = row[10].ToString(),
+                                ap_materno = row[11].ToString()
+                            },
+                            cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
+                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                            subnivel = new SubNivel
+                            {
+                                id = int.Parse(row[5].ToString()),
+                                nombre = row[17].ToString(),
+                                nivel = new Nivel
+                                {
+                                    id = int.Parse(row[18].ToString()),
+                                    nombre = row[19].ToString(),
+                                    codigo = row[20].ToString()
+                                },
+                            },
+                            active = int.Parse(row[16].ToString()),
+                            userAutorizo = new User
+                            {
+                                id = int.Parse(row[22].ToString()),
+                                first_name = row[23].ToString(),
+                                second_name = row[24].ToString()
+                            }
+                        };
+                    }
+                    else
+                    {
+
+                        return new Vale
                         {
-                            id = int.Parse(row[8].ToString()),
-                            nombre = row[9].ToString(),
-                            ap_paterno = row[10].ToString(),
-                            ap_materno = row[11].ToString()
-                        },
-                        cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                        cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
-                        cuenta = new Cuenta { id = int.Parse(row[14].ToString()) },
-                        active = int.Parse(row[17].ToString())
-                    };
+                            id = int.Parse(row[0].ToString()),
+                            turno = int.Parse(row[1].ToString()),
+                            user = new User
+                            {
+                                id = int.Parse(row[2].ToString()),
+                                first_name = row[14].ToString(),
+                                second_name = row[15].ToString()
+                            },
+                            timestamp = Convert.ToDateTime(row[3].ToString()),
+                            updated = Convert.ToDateTime(row[4].ToString()),
+                            compania = new Compania
+                            {
+                                id = int.Parse(row[6].ToString()),
+                                nombre_sistema = row[7].ToString()
+                            },
+                            polvorero = new Empleado
+                            {
+                                id = int.Parse(row[8].ToString()),
+                                nombre = row[9].ToString(),
+                                ap_paterno = row[10].ToString(),
+                                ap_materno = row[11].ToString()
+                            },
+                            cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
+                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                            subnivel = new SubNivel
+                            {
+                                id = int.Parse(row[5].ToString()),
+                                nombre = row[17].ToString(),
+                                nivel = new Nivel
+                                {
+                                    id = int.Parse(row[18].ToString()),
+                                    nombre = row[19].ToString(),
+                                    codigo = row[20].ToString()
+                                },
+                            },
+                            active = int.Parse(row[16].ToString()),
+                            userAutorizo = new User()
+                            
+                        };
+
+                    }
 
                 }
                 catch (Exception ex)
@@ -315,15 +385,24 @@ namespace Data.Implementation
                         objects.Add(new Vale
                         {
                             id = int.Parse(row[0].ToString()),
-                            turno = row[1].ToString(),
-                            lugar = row[2].ToString(),
-                            user = new User { id = int.Parse(row[3].ToString()) },
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString()),
-                            compania = new Proveedor
+                            turno = int.Parse(row[1].ToString()),
+                            user = new User { id = int.Parse(row[2].ToString()) },
+                            timestamp = Convert.ToDateTime(row[3].ToString()),
+                            updated = Convert.ToDateTime(row[4].ToString()),
+                            subnivel = new SubNivel {
+                                id = int.Parse(row[5].ToString()),
+                                nombre = row[15].ToString(),
+                                nivel = new Nivel
+                                {
+                                    id = int.Parse(row[16].ToString()),
+                                    nombre = row[17].ToString(),
+                                    codigo = row[18].ToString()
+                                },
+                            },
+                            compania = new Compania
                             {
                                 id = int.Parse(row[6].ToString()),
-                                nombre_comercial = row[7].ToString()
+                                nombre_sistema = row[7].ToString()
                             },
                             polvorero = new Empleado
                             {
@@ -334,8 +413,7 @@ namespace Data.Implementation
                             },
                             cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
                             cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
-                            cuenta = new Cuenta { id = int.Parse(row[14].ToString()) },
-                            active = int.Parse(row[15].ToString())
+                            active = int.Parse(row[14].ToString())
                     });
                        
                     }
@@ -521,7 +599,7 @@ namespace Data.Implementation
 
                     }
 
-                    SqlCommand command2 = new SqlCommand("sp_getAllRegistroDetaOverlleByFolioCaja", connection);
+                    SqlCommand command2 = new SqlCommand("sp_getAllRegistroDetalleOverByFolioCaja", connection);
                     command2.CommandType = CommandType.StoredProcedure;
                     command2.Parameters.Add(new SqlParameter("folioCaja", folioCaja));
                     SqlDataAdapter data_adapter2 = new SqlDataAdapter(command2);
@@ -615,12 +693,11 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id ", vale.id));
                     command.Parameters.Add(new SqlParameter("compania_id", vale.compania.id));
-                    command.Parameters.Add(new SqlParameter("turno", Validations.defaultString(vale.turno)));
-                    command.Parameters.Add(new SqlParameter("lugar", Validations.defaultString(vale.lugar)));
+                    command.Parameters.Add(new SqlParameter("turno",vale.turno));
                     command.Parameters.Add(new SqlParameter("polvorero_id", vale.polvorero.id));
                     command.Parameters.Add(new SqlParameter("cargador1_id", vale.cargador1.id));
                     command.Parameters.Add(new SqlParameter("cargador2_id", vale.cargador2.id));
-                    command.Parameters.Add(new SqlParameter("cuenta_id", vale.cuenta.id));
+                    command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
                     command.Parameters.Add(new SqlParameter("active", vale.active));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;

@@ -102,11 +102,13 @@
     <Compile Include="Auth\User.cs" />
     <Compile Include="Catalogs\Caja.cs" />
     <Compile Include="Catalogs\Categoria.cs" />
+    <Compile Include="Catalogs\Compania.cs" />
     <Compile Include="Catalogs\Cuenta.cs" />
     <Compile Include="Catalogs\DetalleDevByCaja.cs" />
     <Compile Include="Catalogs\DetalleVale.cs" />
     <Compile Include="Catalogs\Devolucion.cs" />
     <Compile Include="Catalogs\Empleado.cs" />
+    <Compile Include="Catalogs\Inventario.cs" />
     <Compile Include="Catalogs\Nivel.cs" />
     <Compile Include="Catalogs\Observacion.cs" />
     <Compile Include="Catalogs\Presupuesto.cs" />
@@ -114,6 +116,8 @@
     <Compile Include="Catalogs\Producto.cs" />
     <Compile Include="Catalogs\Proveedor.cs" />
     <Compile Include="Catalogs\RegistroDetalle.cs" />
+    <Compile Include="Catalogs\RegistroDetalleDev.cs" />
+    <Compile Include="Catalogs\SegmentoProducto.cs" />
     <Compile Include="Catalogs\SubNivel.cs" />
     <Compile Include="Catalogs\TipoEmpleado.cs" />
     <Compile Include="Catalogs\TipoProducto.cs" />
@@ -122,6 +126,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VOs\CajaVo.cs" />
     <Compile Include="VOs\CategoriaVo.cs" />
+    <Compile Include="VOs\CompaniaVo.cs" />
+    <Compile Include="VOs\InventarioVo.cs" />
     <Compile Include="VOs\ObservacionVo.cs" />
     <Compile Include="VOs\CuentaVo.cs" />
     <Compile Include="VOs\DetalleDevByCajaVo.cs" />
@@ -134,7 +140,9 @@
     <Compile Include="VOs\ProductoVo.cs" />
     <Compile Include="VOs\ProveedorVo.cs" />
     <Compile Include="VOs\RegistersVo.cs" />
+    <Compile Include="VOs\RegistroDetalleDevVo.cs" />
     <Compile Include="VOs\RegistroDetalleVo.cs" />
+    <Compile Include="VOs\SegmentoProductoVo.cs" />
     <Compile Include="VOs\SubNivelVo.cs" />
     <Compile Include="VOs\TipoEmpleadoVo.cs" />
     <Compile Include="VOs\TipoProductoVo.cs" />

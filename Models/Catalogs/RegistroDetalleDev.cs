@@ -6,18 +6,14 @@ using System.Web;
 
 namespace Models.Catalogs
 {
-    public class Devolucion
+    public class RegistroDetalleDev
     {
         public int id { get; set; }
+        public string folio { get; set; }
+        public int tipodev { get; set; }
+        public string observaciones { get; set; }
 
-        public Compania compania { get; set; }
-
-        public string motivo { get; set; }
-        public int turno { get; set; }
-        public Vale vale { get; set; }
-
-        public IList<RegistroDetalleDev> registros { get; set; }
-
+        public Devolucion devolucion { get; set; }
         public User user { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }

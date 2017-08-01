@@ -99,15 +99,18 @@
   <ItemGroup>
     <Compile Include="Implementation\CajaRepository.cs" />
     <Compile Include="Implementation\CategoriaRepository.cs" />
+    <Compile Include="Implementation\CompaniaRepository.cs" />
     <Compile Include="Implementation\CuentaRepository.cs" />
     <Compile Include="Implementation\DevolucionRepository.cs" />
     <Compile Include="Implementation\DummyRepository.cs" />
     <Compile Include="Implementation\EmpleadoRepository.cs" />
+    <Compile Include="Implementation\InventarioRepository.cs" />
     <Compile Include="Implementation\NivelRepository.cs" />
     <Compile Include="Implementation\PresupuestoRepository.cs" />
     <Compile Include="Implementation\ProcesoMineroRepository.cs" />
     <Compile Include="Implementation\ProductoRepository.cs" />
     <Compile Include="Implementation\ProveedorRepository.cs" />
+    <Compile Include="Implementation\SegmentoProductoRepository.cs" />
     <Compile Include="Implementation\SubNivelRepository.cs" />
     <Compile Include="Implementation\TipoEmpleadoRepository.cs" />
     <Compile Include="Implementation\TipoProductoRepository.cs" />
@@ -116,15 +119,18 @@
     <Compile Include="Interface\IAuthenticationRepository.cs" />
     <Compile Include="Interface\ICajaRepository.cs" />
     <Compile Include="Interface\ICategoriaRepository.cs" />
+    <Compile Include="Interface\ICompaniaRepository.cs" />
     <Compile Include="Interface\ICuentaRepository.cs" />
     <Compile Include="Interface\IDevolucionRepository.cs" />
     <Compile Include="Interface\IDummyRepository.cs" />
     <Compile Include="Interface\IEmpleadoRepository.cs" />
+    <Compile Include="Interface\IInventarioRepository.cs" />
     <Compile Include="Interface\INivelRepository.cs" />
     <Compile Include="Interface\IPresupuestoRepository.cs" />
     <Compile Include="Interface\IProcesoMineroRepository.cs" />
     <Compile Include="Interface\IProductoRepository.cs" />
     <Compile Include="Interface\IProveedorRepository.cs" />
+    <Compile Include="Interface\ISegmentoProductoRepository.cs" />
     <Compile Include="Interface\ISubNivelRepository.cs" />
     <Compile Include="Interface\ITipoEmpleadoRepository.cs" />
     <Compile Include="Interface\ITipoProductoRepository.cs" />

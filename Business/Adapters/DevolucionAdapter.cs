@@ -11,9 +11,10 @@ namespace Business.Adapters
             return new Devolucion
             {
                 id = vo.id,
-                proveedor = new Proveedor { id = vo.compania_id },
-                folio = vo.folio,
-                tipo = vo.tipo,
+                compania = new Compania { id = vo.compania_id },
+                motivo = vo.motivo,
+                turno = vo.turno,
+                vale = new Vale { id = vo.vale_id },
                 user = new User { id = vo.user_id}
                 
             };

@@ -29,6 +29,8 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(subnivel.nombre)));
                     command.Parameters.Add(new SqlParameter("user_id", subnivel.user.id));
                     command.Parameters.Add(new SqlParameter("nivel_id", subnivel.nivel.id));
+                    command.Parameters.Add(new SqlParameter("cuenta_id", subnivel.cuenta.id));
+                    command.Parameters.Add(new SqlParameter("categoria_id", subnivel.categoria.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -108,17 +110,26 @@ namespace Data.Implementation
                         id = int.Parse(row[0].ToString()),
                         nombre = row[1].ToString(),
                         status = int.Parse(row[2].ToString()) == 0 ? false : true,
-                        user = new User { id = int.Parse(row[3].ToString()) },
-                        timestamp = Convert.ToDateTime(row[4].ToString()),
-                        updated = Convert.ToDateTime(row[5].ToString()),
+                        cuenta = new Cuenta
+                        {
+                            id = int.Parse(row[3].ToString()),
+                            nombre = row[13].ToString(),
+                            numero = row[14].ToString()
+                        },
+                        categoria = new Categoria
+                        {
+                            id = int.Parse(row[4].ToString()),
+                            nombre = row[11].ToString(),
+                            numero = row[12].ToString()
+                        },
+                        user = new User { id = int.Parse(row[5].ToString()) },
+                        timestamp = Convert.ToDateTime(row[6].ToString()),
+                        updated = Convert.ToDateTime(row[7].ToString()),
                         nivel = new Nivel
                         {
-                            id = int.Parse(row[6].ToString()),
-                            nombre = row[7].ToString(),
-                            codigo = row[8].ToString(),
-                            user = new User { id = int.Parse(row[9].ToString()) },
-                            timestamp = Convert.ToDateTime(row[10].ToString()),
-                            updated = Convert.ToDateTime(row[11].ToString())
+                            id = int.Parse(row[8].ToString()),
+                            nombre = row[9].ToString(),
+                            codigo = row[10].ToString()
                         }
                     };
 
@@ -155,17 +166,26 @@ namespace Data.Implementation
                             id = int.Parse(row[0].ToString()),
                             nombre = row[1].ToString(),
                             status = int.Parse(row[2].ToString()) == 0 ? false : true,
-                            user = new User { id = int.Parse(row[3].ToString())},
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString()),
+                            cuenta = new Cuenta
+                            {
+                                id = int.Parse(row[3].ToString()),
+                                nombre = row[13].ToString(),
+                                numero = row[14].ToString()
+                            },
+                            categoria = new Categoria
+                            {
+                                id = int.Parse(row[4].ToString()),
+                                nombre = row[11].ToString(),
+                                numero = row[12].ToString()
+                            },
+                            user = new User { id = int.Parse(row[5].ToString())},
+                            timestamp = Convert.ToDateTime(row[6].ToString()),
+                            updated = Convert.ToDateTime(row[7].ToString()),
                             nivel = new Nivel
                             {
-                                id = int.Parse( row[6].ToString() ),
-                                nombre = row[7].ToString(),
-                                codigo = row[8].ToString(),
-                                user = new User { id = int.Parse(row[9].ToString())},
-                                timestamp = Convert.ToDateTime(row[10].ToString()),
-                                updated = Convert.ToDateTime(row[11].ToString())
+                                id = int.Parse( row[8].ToString() ),
+                                nombre = row[9].ToString(),
+                                codigo = row[10].ToString()
                             }
                         });
                     }
@@ -198,6 +218,8 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("id", subnivel.id));
                     command.Parameters.Add(new SqlParameter("user_id", subnivel.user.id));
                     command.Parameters.Add(new SqlParameter("nivel_id", subnivel.nivel.id));
+                    command.Parameters.Add(new SqlParameter("cuenta_id", subnivel.cuenta.id));
+                    command.Parameters.Add(new SqlParameter("categoria_id", subnivel.categoria.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
                 }

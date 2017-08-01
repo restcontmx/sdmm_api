@@ -5,12 +5,14 @@ using System.Web;
 
 namespace Models.VOs
 {
-    public class CategoriaVo
+    public class RegistroDetalleDevVo
     {
         public int id { get; set; }
-        public int procesominero_id { get; set; }
-        public string nombre { get; set; }
-        public string numero { get; set; }
+        public string folio { get; set; }
+        public int tipodev { get; set; }
+        public string observaciones { get; set; }
+
+        public int devolucion_id { get; set; }
         public int user_id { get; set; }
         public string timestamp { get; set; }
         public string updated { get; set; }

@@ -22,13 +22,12 @@ namespace Business.Adapters
             {
                 id = vo.id,
                 tipo_producto = new TipoProducto { id = vo.tipoproducto_id },
-                presentacion = vo.presentacion,
+                proveedor = new Proveedor { id = vo.proveedor_id },
+                segmento = new SegmentoProducto { id = vo.segmentoproducto_id },
                 codigo = vo.codigo,
                 nombre = vo.nombre,
-                cantidad = vo.cantidad,
                 costo = vo.costo,
                 peso = vo.peso,
-                modo = vo.modo,
                 user = new Models.Auth.User { id = vo.user_id },
                 revision =  vo.revision
             };

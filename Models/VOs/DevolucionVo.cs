@@ -11,9 +11,11 @@ namespace Models.VOs
 
         public int compania_id { get; set; }
 
-        public string folio { get; set; }
+        public string motivo { get; set; }
+        public int turno { get; set; }
+        public int vale_id { get; set; } 
 
-        public int tipo { get; set; }
+        public IList<RegistroDetalleDevVo> registros { get; set; }
 
         public int user_id { get; set; }
         public string timestamp { get; set; }

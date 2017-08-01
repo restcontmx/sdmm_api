@@ -24,6 +24,8 @@ namespace Business.Adapters
                 nivel = new Nivel { id = vo.nivel_id },
                 nombre = vo.nombre,
                 status = vo.status==0? false : true,
+                cuenta = new Cuenta { id = vo.cuenta_id },
+                categoria =  new Categoria { id = vo.categoria_id },
                 user = new Models.Auth.User { id = vo.user_id }
             };
         }

@@ -11,14 +11,14 @@ namespace Business.Adapters
             return new Vale
             {
                 id = vo.id,
-                compania = new Proveedor { id = vo.compania_id},
+                compania = new Compania { id = vo.compania_id},
                 turno = vo.turno,
-                lugar = vo.lugar,
                 user = new User { id = vo.user_id},
                 polvorero = new Empleado { id = vo.polvorero_id},
                 cargador1 = new Empleado { id = vo.cargador1_id },
                 cargador2 = new Empleado { id = vo.cargador2_id },
-                cuenta = new Cuenta { id = vo.cuenta_id },
+                subnivel = new SubNivel { id = vo.subnivel_id },
+                userAutorizo = new User { id = vo.user_id_autorizo},
                 active = vo.active
             };
         }
