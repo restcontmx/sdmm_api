@@ -255,6 +255,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\explosivos.pubxml" />
     <None Include="Properties\PublishProfiles\localpublish.pubxml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
