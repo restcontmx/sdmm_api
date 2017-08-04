@@ -217,7 +217,7 @@ namespace Data.Implementation
                         data_adapter3.Fill(data_set3);
                         foreach (DataRow row in data_set3.Tables[0].Rows)
                         {
-                            auxInfoInventario.existenciaInicialT2 = (auxInfoInventario.existenciaInicialT1 - (auxInfoInventario.salidasT1 + auxInfoInventario.devolucionesT1));
+                            auxInfoInventario.existenciaInicialT2 = ((auxInfoInventario.existenciaInicialT1 + auxInfoInventario.entradasT1 + auxInfoInventario.devolucionesT1) - (auxInfoInventario.salidasT1));
                             auxInfoInventario.salidasT2 = int.Parse(row[2].ToString());
                             auxInfoInventario.devolucionesT2 = int.Parse(row[3].ToString());
                             auxInfoInventario.reservado = int.Parse(row[4].ToString());
