@@ -14,6 +14,8 @@ namespace Models.VOs
         public string folio { get; set; }
         public int turno { get; set; }
 
+        public int producto_id { get; set; }
+        public int vale_id { get; set; }
         public int user_id { get; set; }
         public string timestamp { get; set; }
         public string updated { get; set; }

@@ -97,6 +97,113 @@ namespace Data.Implementation
             }
         }
 
+        public IList<RegistroDetalleDev> detail(int id)
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalleDev> objects = new List<RegistroDetalleDev>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroDetalleDevByIdDevolucion", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("idDev", id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new RegistroDetalleDev
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            tipodev = int.Parse(row[3].ToString()),
+                            observaciones = row[4].ToString(),
+                            producto = new Producto
+                            {
+                                nombre = row[6].ToString()
+                            },
+                            devolucion = new Devolucion
+                            {
+                                id = int.Parse(row[5].ToString()),
+                                compania = new Compania
+                                {
+                                    nombre_sistema = row[7].ToString()
+                                    
+                                },
+                                timestamp = Convert.ToDateTime(row[8].ToString())
+                            }
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        
+
+        public IList<Devolucion> getAll()
+        {
+            SqlConnection connection = null;
+            IList<Devolucion> objects = new List<Devolucion>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllDevolucion", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new Devolucion
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            compania = new Compania
+                            {
+                                id = int.Parse(row[1].ToString()),
+                                nombre_sistema = row[6].ToString()
+                            },
+                            motivo = row[2].ToString(),
+                            turno = int.Parse(row[3].ToString()),
+                            vale = new Vale
+                            {
+                                id = int.Parse(row[4].ToString())
+                            },
+                            user = new User
+                            {
+                                first_name = row[7].ToString(),
+                                second_name = row[8].ToString()
+                            },
+                            timestamp = Convert.ToDateTime(row[5].ToString())
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
 
         //Regresa todo los registros que existen por el folio de la caja
         public IList<RegistroDetalle> getAllRegistersByFolioCaja(string folioCaja)
@@ -236,6 +343,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("observaciones", registro.observaciones));
                     command.Parameters.Add(new SqlParameter("user_id", registro.user.id));
                     command.Parameters.Add(new SqlParameter("folio", registro.folio));
+                    command.Parameters.Add(new SqlParameter("producto_id", registro.producto.id));
                     command.ExecuteNonQuery();
 
                     //Devolución de una caja completa

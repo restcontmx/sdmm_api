@@ -39,16 +39,35 @@ namespace Business.Implementation
             vale.user = user_log;
             int id = vale_repository.create(vale);
             if (id > 0) {
-                var tr = TransactionResult.CREATED;
                 foreach (DetalleValeVo dvo in vale_vo.detalles)
                 {
                     dvo.vale_id = id;
-                    tr = vale_repository.createDetalle( DetalleValeAdapter.voToObject(dvo) );
-                    if (tr != TransactionResult.CREATED) {
-                        return tr;
+                    int tr = vale_repository.createDetalle(DetalleValeAdapter.voToObject(dvo));
+                    if (0 >= tr)
+                    {
+                        return TransactionResult.ERROR;
                     }
-                }return tr;
-            }return TransactionResult.ERROR;
+                    else
+                    {
+                        if (dvo.registros != null)
+                        {
+                            var tr2 = TransactionResult.CREATED;
+                            foreach (RegistroDetalleVo rvo in dvo.registros)
+                            {
+                                dvo.vale_id = id;
+                                tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
+                                if (tr2 != TransactionResult.CREATED)
+                                {
+                                    return tr2;
+                                }
+                            }
+                            return tr2;
+                        }
+                    }
+                }
+                return TransactionResult.CREATED;
+            }
+            return TransactionResult.ERROR;
         }
 
         /// <summary>
@@ -173,15 +192,30 @@ namespace Business.Implementation
 
             vale_repository.deleteDetalleVale(vale_vo.id);
 
-            var tr = TransactionResult.CREATED;
-
             foreach (DetalleValeVo dvo in vale_vo.detalles)
             {
                 dvo.vale_id = vale_vo.id;
-                tr = vale_repository.createDetalle(DetalleValeAdapter.voToObject(dvo));
-                if (tr != TransactionResult.CREATED)
+                int tr = vale_repository.createDetalle(DetalleValeAdapter.voToObject(dvo));
+                if (0 >= tr)
                 {
-                    return tr;
+                    return TransactionResult.ERROR;
+                }
+                else
+                {
+                    if (dvo.registros != null)
+                    {
+                        var tr2 = TransactionResult.CREATED;
+                        foreach (RegistroDetalleVo rvo in dvo.registros)
+                        {
+                            dvo.vale_id = vale_vo.id;
+                            tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
+                            if (tr2 != TransactionResult.CREATED)
+                            {
+                                return tr2;
+                            }
+                        }
+                        return tr2;
+                    }
                 }
             }
 
@@ -191,6 +225,14 @@ namespace Business.Implementation
         public TransactionResult updateStatus(ValeVo vale_vo)
         {
             return vale_repository.updateStatus(ValeAdapter.voToObject(vale_vo));
+        }
+
+        public TransactionResult updateAutorizacion(ValeVo vale_vo, User user_log)
+        {
+            Vale vale = ValeAdapter.voToObject(vale_vo);
+            vale.userAutorizo = user_log;
+
+            return vale_repository.updateAutorizacion(vale);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Models.VOs
         public int producto_id { get; set; }
         public int cantidad { get; set; }
         public int reservado { get; set; }
+        public int turno { get; set; }
         public string updated { get; set; }
         public int cantidad_cajas { get; set; }
     }

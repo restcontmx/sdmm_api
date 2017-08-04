@@ -14,11 +14,10 @@ namespace Business.Interface
     {
         TransactionResult createP(DevolucionVo devolucion_vo, User user_log);
         DetalleDevByCajaVo getDetalleByCaja(string folio);
-
-        /* IList<Devolucion> getAll();
-         Devolucion detail(int id);
-         TransactionResult update(DevolucionVo devolucion_vo);
-         TransactionResult delete(int id);*/
+        IList<Devolucion> getAll();
+        IList<RegistroDetalleDev> detail(int id);
+        /*TransactionResult update(DevolucionVo devolucion_vo);
+        TransactionResult delete(int id);*/
 
 
 

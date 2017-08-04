@@ -109,6 +109,7 @@
     <Compile Include="Adapters\DetalleValeAdapter.cs" />
     <Compile Include="Adapters\DevolucionAdapter.cs" />
     <Compile Include="Adapters\EmpleadoAdapter.cs" />
+    <Compile Include="Adapters\InventarioAdapter.cs" />
     <Compile Include="Adapters\NivelAdapter.cs" />
     <Compile Include="Adapters\ObservacionAdapter.cs" />
     <Compile Include="Adapters\PresupuestoAdapter.cs" />
@@ -131,6 +132,8 @@
     <Compile Include="Implementation\DevolucionService.cs" />
     <Compile Include="Implementation\DummyService.cs" />
     <Compile Include="Implementation\EmpleadoService.cs" />
+    <Compile Include="Implementation\InventarioAdapter.cs" />
+    <Compile Include="Implementation\InventarioService.cs" />
     <Compile Include="Implementation\NivelService.cs" />
     <Compile Include="Implementation\PresupuestoService.cs" />
     <Compile Include="Implementation\ProcesoMineroService.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="Interface\IDevolucionService.cs" />
     <Compile Include="Interface\IDummyService.cs" />
     <Compile Include="Interface\IEmpleadoService.cs" />
+    <Compile Include="Interface\IInventarioService.cs" />
     <Compile Include="Interface\INivelService.cs" />
     <Compile Include="Interface\IPresupuestoService.cs" />
     <Compile Include="Interface\IProcesoMineroService.cs" />

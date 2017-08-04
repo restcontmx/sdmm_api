@@ -1,16 +1,18 @@
-﻿using Models.Catalogs;
+﻿using Models.Auth;
+using Models.Catalogs;
+using Models.VOs;
 using System.Collections.Generic;
 using Warrior.Handlers.Enums;
 
 
-namespace Data.Interface
+namespace Business.Interface
 {
-    public interface IInventarioRepository
+    public interface IInventarioService
     {
         IList<InfoInventario> getAll(string DateCheck);
         Inventario detail(int id);
-        TransactionResult create(Inventario inventario);
         TransactionResult createIventarioDiario();
+        TransactionResult create(InventarioVo inventario_vo);
         TransactionResult delete(int id);
     }
 }

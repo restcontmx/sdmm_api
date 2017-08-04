@@ -13,6 +13,7 @@ namespace Models.Catalogs
         public int tipodev { get; set; }
         public string observaciones { get; set; }
 
+        public Producto producto { get; set; }
         public Devolucion devolucion { get; set; }
         public User user { get; set; }
         public DateTime timestamp { get; set; }

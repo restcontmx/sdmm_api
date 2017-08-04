@@ -61,7 +61,7 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult createDetalle(DetalleVale detalle)
+        public int createDetalle(DetalleVale detalle)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -74,8 +74,11 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("vale_id", detalle.vale.id));
                     command.Parameters.Add(new SqlParameter("producto_id", detalle.producto.id));
                     command.Parameters.Add(new SqlParameter("cantidad", detalle.cantidad));
-                    command.ExecuteNonQuery();
-                    return TransactionResult.CREATED;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+                    return int.Parse(row[0].ToString());
                 }
                 catch (SqlException ex)
                 {
@@ -85,9 +88,9 @@ namespace Data.Implementation
                     }
                     if (ex.Number == 2627)
                     {
-                        return TransactionResult.EXISTS;
+                        return 0;
                     }
-                    return TransactionResult.NOT_PERMITTED;
+                    return 0;
                 }
                 catch
                 {
@@ -95,11 +98,50 @@ namespace Data.Implementation
                     {
                         connection.Close();
                     }
-                    return TransactionResult.ERROR;
+                    return 0;
                 }
             }
         }
 
+        /* public TransactionResult createDetalle(DetalleVale detalle)
+         {
+             SqlConnection connection = null;
+             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+             {
+                 try
+                 {
+                     connection.Open();
+                     SqlCommand command = new SqlCommand("sp_createDetalleVale", connection);
+                     command.CommandType = CommandType.StoredProcedure;
+                     command.Parameters.Add(new SqlParameter("vale_id", detalle.vale.id));
+                     command.Parameters.Add(new SqlParameter("producto_id", detalle.producto.id));
+                     command.Parameters.Add(new SqlParameter("cantidad", detalle.cantidad));
+                     command.ExecuteNonQuery();
+                     return TransactionResult.CREATED;
+                 }
+                 catch (SqlException ex)
+                 {
+                     if (connection != null)
+                     {
+                         connection.Close();
+                     }
+                     if (ex.Number == 2627)
+                     {
+                         return TransactionResult.EXISTS;
+                     }
+                     return TransactionResult.NOT_PERMITTED;
+                 }
+                 catch
+                 {
+                     if (connection != null)
+                     {
+                         connection.Close();
+                     }
+                     return TransactionResult.ERROR;
+                 }
+             }
+         }
+         */
         public TransactionResult createRegistroDetalle(RegistroDetalle registro)
         {
             bool changePro = false;
@@ -128,6 +170,10 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("detallevale_id", registro.detallevale.id));
                     command.Parameters.Add(new SqlParameter("folio", registro.folio));
                     command.Parameters.Add(new SqlParameter("user_id", registro.user.id));
+                    command.Parameters.Add(new SqlParameter("producto_id", registro.producto.id));
+                    command.Parameters.Add(new SqlParameter("vale_id", registro.vale.id));
+                    command.Parameters.Add(new SqlParameter("turno", registro.turno));
+                    command.Parameters.Add(new SqlParameter("status", 1));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -173,6 +219,10 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("folio", registro.folio));
                     command.Parameters.Add(new SqlParameter("codigoCaja", folioCaja));
                     command.Parameters.Add(new SqlParameter("user_id", registro.user.id));
+                    command.Parameters.Add(new SqlParameter("producto_id", registro.producto.id));
+                    command.Parameters.Add(new SqlParameter("vale_id", registro.vale.id));
+                    command.Parameters.Add(new SqlParameter("turno", registro.turno));
+                    command.Parameters.Add(new SqlParameter("status", 1));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -381,40 +431,97 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
+                        bool authEmpty = true;
 
-                        objects.Add(new Vale
+                        //Revisa si la autorización está vacía
+                        string aux2 = row[22].ToString();
+
+                        if (aux2 == String.Empty || aux2 == null)
                         {
-                            id = int.Parse(row[0].ToString()),
-                            turno = int.Parse(row[1].ToString()),
-                            user = new User { id = int.Parse(row[2].ToString()) },
-                            timestamp = Convert.ToDateTime(row[3].ToString()),
-                            updated = Convert.ToDateTime(row[4].ToString()),
-                            subnivel = new SubNivel {
-                                id = int.Parse(row[5].ToString()),
-                                nombre = row[15].ToString(),
-                                nivel = new Nivel
+                            authEmpty = false;
+                        }
+
+                        if (authEmpty)
+                        {
+                            objects.Add(new Vale
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                turno = int.Parse(row[1].ToString()),
+                                user = new User { id = int.Parse(row[2].ToString()) },
+                                timestamp = Convert.ToDateTime(row[3].ToString()),
+                                updated = Convert.ToDateTime(row[4].ToString()),
+                                subnivel = new SubNivel
                                 {
-                                    id = int.Parse(row[16].ToString()),
-                                    nombre = row[17].ToString(),
-                                    codigo = row[18].ToString()
+                                    id = int.Parse(row[5].ToString()),
+                                    nombre = row[15].ToString(),
+                                    nivel = new Nivel
+                                    {
+                                        id = int.Parse(row[16].ToString()),
+                                        nombre = row[17].ToString(),
+                                        codigo = row[18].ToString()
+                                    },
                                 },
-                            },
-                            compania = new Compania
+                                compania = new Compania
+                                {
+                                    id = int.Parse(row[6].ToString()),
+                                    nombre_sistema = row[7].ToString()
+                                },
+                                polvorero = new Empleado
+                                {
+                                    id = int.Parse(row[8].ToString()),
+                                    nombre = row[9].ToString(),
+                                    ap_paterno = row[10].ToString(),
+                                    ap_materno = row[11].ToString()
+                                },
+                                cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
+                                cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                                active = int.Parse(row[14].ToString()),
+                                userAutorizo = new User
+                                {
+                                    id = int.Parse(row[20].ToString()),
+                                    first_name = row[21].ToString(),
+                                    second_name = row[22].ToString()
+                                }
+                            });
+                        }
+                        else
+                        {
+                            objects.Add(new Vale
                             {
-                                id = int.Parse(row[6].ToString()),
-                                nombre_sistema = row[7].ToString()
-                            },
-                            polvorero = new Empleado
-                            {
-                                id = int.Parse(row[8].ToString()),
-                                nombre = row[9].ToString(),
-                                ap_paterno = row[10].ToString(),
-                                ap_materno = row[11].ToString()
-                            },
-                            cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
-                            active = int.Parse(row[14].ToString())
-                    });
+                                id = int.Parse(row[0].ToString()),
+                                turno = int.Parse(row[1].ToString()),
+                                user = new User { id = int.Parse(row[2].ToString()) },
+                                timestamp = Convert.ToDateTime(row[3].ToString()),
+                                updated = Convert.ToDateTime(row[4].ToString()),
+                                subnivel = new SubNivel
+                                {
+                                    id = int.Parse(row[5].ToString()),
+                                    nombre = row[15].ToString(),
+                                    nivel = new Nivel
+                                    {
+                                        id = int.Parse(row[16].ToString()),
+                                        nombre = row[17].ToString(),
+                                        codigo = row[18].ToString()
+                                    },
+                                },
+                                compania = new Compania
+                                {
+                                    id = int.Parse(row[6].ToString()),
+                                    nombre_sistema = row[7].ToString()
+                                },
+                                polvorero = new Empleado
+                                {
+                                    id = int.Parse(row[8].ToString()),
+                                    nombre = row[9].ToString(),
+                                    ap_paterno = row[10].ToString(),
+                                    ap_materno = row[11].ToString()
+                                },
+                                cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
+                                cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                                active = int.Parse(row[14].ToString()),
+                                userAutorizo = new User()
+                            });
+                        }
                        
                     }
                     return objects;
@@ -737,6 +844,44 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id ", vale.id));
                     command.Parameters.Add(new SqlParameter("active", vale.active));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.OK;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        public TransactionResult updateAutorizacion(Vale vale)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_updateValeAutorización", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("id ", vale.id));
+                    command.Parameters.Add(new SqlParameter("user_id", vale.userAutorizo.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
                 }

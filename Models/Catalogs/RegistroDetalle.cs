@@ -15,6 +15,8 @@ namespace Models.Catalogs
         public string folio { get; set; }
         public int turno { get; set; }
 
+        public Producto producto { get; set;}
+        public Vale vale { get; set; }
         public User user { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }

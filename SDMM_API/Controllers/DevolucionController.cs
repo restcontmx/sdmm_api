@@ -51,6 +51,49 @@ namespace SDMM_API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/devolucion/")]
+        [HttpGet]
+        public HttpResponseMessage list()
+        {
+            try
+            {
+                IDictionary<string, IList<Devolucion>> data = new Dictionary<string, IList<Devolucion>>();
+                data.Add("data", devolucion_service.getAll());
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/devolucion/{id}")]
+        [HttpGet]
+        public HttpResponseMessage detail(int id)
+        {
+            try
+            {
+                IDictionary<string, IList<RegistroDetalleDev>> data = new Dictionary<string, IList<RegistroDetalleDev>>();
+                data.Add("data", devolucion_service.detail(id));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
 
         /// <summary>
         /// Get DetalleDevByCaja by flolio caja

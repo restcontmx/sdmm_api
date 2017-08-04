@@ -11,5 +11,7 @@ namespace Models.VOs
         public int producto_id { get; set; }
         public int vale_id { get; set; }
         public int cantidad { get; set; }
+
+        public IList<RegistroDetalleVo> registros { get; set; }
     }
 }

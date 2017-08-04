@@ -87,6 +87,7 @@ namespace SDMM_API.Controllers
         {
             Vale vale = vale_service.detail(id);
             vale.detalles = vale_service.getDetailsByValeId(id);
+
             if (vale != null)
             {
                 IDictionary<string, Vale> data = new Dictionary<string, Vale>();
@@ -332,8 +333,17 @@ namespace SDMM_API.Controllers
         [HttpPut]
         public HttpResponseMessage update([FromBody] ValeVo vale)
         {
+            TransactionResult tr;
 
-            TransactionResult tr = vale_service.update(vale);
+            if (vale.autorizo != 0)
+            {
+                tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            }
+            else
+            {
+                tr = vale_service.update(vale);
+            }
+            //TransactionResult tr = vale_service.update(vale);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.OK)
             {

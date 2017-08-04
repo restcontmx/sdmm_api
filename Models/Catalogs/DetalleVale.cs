@@ -11,5 +11,7 @@ namespace Models.Catalogs
         public Producto producto { get; set; }
         public int cantidad { get; set; }
         public Vale vale { get; set; }
+
+        public IList<RegistroDetalle> registros { get; set; }
     }
 }

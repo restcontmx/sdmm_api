@@ -33,7 +33,10 @@ namespace Business.Adapters
                 id = vo.id,
                 detallevale = new DetalleVale { id = vo.detallevale_id },
                 folio = vo.folio,
-                user = new Models.Auth.User { id = vo.user_id }
+                user = new Models.Auth.User { id = vo.user_id },
+                producto = new Producto { id = vo.producto_id },
+                vale = new Vale { id = vo.vale_id },
+                turno = vo.turno               
             };
         }
     }

@@ -89,6 +89,7 @@ namespace SDMM_API.App_Start
             kernel.Bind<ICuentaService>().To<CuentaService>();
             kernel.Bind<ICajaService>().To<CajaService>();
             kernel.Bind<ISegmentoProductoService>().To<SegmentoProductoService>();
+            kernel.Bind<IInventarioService>().To<InventarioService>();
 
         }
     }

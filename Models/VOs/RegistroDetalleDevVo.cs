@@ -12,6 +12,7 @@ namespace Models.VOs
         public int tipodev { get; set; }
         public string observaciones { get; set; }
 
+        public int producto_id { get; set; }
         public int devolucion_id { get; set; }
         public int user_id { get; set; }
         public string timestamp { get; set; }

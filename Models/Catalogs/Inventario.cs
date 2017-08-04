@@ -10,7 +10,7 @@ namespace Models.Catalogs
         public int id { get; set; }
         public Producto producto { get; set; }
         public int cantidad { get; set; }
-        public int reservado { get; set; }
+        public int turno { get; set; }
         public DateTime updated { get; set; }
         public int cantidad_cajas { get; set; }
     }

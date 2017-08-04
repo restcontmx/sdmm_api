@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using SDMM_API.Modules;
 
 namespace SDMM_API
 {
@@ -14,6 +15,7 @@ namespace SDMM_API
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            JobScheduler.Start();
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Data.Interface
         int createP(Devolucion devolucion);
         DetalleDevByCaja getDetalleByCaja(string folio);
         TransactionResult createRegistroDetalleDev(RegistroDetalleDev registro);
-       /* IList<Devolucion> getAll();
-        Devolucion detail(int id);
-        TransactionResult update(Devolucion devolucion);
+        IList<Devolucion> getAll();
+        IList<RegistroDetalleDev> detail(int id);
+        /*TransactionResult update(Devolucion devolucion);
         TransactionResult delete(int id);*/
     }
 }

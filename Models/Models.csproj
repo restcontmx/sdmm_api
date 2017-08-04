@@ -108,6 +108,7 @@
     <Compile Include="Catalogs\DetalleVale.cs" />
     <Compile Include="Catalogs\Devolucion.cs" />
     <Compile Include="Catalogs\Empleado.cs" />
+    <Compile Include="Catalogs\InfoInventario.cs" />
     <Compile Include="Catalogs\Inventario.cs" />
     <Compile Include="Catalogs\Nivel.cs" />
     <Compile Include="Catalogs\Observacion.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="VOs\CajaVo.cs" />
     <Compile Include="VOs\CategoriaVo.cs" />
     <Compile Include="VOs\CompaniaVo.cs" />
+    <Compile Include="VOs\InfoInventarioVo.cs" />
     <Compile Include="VOs\InventarioVo.cs" />
     <Compile Include="VOs\ObservacionVo.cs" />
     <Compile Include="VOs\CuentaVo.cs" />

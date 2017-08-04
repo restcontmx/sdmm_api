@@ -26,5 +26,7 @@ namespace Models.Catalogs
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
 
+        public int autorizo { get; set; }
+
     }
 }

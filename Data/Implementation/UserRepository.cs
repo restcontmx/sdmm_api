@@ -72,8 +72,8 @@ namespace Data.Implementation
                     connection.Open();
                     SqlCommand command = new SqlCommand("sp_createUser", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("username", user.username));
-                    command.Parameters.Add(new SqlParameter("password", user.password));
+                    command.Parameters.Add(new SqlParameter("username", user.username.Trim()));
+                    command.Parameters.Add(new SqlParameter("password", user.password.Trim()));
                     command.Parameters.Add(new SqlParameter("first_name", user.first_name));
                     command.Parameters.Add(new SqlParameter("second_name", user.second_name));
                     command.Parameters.Add(new SqlParameter("email", user.email));

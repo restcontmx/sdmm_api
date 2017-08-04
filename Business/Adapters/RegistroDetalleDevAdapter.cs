@@ -17,7 +17,8 @@ namespace Business.Adapters
                 tipodev = vo.tipodev,
                 observaciones = vo.observaciones,
                 devolucion = new Devolucion { id = vo.devolucion_id },
-                user = new Models.Auth.User { id = vo.user_id }
+                user = new Models.Auth.User { id = vo.user_id },
+                producto = new Producto { id = vo.producto_id }
             };
         }
     }

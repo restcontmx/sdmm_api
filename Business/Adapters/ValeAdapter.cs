@@ -19,7 +19,8 @@ namespace Business.Adapters
                 cargador2 = new Empleado { id = vo.cargador2_id },
                 subnivel = new SubNivel { id = vo.subnivel_id },
                 userAutorizo = new User { id = vo.user_id_autorizo},
-                active = vo.active
+                active = vo.active,
+                autorizo = vo.autorizo
             };
         }
     }

@@ -17,6 +17,7 @@ namespace Business.Interface
         TransactionResult create(ValeVo vale_vo, User user_log);
         TransactionResult update(ValeVo vale_vo);
         TransactionResult updateStatus(ValeVo vale_vo);
+        TransactionResult updateAutorizacion(ValeVo vale, User user_log);
         TransactionResult delete(int id);
         IList<DetalleVale> getDetailsByValeId(int vale_id);
         IList<RegistroDetalle> getAllRegistersByDetalle(int detalle_id);
