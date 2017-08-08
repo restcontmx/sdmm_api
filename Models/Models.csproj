@@ -100,6 +100,7 @@
     <Compile Include="Auth\AuthModel.cs" />
     <Compile Include="Auth\Rol.cs" />
     <Compile Include="Auth\User.cs" />
+    <Compile Include="Catalogs\Bulto.cs" />
     <Compile Include="Catalogs\Caja.cs" />
     <Compile Include="Catalogs\Categoria.cs" />
     <Compile Include="Catalogs\Compania.cs" />
@@ -125,6 +126,8 @@
     <Compile Include="Catalogs\Vale.cs" />
     <Compile Include="Dummy\Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VOs\BultosVo.cs" />
+    <Compile Include="VOs\BultoVo.cs" />
     <Compile Include="VOs\CajaVo.cs" />
     <Compile Include="VOs\CategoriaVo.cs" />
     <Compile Include="VOs\CompaniaVo.cs" />

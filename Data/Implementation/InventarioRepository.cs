@@ -19,7 +19,7 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_createInvetario", connection);
+                    SqlCommand command = new SqlCommand("sp_createInventario", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("producto_id", inventario.producto.id));
                     command.Parameters.Add(new SqlParameter("cantidad", inventario.cantidad));

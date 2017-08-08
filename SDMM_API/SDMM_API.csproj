@@ -210,6 +210,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
     <Compile Include="Controllers\BasicApiController.cs" />
+    <Compile Include="Controllers\BultoController.cs" />
     <Compile Include="Controllers\CajaController.cs" />
     <Compile Include="Controllers\CategoriaController.cs" />
     <Compile Include="Controllers\CompaniaController.cs" />

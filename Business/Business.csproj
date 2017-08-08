@@ -101,6 +101,7 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapters\BultoAdapter.cs" />
     <Compile Include="Adapters\CajaAdapter.cs" />
     <Compile Include="Adapters\CategoriaAdapter.cs" />
     <Compile Include="Adapters\CompaniaAdapter.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Adapters\UserAdapter.cs" />
     <Compile Include="Adapters\ValeAdapter.cs" />
     <Compile Include="Helpers\NInjectHelper.cs" />
+    <Compile Include="Implementation\BultoService.cs" />
     <Compile Include="Implementation\CajaService.cs" />
     <Compile Include="Implementation\CategoriaService.cs" />
     <Compile Include="Implementation\CompaniaService.cs" />
@@ -146,6 +148,7 @@
     <Compile Include="Implementation\UserService.cs" />
     <Compile Include="Implementation\ValeService.cs" />
     <Compile Include="Interface\IAuthenticationService.cs" />
+    <Compile Include="Interface\IBultoService.cs" />
     <Compile Include="Interface\ICajaService.cs" />
     <Compile Include="Interface\ICategoriaService.cs" />
     <Compile Include="Interface\ICompaniaService.cs" />

@@ -3,6 +3,7 @@ using Models.Catalogs;
 using Models.VOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -10,67 +11,31 @@ using Warrior.Handlers.Enums;
 
 namespace SDMM_API.Controllers
 {
-    public class InventarioController : BasicApiController
+    public class BultoController : BasicApiController
     {
-        private IInventarioService inventario_service;
+        public IBultoService bulto_service;
 
         /// <summary>
-        /// Constructor
+        /// Caja Controller constructor
         /// </summary>
-        /// <param name="producto_service"></param>
-        public InventarioController(IInventarioService inventario_service)
+        /// <param name="caja_service"></param>
+        public BultoController(IBultoService bulto_service)
         {
-            this.inventario_service = inventario_service;
+            this.bulto_service = bulto_service;
         }
 
         /// <summary>
         /// Get all objects route
         /// </summary>
         /// <returns></returns>
-        [Route("api/inventario/")]
+        [Route("api/bulto/")]
         [HttpGet]
         public HttpResponseMessage list()
         {
             try
-            { 
-                IDictionary<string, IList<InfoInventario>> data = new Dictionary<string, IList<InfoInventario>>();
-                data.Add("data", inventario_service.getAll(DateTime.Now.ToString()));
-                return Request.CreateResponse(HttpStatusCode.OK, data);
-            }
-            catch (Exception e)
             {
-                IDictionary<string, string> data = new Dictionary<string, string>();
-                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
-                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
-            }
-        }
-
-
-        /// <summary>
-        /// Get all objects route
-        /// </summary>
-        /// <returns></returns>
-        [Route("api/inventario/mobile/")]
-        [HttpGet]
-        public HttpResponseMessage listMobile()
-        {
-            try
-            {
-                IList<InfoInventario> aux = inventario_service.getAll(DateTime.Now.ToString());
-
-                List<InfoInventario> aux2 = new List<InfoInventario>();
-                
-                foreach(InfoInventario inf in aux)
-                {
-                    if(inf.existenciaFinal > 0)
-                    {
-                        aux2.Add(inf);
-                    }
-                }
-  
-
-                IDictionary <string, IList<InfoInventario>> data = new Dictionary<string, IList<InfoInventario>>();
-                data.Add("data", (IList<InfoInventario>)aux2);
+                IDictionary<string, IList<Bulto>> data = new Dictionary<string, IList<Bulto>>();
+                data.Add("data", bulto_service.getAll());
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -86,15 +51,15 @@ namespace SDMM_API.Controllers
         /// </summary>
         /// <param name="id">primary field on the db</param>
         /// <returns></returns>
-        [Route("api/inventario/{id}")]
+        [Route("api/bulto/{id}")]
         [HttpGet]
         public HttpResponseMessage detail(int id)
         {
-            Inventario inventario = inventario_service.detail(id);
-            if (inventario != null)
+            Bulto bulto = bulto_service.detail(id);
+            if (bulto != null)
             {
-                IDictionary<string, Inventario> data = new Dictionary<string, Inventario>();
-                data.Add("data", inventario);
+                IDictionary<string, Bulto> data = new Dictionary<string, Bulto>();
+                data.Add("data", bulto);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             else
@@ -108,13 +73,13 @@ namespace SDMM_API.Controllers
         /// <summary>
         /// Create object pettition
         /// </summary>
-        /// <param name="inventario_vo"></param>
+        /// <param name="caja_vo"></param>
         /// <returns></returns>
-        [Route("api/inventario/")]
+        [Route("api/bulto/")]
         [HttpPost]
-        public HttpResponseMessage create([FromBody] InventarioVo inventario_vo)
+        public HttpResponseMessage create([FromBody] BultoVo bulto_vo)
         {
-            TransactionResult tr = inventario_service.create(inventario_vo);
+            TransactionResult tr = bulto_service.create(bulto_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
             {
@@ -133,21 +98,47 @@ namespace SDMM_API.Controllers
             }
         }
 
+
         /// <summary>
         /// Delete object request
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [Route("api/inventario/{id}")]
+        [Route("api/bulto/{id}")]
         [HttpDelete]
         public HttpResponseMessage delete(int id)
         {
-            TransactionResult tr = inventario_service.delete(id);
+            TransactionResult tr = bulto_service.delete(id);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.DELETED)
             {
                 data.Add("message", "Object deleted.");
                 return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
+        [Route("api/bulto/bunch/")]
+        [HttpPost]
+        public HttpResponseMessage createBultosBunch([FromBody]  BultosVo registros)
+        {
+            Console.WriteLine(Request.Content);
+            TransactionResult tr = bulto_service.createBultosByList(registros.bultos_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.CREATED)
+            {
+                data.Add("message", "Object created.");
+                return Request.CreateResponse(HttpStatusCode.Created, data);
+            }
+            else if (tr == TransactionResult.EXISTS)
+            {
+                data.Add("message", "Object already existed.");
+                return Request.CreateResponse(HttpStatusCode.Conflict, data);
             }
             else
             {
