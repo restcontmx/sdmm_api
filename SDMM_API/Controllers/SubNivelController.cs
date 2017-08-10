@@ -50,7 +50,7 @@ namespace SDMM_API.Controllers
         {
             try
             {
-                IDictionary<string, IList<string>> data = new Dictionary<string, IList<string>>();
+                IDictionary<string, IList<LugarVo>> data = new Dictionary<string, IList<LugarVo>>();
                 data.Add("data", subnivel_service.getNombresLugares());
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }

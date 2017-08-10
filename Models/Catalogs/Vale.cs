@@ -27,6 +27,7 @@ namespace Models.Catalogs
         public DateTime updated { get; set; }
 
         public int autorizo { get; set; }
+        public int fuente { get; set; }
 
     }
 }

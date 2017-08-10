@@ -24,5 +24,6 @@ namespace Models.VOs
         public string updated { get; set; }
 
         public int autorizo { get; set; }
+        public int fuente { get; set; }
     }
 }

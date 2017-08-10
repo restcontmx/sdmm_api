@@ -251,7 +251,7 @@ namespace Data.Implementation
                     SqlCommand command = new SqlCommand("sp_createObservacionCaja", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("comentarios", obs.comentarios));
-                    command.Parameters.Add(new SqlParameter("caja_id", obs.caja.id));
+                    command.Parameters.Add(new SqlParameter("folio_caja", obs.caja.codigo));
                     command.Parameters.Add(new SqlParameter("user_id", obs.user.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;

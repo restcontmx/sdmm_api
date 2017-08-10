@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Models.Catalogs;
+using Models.VOs;
 using Warrior.Handlers.Enums;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -247,10 +248,10 @@ namespace Data.Implementation
         }
 
 
-        public IList<string> getNombresLugares()
+        public IList<LugarVo> getNombresLugares()
         {
             SqlConnection connection = null;
-            IList<string> objects = new List<string>();
+            IList<LugarVo> objects = new List<LugarVo>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
@@ -263,7 +264,8 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
-                        objects.Add(row[8].ToString() + "-" + row[7].ToString() + "-" + row[1].ToString());
+                        objects.Add(new LugarVo { id = int.Parse(row[0].ToString()),
+                                                  nombreLugar = row[10].ToString() + "-" + row[9].ToString() + "-" + row[1].ToString()});
                     }
                     return objects;
 

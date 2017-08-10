@@ -12,6 +12,8 @@ namespace Models.Catalogs
         public string comentarios { get; set; }
 
         public int caja_id { get; set; }
+        public string folio_caja { get; set; }
+
         public int user_id { get; set; }
 
         public string timestamp { get; set; }

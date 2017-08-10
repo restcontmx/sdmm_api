@@ -133,6 +133,7 @@
     <Compile Include="VOs\CompaniaVo.cs" />
     <Compile Include="VOs\InfoInventarioVo.cs" />
     <Compile Include="VOs\InventarioVo.cs" />
+    <Compile Include="VOs\LugarVo.cs" />
     <Compile Include="VOs\ObservacionVo.cs" />
     <Compile Include="VOs\CuentaVo.cs" />
     <Compile Include="VOs\DetalleDevByCajaVo.cs" />

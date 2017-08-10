@@ -32,6 +32,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("cargador2_id", vale.cargador2.id));
                     command.Parameters.Add(new SqlParameter("user_id", vale.user.id));
                     command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
+                    command.Parameters.Add(new SqlParameter("fuente", vale.fuente));
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
@@ -348,11 +349,12 @@ namespace Data.Implementation
                                 },
                             },
                             active = int.Parse(row[16].ToString()),
+                            fuente = int.Parse(row[21].ToString()),
                             userAutorizo = new User
                             {
-                                id = int.Parse(row[22].ToString()),
-                                first_name = row[23].ToString(),
-                                second_name = row[24].ToString()
+                                id = int.Parse(row[23].ToString()),
+                                first_name = row[24].ToString(),
+                                second_name = row[25].ToString()
                             }
                         };
                     }
@@ -397,6 +399,7 @@ namespace Data.Implementation
                                 },
                             },
                             active = int.Parse(row[16].ToString()),
+                            fuente = int.Parse(row[21].ToString()),
                             userAutorizo = new User()
                             
                         };
@@ -476,11 +479,12 @@ namespace Data.Implementation
                                 cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
                                 cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
                                 active = int.Parse(row[14].ToString()),
+                                fuente = int.Parse(row[19].ToString()),
                                 userAutorizo = new User
                                 {
-                                    id = int.Parse(row[20].ToString()),
-                                    first_name = row[21].ToString(),
-                                    second_name = row[22].ToString()
+                                    id = int.Parse(row[21].ToString()),
+                                    first_name = row[22].ToString(),
+                                    second_name = row[23].ToString()
                                 }
                             });
                         }
@@ -519,6 +523,7 @@ namespace Data.Implementation
                                 cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
                                 cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
                                 active = int.Parse(row[14].ToString()),
+                                fuente = int.Parse(row[19].ToString()),
                                 userAutorizo = new User()
                             });
                         }

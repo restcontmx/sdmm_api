@@ -20,7 +20,8 @@ namespace Business.Adapters
                 subnivel = new SubNivel { id = vo.subnivel_id },
                 userAutorizo = new User { id = vo.user_id_autorizo},
                 active = vo.active,
-                autorizo = vo.autorizo
+                autorizo = vo.autorizo,
+                fuente = vo.fuente
             };
         }
     }

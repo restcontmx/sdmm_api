@@ -48,6 +48,42 @@ namespace SDMM_API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/vale/activos/")]
+        [HttpGet]
+        public HttpResponseMessage listActivos()
+        {
+            try
+            {
+
+                IList<Vale> valesTodos = vale_service.getAll();
+
+                IList<Vale> valesActivos = new List<Vale>();
+
+                foreach(Vale v in valesTodos)
+                {
+                    if (v.active != 0 && v.userAutorizo.id != 0)
+                    {
+                        valesActivos.Add(v);
+                    }
+                }
+
+                IDictionary<string, IList<Vale>> data = new Dictionary<string, IList<Vale>>();
+                data.Add("data", valesActivos);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
         /// <summary>
         /// Create object pettition
         /// </summary>
@@ -335,9 +371,13 @@ namespace SDMM_API.Controllers
         {
             TransactionResult tr;
 
-            if (vale.autorizo != 0)
+            if (vale.autorizo == 1)
             {
                 tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            }
+            else if (vale.autorizo == 2)
+            {
+                tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = vale.user_id_autorizo});
             }
             else
             {

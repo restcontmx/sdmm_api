@@ -16,6 +16,7 @@ namespace Business.Adapters
                 id = obj.id,
                 comentarios = obj.comentarios,
                 caja_id = obj.caja.id,
+                folio_caja = obj.caja.codigo,
                 user_id = obj.user.id,
                 timestamp = obj.timestamp.ToString(),
                 updated = obj.updated.ToString()
@@ -33,7 +34,7 @@ namespace Business.Adapters
             {
                 id = vo.id,
                 comentarios = vo.comentarios,
-                caja = new Caja { id = vo.caja_id},
+                caja = new Caja { id = vo.caja_id, codigo = vo.folio_caja},
                 user = new Models.Auth.User { id = vo.user_id}
 
             };

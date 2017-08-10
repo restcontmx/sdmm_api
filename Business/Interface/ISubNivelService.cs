@@ -13,6 +13,6 @@ namespace Business.Interface
         TransactionResult create(SubNivelVo subnivel_vo, User user_log);
         TransactionResult update(SubNivelVo subnivel_vo, User user_log);
         TransactionResult delete(int id);
-        IList<string> getNombresLugares();
+        IList<LugarVo> getNombresLugares();
     }
 }
