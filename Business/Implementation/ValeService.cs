@@ -51,17 +51,30 @@ namespace Business.Implementation
                     {
                         if (dvo.registros != null)
                         {
-                            var tr2 = TransactionResult.CREATED;
-                            foreach (RegistroDetalleVo rvo in dvo.registros)
+                            bool insert = true;
+                            foreach(RegistroDetalleVo r in dvo.registros)
                             {
-                                dvo.vale_id = id;
-                                tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
-                                if (tr2 != TransactionResult.CREATED)
+                                if (r.folio == null || r.producto_id == 0)
                                 {
-                                    return tr2;
+                                    insert = false;
+                                    break;
                                 }
                             }
-                            return tr2;
+                            if (insert)
+                            {
+                                var tr2 = TransactionResult.CREATED;
+                                foreach (RegistroDetalleVo rvo in dvo.registros)
+                                {
+                                    dvo.vale_id = id;
+                                    tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
+                                    if (tr2 != TransactionResult.CREATED)
+                                    {
+                                        return tr2;
+                                    }
+                                }
+                                return tr2;
+                            }
+                            
                         }
                     }
                 }
@@ -179,6 +192,16 @@ namespace Business.Implementation
         public IList<RegistroDetalle> getAllRegistersSacos()
         {
             return vale_repository.getAllRegistersSacos();
+        }
+
+        public IList<RegistroDetalle> getAllRegistersHistorico()
+        {
+            return vale_repository.getAllRegistersHistorico();
+        }
+
+        public IList<RegistroDetalle> getAllRegistersHistoricoOver()
+        {
+            return vale_repository.getAllRegistersHistoricoOver();
         }
 
 

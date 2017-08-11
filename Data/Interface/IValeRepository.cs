@@ -25,6 +25,8 @@ namespace Data.Interface
         IList<RegistroDetalle> getAllRegistersByDetalle(int detalle_id);
         IList<RegistroDetalle> getAllRegistersOverByDetalle(int detalle_id);
         IList<RegistroDetalle> getAllRegistersByFolioCaja(string folioCaja);
+        IList<RegistroDetalle> getAllRegistersHistorico();
+        IList<RegistroDetalle> getAllRegistersHistoricoOver();
         IList<RegistroDetalle> getAllRegistersSacos();
         TransactionResult createRegistroDetalle(RegistroDetalle registro);
         TransactionResult createRegistroDetalleOver(RegistroDetalle registro);

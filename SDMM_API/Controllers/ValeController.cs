@@ -93,8 +93,37 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage create([FromBody] ValeVo vale_vo)
         {
-            TransactionResult tr = vale_service.create(vale_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
+
+            string s = "";
+
+            if(vale_vo == null)
+            {
+                data.Add("message", "El objeto recibido es nulo.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+
+            if (vale_vo.detalles == null || vale_vo.detalles.Count == 0)
+            {
+                data.Add("message", "La lista de detalles es nula.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+            else
+            {
+                foreach (DetalleValeVo d in vale_vo.detalles)
+                {
+                    s = s + " | " + "cantidad: " + d.cantidad.ToString() + ", producto_id: " + d.producto_id.ToString();
+
+                    if (d.cantidad == 0 || d.producto_id == 0)
+                    {
+                        data.Add("message", s);
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+                    }
+                }
+            }
+
+            TransactionResult tr = vale_service.create(vale_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            
             if (tr == TransactionResult.CREATED)
             {
                 data.Add("message", "Object created.");
@@ -172,6 +201,53 @@ namespace SDMM_API.Controllers
             {
                 IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
                 data.Add("data", vale_service.getAllRegistersByDetalle(id));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
+        /// <summary>
+        /// List registers by detalle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/vale/detalle/registro/historico/")]
+        [HttpGet]
+        public HttpResponseMessage listRegistersHist()
+        {
+            try
+            {
+                IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
+                data.Add("data", vale_service.getAllRegistersHistorico());
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// List registers by detalle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/vale/detalle/registro/over/historico/")]
+        [HttpGet]
+        public HttpResponseMessage listRegistersHistOver()
+        {
+            try
+            {
+                IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
+                data.Add("data", vale_service.getAllRegistersHistoricoOver());
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

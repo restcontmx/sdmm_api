@@ -24,6 +24,8 @@ namespace Business.Interface
         IList<RegistroDetalle> getAllRegistersOverByDetalle(int detalle_id);
         IList<RegistroDetalle> getAllRegistersByFolioCaja(string folioCaja);
         IList<RegistroDetalle> getAllRegistersSacos();
+        IList<RegistroDetalle> getAllRegistersHistorico();
+        IList<RegistroDetalle> getAllRegistersHistoricoOver();
         TransactionResult createRegistroDetalle(RegistroDetalleVo registro_vo, User user_log);
         TransactionResult createRegistroDetalleOver(RegistroDetalleVo registro_vo, User user_log);
         TransactionResult createRegistroDetalleByList(IList<RegistroDetalleVo> registrodetalles_vo, User user);

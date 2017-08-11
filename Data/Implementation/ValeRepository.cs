@@ -606,10 +606,13 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
-                            detallevale = new DetalleVale { id = int.Parse( row[3].ToString() ) },
-                            user = new User { id = int.Parse(row[4].ToString()) },
-                            timestamp = Convert.ToDateTime(row[5].ToString()),
-                            updated = Convert.ToDateTime(row[6].ToString())
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            vale = new Vale { id = int.Parse(row[8].ToString()) },
+                            producto = new Producto { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[9].ToString()),
+                            updated = Convert.ToDateTime(row[10].ToString())
                         });
                     }
                     return objects;
@@ -647,10 +650,13 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
-                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
-                            user = new User { id = int.Parse(row[4].ToString()) },
-                            timestamp = Convert.ToDateTime(row[5].ToString()),
-                            updated = Convert.ToDateTime(row[6].ToString())
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            vale = new Vale { id = int.Parse(row[8].ToString()) },
+                            producto = new Producto { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[9].ToString()),
+                            updated = Convert.ToDateTime(row[10].ToString())
                         });
                     }
                     return objects;
@@ -696,10 +702,13 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
-                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
-                            user = new User { id = int.Parse(row[4].ToString()) },
-                            timestamp = Convert.ToDateTime(row[5].ToString()),
-                            updated = Convert.ToDateTime(row[6].ToString())
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            vale = new Vale { id = int.Parse(row[8].ToString()) },
+                            producto = new Producto { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[9].ToString()),
+                            updated = Convert.ToDateTime(row[10].ToString())
                         };
 
                         int folioS = int.Parse(rgd.folio.Substring(10, 6));
@@ -723,10 +732,13 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
-                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
-                            user = new User { id = int.Parse(row[4].ToString()) },
-                            timestamp = Convert.ToDateTime(row[5].ToString()),
-                            updated = Convert.ToDateTime(row[6].ToString())
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            vale = new Vale { id = int.Parse(row[8].ToString()) },
+                            producto = new Producto { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[9].ToString()),
+                            updated = Convert.ToDateTime(row[10].ToString())
                         };
 
                         objects.Add(rgd);
@@ -771,10 +783,113 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
-                            detallevale = new DetalleVale { id = int.Parse(row[3].ToString()) },
-                            user = new User { id = int.Parse(row[4].ToString()) },
-                            timestamp = Convert.ToDateTime(row[5].ToString()),
-                            updated = Convert.ToDateTime(row[6].ToString())
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            vale = new Vale { id = int.Parse(row[8].ToString()) },
+                            producto = new Producto { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[9].ToString()),
+                            updated = Convert.ToDateTime(row[10].ToString())
+                        };
+
+                        objects.Add(rgd);
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vale"></param>
+        /// <returns></returns>
+        public IList<RegistroDetalle> getAllRegistersHistorico()
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroHistorico", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        RegistroDetalle rgd = new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            vale =  new Vale { id = int.Parse(row[8].ToString()) },
+                            producto = new Producto { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[9].ToString()),
+                            updated = Convert.ToDateTime(row[10].ToString())
+                        };
+
+                        objects.Add(rgd);
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="vale"></param>
+        /// <returns></returns>
+        public IList<RegistroDetalle> getAllRegistersHistoricoOver()
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroOverHistorico", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        RegistroDetalle rgd = new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            vale = new Vale { id = int.Parse(row[8].ToString()) },
+                            producto = new Producto { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[9].ToString()),
+                            updated = Convert.ToDateTime(row[10].ToString())
                         };
 
                         objects.Add(rgd);
