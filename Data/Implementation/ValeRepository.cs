@@ -23,7 +23,17 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_createVale", connection);
+                    SqlCommand command = new SqlCommand();
+
+                    if (vale.userAutorizo.id != 0)
+                    {
+                        command = new SqlCommand("sp_createValeFromHH", connection);
+                    }
+                    else
+                    {
+                        command = new SqlCommand("sp_createVale", connection);
+                    }
+                        
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("turno", vale.turno));
                     command.Parameters.Add(new SqlParameter("compania_id", vale.compania.id));
@@ -33,6 +43,13 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("user_id", vale.user.id));
                     command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
                     command.Parameters.Add(new SqlParameter("fuente", vale.fuente));
+
+                    if (vale.userAutorizo.id != 0)
+                    {
+                        command.Parameters.Add(new SqlParameter("userAutorizo", vale.userAutorizo.id));
+                        command.Parameters.Add(new SqlParameter("active", vale.active));
+                    }
+
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
@@ -1091,6 +1108,66 @@ namespace Data.Implementation
                         connection.Close();
                     }
                     return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        public User validarLoginTablet(User user)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getUserTablet", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("username ", user.username));
+                    command.Parameters.Add(new SqlParameter("pass ", user.password));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+
+                    bool userEmpty = true;
+
+                    //Revisa si la autorización está vacía
+                    string aux2 = row[0].ToString();
+
+                    if (aux2 == String.Empty || aux2 == null)
+                    {
+                        userEmpty = false;
+                        return null;
+                    }
+
+                    if (userEmpty)
+                    {
+                        if (int.Parse(row[5].ToString()) == 3)
+                        {
+                            return new User
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                first_name = row[3].ToString(),
+                                second_name = row[4].ToString()
+                            };
+                        }else
+                        {
+                            return null;
+                        }
+                    }else
+                    {
+                        return null;
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return null;
                 }
             }
         }

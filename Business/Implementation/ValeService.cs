@@ -227,17 +227,29 @@ namespace Business.Implementation
                 {
                     if (dvo.registros != null)
                     {
-                        var tr2 = TransactionResult.CREATED;
-                        foreach (RegistroDetalleVo rvo in dvo.registros)
+                        bool insert = true;
+                        foreach (RegistroDetalleVo r in dvo.registros)
                         {
-                            dvo.vale_id = vale_vo.id;
-                            tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
-                            if (tr2 != TransactionResult.CREATED)
+                            if (r.folio == null || r.producto_id == 0)
                             {
-                                return tr2;
+                                insert = false;
+                                break;
                             }
                         }
-                        return tr2;
+                        if (insert)
+                        {
+                            var tr2 = TransactionResult.CREATED;
+                            foreach (RegistroDetalleVo rvo in dvo.registros)
+                            {
+                                dvo.vale_id = vale_vo.id;
+                                tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
+                                if (tr2 != TransactionResult.CREATED)
+                                {
+                                    return tr2;
+                                }
+                            }
+                            return tr2;
+                        }
                     }
                 }
             }
@@ -256,6 +268,11 @@ namespace Business.Implementation
             vale.userAutorizo = user_log;
 
             return vale_repository.updateAutorizacion(vale);
+        }
+
+        public User validarLoginTablet(UserVo user)
+        {
+            return vale_repository.validarLoginTablet(UserAdapter.voToObject(user));
         }
     }
 }

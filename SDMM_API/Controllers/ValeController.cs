@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Warrior.Handlers.Enums;
+using Models.Auth;
 
 namespace SDMM_API.Controllers
 {
@@ -64,7 +65,7 @@ namespace SDMM_API.Controllers
 
                 IList<Vale> valesActivos = new List<Vale>();
 
-                foreach(Vale v in valesTodos)
+                foreach (Vale v in valesTodos)
                 {
                     if (v.active != 0 && v.userAutorizo.id != 0)
                     {
@@ -97,7 +98,7 @@ namespace SDMM_API.Controllers
 
             string s = "";
 
-            if(vale_vo == null)
+            if (vale_vo == null)
             {
                 data.Add("message", "El objeto recibido es nulo.");
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
@@ -122,8 +123,17 @@ namespace SDMM_API.Controllers
                 }
             }
 
-            TransactionResult tr = vale_service.create(vale_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
-            
+            TransactionResult tr;
+
+            if (vale_vo.user_id != 0)
+            {
+                tr = vale_service.create(vale_vo, new Models.Auth.User { id = vale_vo.user_id });
+            }
+            else
+            {
+                tr = vale_service.create(vale_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            }
+
             if (tr == TransactionResult.CREATED)
             {
                 data.Add("message", "Object created.");
@@ -339,9 +349,9 @@ namespace SDMM_API.Controllers
 
         [Route("api/vale/detalle/registro/bunch/")]
         [HttpPost]
-        public HttpResponseMessage createRegistroBunch([FromBody]  RegistersVo registros )
+        public HttpResponseMessage createRegistroBunch([FromBody]  RegistersVo registros)
         {
-            Console.WriteLine( Request.Content );
+            Console.WriteLine(Request.Content);
             TransactionResult tr = vale_service.createRegistroDetalleByList(registros.registrodetalles_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
@@ -453,7 +463,7 @@ namespace SDMM_API.Controllers
             }
             else if (vale.autorizo == 2)
             {
-                tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = vale.user_id_autorizo});
+                tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = vale.user_id_autorizo });
             }
             else
             {
@@ -494,6 +504,29 @@ namespace SDMM_API.Controllers
             else
             {
                 data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Create register
+        /// </summary>
+        /// <param name="registrodetalle_vo"></param>
+        /// <returns></returns>
+        [Route("api/vale/validar")]
+        [HttpPost]
+        public HttpResponseMessage validarLoginTablet([FromBody] UserVo user_vo)
+        {
+            try
+            {
+                IDictionary<string, User> data = new Dictionary<string, User>();
+                data.Add("data", vale_service.validarLoginTablet(user_vo));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
         }

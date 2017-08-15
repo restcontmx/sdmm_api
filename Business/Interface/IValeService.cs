@@ -29,5 +29,7 @@ namespace Business.Interface
         TransactionResult createRegistroDetalle(RegistroDetalleVo registro_vo, User user_log);
         TransactionResult createRegistroDetalleOver(RegistroDetalleVo registro_vo, User user_log);
         TransactionResult createRegistroDetalleByList(IList<RegistroDetalleVo> registrodetalles_vo, User user);
+
+        User validarLoginTablet(UserVo user);
     }
 }

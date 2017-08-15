@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Warrior.Handlers.Enums;
+using Models.Auth;
 
 namespace Data.Interface
 {
@@ -30,5 +31,7 @@ namespace Data.Interface
         IList<RegistroDetalle> getAllRegistersSacos();
         TransactionResult createRegistroDetalle(RegistroDetalle registro);
         TransactionResult createRegistroDetalleOver(RegistroDetalle registro);
+
+        User validarLoginTablet(User user);
     }
 }
