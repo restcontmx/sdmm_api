@@ -66,13 +66,16 @@ namespace Business.Implementation
                                 foreach (RegistroDetalleVo rvo in dvo.registros)
                                 {
                                     dvo.vale_id = id;
+                                    rvo.user_id = vale_vo.user_id;
+                                    rvo.vale_id = id;
+                                    rvo.detallevale_id = tr;
+
                                     tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
                                     if (tr2 != TransactionResult.CREATED)
                                     {
                                         return tr2;
                                     }
                                 }
-                                return tr2;
                             }
                             
                         }
@@ -242,13 +245,15 @@ namespace Business.Implementation
                             foreach (RegistroDetalleVo rvo in dvo.registros)
                             {
                                 dvo.vale_id = vale_vo.id;
+                                rvo.user_id = vale_vo.user_id;
+                                rvo.vale_id = vale_vo.id;
+                                rvo.detallevale_id = tr;
                                 tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
                                 if (tr2 != TransactionResult.CREATED)
                                 {
                                     return tr2;
                                 }
                             }
-                            return tr2;
                         }
                     }
                 }
