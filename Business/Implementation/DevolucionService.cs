@@ -26,17 +26,7 @@ namespace Business.Implementation
 
         public TransactionResult createP(DevolucionVo devolucion_vo, User user_log)
         {
-            RegistroDetalleDevVo reg = new RegistroDetalleDevVo
-            {
-                folio = "1",
-                tipodev = 1,
-                observaciones = "",
-                producto_id = 2,
-                user_id = user_log.id
-
-            };
-            devolucion_vo.registros = new List<RegistroDetalleDevVo>();
-            devolucion_vo.registros.Add(reg);
+            
             Devolucion devolucion = DevolucionAdapter.voToObject(devolucion_vo);
             devolucion.user = user_log;
 
@@ -48,6 +38,7 @@ namespace Business.Implementation
                 foreach (RegistroDetalleDevVo rvo in devolucion_vo.registros)
                 {
                     rvo.devolucion_id = id;
+                    rvo.user_id = devolucion.user.id;
                     tr = devolucion_repository.createRegistroDetalleDev(RegistroDetalleDevAdapter.voToObject(rvo));
                     if (tr != TransactionResult.CREATED)
                     {

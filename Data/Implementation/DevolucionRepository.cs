@@ -336,6 +336,12 @@ namespace Data.Implementation
                 {
                     SqlCommand command;
                     connection.Open();
+
+                    if (registro.observaciones == null || registro.observaciones == string.Empty)
+                    {
+                        registro.observaciones = "";
+                    }
+
                     command = new SqlCommand("sp_createRegistroDetalleDev", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("devolucion_id", registro.devolucion.id));
