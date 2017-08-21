@@ -13,6 +13,7 @@ namespace Models.Catalogs
         public DetalleVale detallevale { get; set; }
 
         public string folio { get; set; }
+        public string folioCaja { get; set; }
         public int turno { get; set; }
 
         public Producto producto { get; set;}

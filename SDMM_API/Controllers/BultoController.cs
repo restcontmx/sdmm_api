@@ -47,6 +47,41 @@ namespace SDMM_API.Controllers
         }
 
         /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/bulto/activos")]
+        [HttpGet]
+        public HttpResponseMessage listActivos()
+        {
+            try
+            {
+                IList<Bulto> bultosAux = bulto_service.getAll();
+
+                IList<Bulto> bultosActivos = new List<Bulto>();
+
+                foreach (Bulto b in bultosAux)
+                {
+                    if (b.active)
+                    {
+                        bultosActivos.Add(b);
+                    }
+                }
+
+
+                IDictionary<string, IList<Bulto>> data = new Dictionary<string, IList<Bulto>>();
+                data.Add("data", bultosActivos);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
         /// Retrieve object request
         /// </summary>
         /// <param name="id">primary field on the db</param>

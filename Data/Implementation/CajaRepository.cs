@@ -35,7 +35,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(caja.codigo)));
                     command.Parameters.Add(new SqlParameter("cantidad", caja.cantidad));
                     command.Parameters.Add(new SqlParameter("producto_id", caja.producto.id));
-                    //command.Parameters.Add(new SqlParameter("active", Validations.setBooleanValue(caja.active)));
+                    command.Parameters.Add(new SqlParameter("active", Validations.setBooleanValue(caja.active)));
                     command.Parameters.Add(new SqlParameter("user_id", caja.user.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;

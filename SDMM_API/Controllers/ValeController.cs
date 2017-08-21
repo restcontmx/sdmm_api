@@ -94,6 +94,11 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage create([FromBody] ValeVo vale_vo)
         {
+            if (vale_vo.folio_fisico == null || vale_vo.folio_fisico == string.Empty)
+            {
+                vale_vo.folio_fisico = "0";
+            }
+
             IDictionary<string, string> data = new Dictionary<string, string>();
 
             string s = "";
@@ -160,8 +165,19 @@ namespace SDMM_API.Controllers
         [HttpGet]
         public HttpResponseMessage detail(int id)
         {
-            Vale vale = vale_service.detail(id);
-            vale.detalles = vale_service.getDetailsByValeId(id);
+            Vale vale = new Vale();
+            try
+            {
+                vale = vale_service.detail(id);
+                vale.detalles = vale_service.getDetailsByValeId(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", ex.Message);
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
 
             if (vale != null)
             {

@@ -36,6 +36,7 @@ namespace Business.Adapters
                 user = new Models.Auth.User { id = vo.user_id },
                 producto = new Producto { id = vo.producto_id },
                 vale = new Vale { id = vo.vale_id },
+                folioCaja = vo.folioCaja,
                 turno = vo.turno               
             };
         }

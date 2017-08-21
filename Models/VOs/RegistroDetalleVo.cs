@@ -10,7 +10,7 @@ namespace Models.VOs
         public int id { get; set; }
 
         public int detallevale_id { get; set; }
-
+        public string folioCaja { get; set; }
         public string folio { get; set; }
         public int turno { get; set; }
 

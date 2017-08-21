@@ -21,7 +21,8 @@ namespace Business.Adapters
                 userAutorizo = new User { id = vo.user_id_autorizo},
                 active = vo.active,
                 autorizo = vo.autorizo,
-                fuente = vo.fuente
+                fuente = vo.fuente,
+                folio_fisico = vo.folio_fisico
             };
         }
     }

@@ -25,5 +25,6 @@ namespace Models.VOs
 
         public int autorizo { get; set; }
         public int fuente { get; set; }
+        public string folio_fisico { get; set; }
     }
 }

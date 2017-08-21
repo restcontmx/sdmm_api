@@ -43,6 +43,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("user_id", vale.user.id));
                     command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
                     command.Parameters.Add(new SqlParameter("fuente", vale.fuente));
+                    command.Parameters.Add(new SqlParameter("folio_fisico", vale.folio_fisico));
 
                     if (vale.userAutorizo.id != 0)
                     {
@@ -187,6 +188,12 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("detallevale_id", registro.detallevale.id));
                     command.Parameters.Add(new SqlParameter("folio", registro.folio));
+
+                    if (!changePro)
+                    {
+                        command.Parameters.Add(new SqlParameter("folioCaja", registro.folioCaja));
+                    }
+                    
                     command.Parameters.Add(new SqlParameter("user_id", registro.user.id));
                     command.Parameters.Add(new SqlParameter("producto_id", registro.producto.id));
                     command.Parameters.Add(new SqlParameter("vale_id", registro.vale.id));
@@ -222,8 +229,6 @@ namespace Data.Implementation
         public TransactionResult createRegistroDetalleOver(RegistroDetalle registro)
         {
 
-            string folioCaja = registro.folio.Substring(16, 30);
-
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
@@ -235,7 +240,7 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("detallevale_id", registro.detallevale.id));
                     command.Parameters.Add(new SqlParameter("folio", registro.folio));
-                    command.Parameters.Add(new SqlParameter("codigoCaja", folioCaja));
+                    command.Parameters.Add(new SqlParameter("codigoCaja", registro.folioCaja));
                     command.Parameters.Add(new SqlParameter("user_id", registro.user.id));
                     command.Parameters.Add(new SqlParameter("producto_id", registro.producto.id));
                     command.Parameters.Add(new SqlParameter("vale_id", registro.vale.id));
@@ -367,6 +372,7 @@ namespace Data.Implementation
                             },
                             active = int.Parse(row[16].ToString()),
                             fuente = int.Parse(row[21].ToString()),
+                            folio_fisico = row[22].ToString(),
                             userAutorizo = new User
                             {
                                 id = int.Parse(row[23].ToString()),
@@ -417,6 +423,7 @@ namespace Data.Implementation
                             },
                             active = int.Parse(row[16].ToString()),
                             fuente = int.Parse(row[21].ToString()),
+                            folio_fisico = row[22].ToString(),
                             userAutorizo = new User()
                             
                         };
@@ -497,6 +504,7 @@ namespace Data.Implementation
                                 cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
                                 active = int.Parse(row[14].ToString()),
                                 fuente = int.Parse(row[19].ToString()),
+                                folio_fisico = row[20].ToString(),
                                 userAutorizo = new User
                                 {
                                     id = int.Parse(row[21].ToString()),
@@ -541,6 +549,7 @@ namespace Data.Implementation
                                 cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
                                 active = int.Parse(row[14].ToString()),
                                 fuente = int.Parse(row[19].ToString()),
+                                folio_fisico = row[20].ToString(),
                                 userAutorizo = new User()
                             });
                         }
@@ -623,13 +632,15 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
+                            folioCaja = row[2].ToString(),
                             turno = int.Parse(row[3].ToString()),
                             detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
                             vale = new Vale { id = int.Parse(row[8].ToString()) },
                             producto = new Producto { id = int.Parse(row[7].ToString()) },
                             timestamp = Convert.ToDateTime(row[9].ToString()),
-                            updated = Convert.ToDateTime(row[10].ToString())
+                            updated = Convert.ToDateTime(row[10].ToString()),
+
                         });
                     }
                     return objects;
@@ -667,6 +678,7 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
+                            folioCaja = row[2].ToString(),
                             turno = int.Parse(row[3].ToString()),
                             detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
@@ -719,6 +731,7 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
+                            folioCaja = row[2].ToString(),
                             turno = int.Parse(row[3].ToString()),
                             detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
@@ -749,6 +762,7 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
+                            folioCaja = row[2].ToString(),
                             turno = int.Parse(row[3].ToString()),
                             detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
@@ -850,6 +864,7 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             folio = row[1].ToString(),
+                            folioCaja = row[2].ToString(),
                             turno = int.Parse(row[3].ToString()),
                             detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
