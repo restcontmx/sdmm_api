@@ -507,9 +507,9 @@ namespace Data.Implementation
                                 folio_fisico = row[20].ToString(),
                                 userAutorizo = new User
                                 {
-                                    id = int.Parse(row[21].ToString()),
-                                    first_name = row[22].ToString(),
-                                    second_name = row[23].ToString()
+                                    id = int.Parse(row[22].ToString()),
+                                    first_name = row[23].ToString(),
+                                    second_name = row[24].ToString()
                                 }
                             });
                         }
