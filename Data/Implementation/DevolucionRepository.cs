@@ -334,7 +334,7 @@ namespace Data.Implementation
             {
                 try
                 {
-                    SqlCommand command;
+                    SqlCommand command = new SqlCommand();
                     connection.Open();
 
                     if (registro.observaciones == null || registro.observaciones == string.Empty)
@@ -342,7 +342,18 @@ namespace Data.Implementation
                         registro.observaciones = "";
                     }
 
-                    command = new SqlCommand("sp_createRegistroDetalleDev", connection);
+                    //command = new SqlCommand("sp_createRegistroDetalleDev", connection);
+                    //command = new SqlCommand("sp_createRegistroDetalleDev", connection);
+
+                    if (registro.tipodev == 1)
+                    {
+                        command = new SqlCommand("sp_createRegistroDetalleDevProducto", connection);
+                    }
+                    if (registro.tipodev == 2)
+                    {
+                        command = new SqlCommand("sp_createRegistroDetalleDevCaja", connection);
+                    }
+
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("devolucion_id", registro.devolucion.id));
                     command.Parameters.Add(new SqlParameter("tipodev", registro.tipodev));
