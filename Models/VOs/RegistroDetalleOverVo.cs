@@ -14,5 +14,6 @@ namespace Models.VOs
         public int turno { get; set; }
         public int producto_id { get; set; }
         public int vale_id { get; set; }
+        public int status { get; set; }
     }
 }

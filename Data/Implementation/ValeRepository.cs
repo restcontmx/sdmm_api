@@ -868,6 +868,7 @@ namespace Data.Implementation
                             turno = int.Parse(row[3].ToString()),
                             detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
+                            status = int.Parse(row[6].ToString()),
                             vale =  new Vale { id = int.Parse(row[8].ToString()) },
                             producto = new Producto { id = int.Parse(row[7].ToString()) },
                             timestamp = Convert.ToDateTime(row[9].ToString()),
