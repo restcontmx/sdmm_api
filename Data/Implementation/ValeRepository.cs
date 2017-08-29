@@ -326,7 +326,7 @@ namespace Data.Implementation
                     //Revisa si la autorización está vacía
                     string aux2 = row[22].ToString();
 
-                    if(aux2 == String.Empty || aux2 == null)
+                    if(aux2 == String.Empty || aux2 == null || int.Parse(row[22].ToString()) == 0)
                     {
                         authEmpty = false;
                     }
@@ -357,8 +357,18 @@ namespace Data.Implementation
                                 ap_paterno = row[10].ToString(),
                                 ap_materno = row[11].ToString()
                             },
-                            cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                            cargador1 = new Empleado
+                            {
+                                id = int.Parse(row[12].ToString()),
+                                nombre = row[29].ToString(),
+                                ap_paterno = row[30].ToString()
+                            },
+                            cargador2 = new Empleado
+                            {
+                                id = int.Parse(row[13].ToString()),
+                                nombre = row[33].ToString(),
+                                ap_paterno = row[34].ToString()
+                            },
                             subnivel = new SubNivel
                             {
                                 id = int.Parse(row[5].ToString()),
@@ -408,8 +418,18 @@ namespace Data.Implementation
                                 ap_paterno = row[10].ToString(),
                                 ap_materno = row[11].ToString()
                             },
-                            cargador1 = new Empleado { id = int.Parse(row[12].ToString()) },
-                            cargador2 = new Empleado { id = int.Parse(row[13].ToString()) },
+                            cargador1 = new Empleado
+                            {
+                                id = int.Parse(row[12].ToString()),
+                                nombre = row[29].ToString(),
+                                ap_paterno = row[30].ToString()
+                            },
+                            cargador2 = new Empleado
+                            {
+                                id = int.Parse(row[13].ToString()),
+                                nombre = row[33].ToString(),
+                                ap_paterno = row[34].ToString()
+                            },
                             subnivel = new SubNivel
                             {
                                 id = int.Parse(row[5].ToString()),
@@ -591,7 +611,11 @@ namespace Data.Implementation
                             id = int.Parse(row[0].ToString()),
                             producto = new Producto {
                                 id = int.Parse(row[1].ToString()),
-                                nombre = row[2].ToString()
+                                nombre = row[2].ToString(),
+                                segmento = new SegmentoProducto
+                                {
+                                    name = row[5].ToString()
+                                }
                             },
                             cantidad = int.Parse(row[3].ToString()),
                             vale = new Vale { id = int.Parse(row[4].ToString()) }
