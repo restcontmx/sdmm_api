@@ -14,6 +14,7 @@ namespace Data.Interface
         TransactionResult createRegistroDetalleDev(RegistroDetalleDev registro);
         IList<Devolucion> getAll();
         IList<RegistroDetalleDev> detail(int id);
+        Devolucion detailComprobante(int id);
         /*TransactionResult update(Devolucion devolucion);
         TransactionResult delete(int id);*/
     }

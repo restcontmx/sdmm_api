@@ -94,20 +94,20 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage create([FromBody] ValeVo vale_vo)
         {
-            if (vale_vo.folio_fisico == null || vale_vo.folio_fisico == string.Empty)
-            {
-                vale_vo.folio_fisico = "0";
-            }
-
             IDictionary<string, string> data = new Dictionary<string, string>();
-
-            string s = "";
 
             if (vale_vo == null)
             {
                 data.Add("message", "El objeto recibido es nulo.");
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
+
+            if (vale_vo.folio_fisico == null || vale_vo.folio_fisico == string.Empty)
+            {
+                vale_vo.folio_fisico = "0";
+            }
+
+            string s = "";
 
             if (vale_vo.detalles == null || vale_vo.detalles.Count == 0)
             {
@@ -245,12 +245,69 @@ namespace SDMM_API.Controllers
         /// <returns></returns>
         [Route("api/vale/detalle/registro/historico/")]
         [HttpGet]
-        public HttpResponseMessage listRegistersHist()
+        public HttpResponseMessage listRegistersHist([FromBody] IList<RegistroCompararVo> listComparar)
         {
             try
             {
                 IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
                 data.Add("data", vale_service.getAllRegistersHistorico());
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
+        /// <summary>
+        /// List registers by detalle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/vale/detalle/registro/historico/")]
+        [HttpPost]
+        public HttpResponseMessage listRegistersHist2([FromBody] RegistrosCompararVo listComparar)
+        {
+            try
+            {
+                IList<RegistroDetalle> registrosResponse = new List<RegistroDetalle>();
+                IList<RegistroDetalle> registrosH = new List<RegistroDetalle>();
+                registrosH = vale_service.getAllRegistersHistorico();
+
+                IList<int> idsExistentes = new List<int>();
+                foreach (RegistroCompararVo reg in listComparar.registros_vo)
+                {
+                    idsExistentes.Add(reg.id);
+                }
+
+
+                foreach (RegistroDetalle r in registrosH)
+                {
+                    if (idsExistentes.Contains(r.id))
+                    {
+                        foreach (RegistroCompararVo reg in listComparar.registros_vo)
+                        {
+                            if (r.id == reg.id)
+                            {
+                                if (r.status != reg.estatus || r.folio != reg.folio)
+                                {
+                                    registrosResponse.Add(r);
+                                    break;
+                                }
+                            }
+                        }
+                    }else
+                    {
+                        registrosResponse.Add(r);
+                    }
+                }
+
+                IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
+                data.Add("data", registrosResponse);
+                idsExistentes.Clear();
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

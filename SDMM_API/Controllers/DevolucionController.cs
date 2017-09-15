@@ -96,6 +96,28 @@ namespace SDMM_API.Controllers
         }
 
         /// <summary>
+        /// Get detalles for devolucion
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/devolucion/comprobante/{id}")]
+        [HttpGet]
+        public HttpResponseMessage comprobante(int id)
+        {
+            try
+            {
+                IDictionary<string, Devolucion> data = new Dictionary<string, Devolucion>();
+                data.Add("data", devolucion_service.detailComprobante(id));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
         /// Get DetalleDevByCaja by flolio caja
         /// </summary>
         /// <param name="folio"></param>

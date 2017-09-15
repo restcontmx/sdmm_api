@@ -124,6 +124,11 @@ namespace Data.Implementation
                     return new Caja
                     {
                         id = int.Parse(row[0].ToString()),
+                        codigo = row[1].ToString(),
+                        folio_ini = row[2].ToString(),
+                        folio_fin = row[3].ToString(),
+                        cantidad = int.Parse(row[4].ToString()),
+                        producto = new Producto { id = int.Parse(row[5].ToString()) }
                     };
                 }
                 catch (Exception ex)

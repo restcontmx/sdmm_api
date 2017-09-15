@@ -122,45 +122,6 @@ namespace Data.Implementation
             }
         }
 
-        /* public TransactionResult createDetalle(DetalleVale detalle)
-         {
-             SqlConnection connection = null;
-             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
-             {
-                 try
-                 {
-                     connection.Open();
-                     SqlCommand command = new SqlCommand("sp_createDetalleVale", connection);
-                     command.CommandType = CommandType.StoredProcedure;
-                     command.Parameters.Add(new SqlParameter("vale_id", detalle.vale.id));
-                     command.Parameters.Add(new SqlParameter("producto_id", detalle.producto.id));
-                     command.Parameters.Add(new SqlParameter("cantidad", detalle.cantidad));
-                     command.ExecuteNonQuery();
-                     return TransactionResult.CREATED;
-                 }
-                 catch (SqlException ex)
-                 {
-                     if (connection != null)
-                     {
-                         connection.Close();
-                     }
-                     if (ex.Number == 2627)
-                     {
-                         return TransactionResult.EXISTS;
-                     }
-                     return TransactionResult.NOT_PERMITTED;
-                 }
-                 catch
-                 {
-                     if (connection != null)
-                     {
-                         connection.Close();
-                     }
-                     return TransactionResult.ERROR;
-                 }
-             }
-         }
-         */
         public TransactionResult createRegistroDetalle(RegistroDetalle registro)
         {
             bool changePro = false;
@@ -324,9 +285,9 @@ namespace Data.Implementation
                     bool authEmpty = true;
 
                     //Revisa si la autorización está vacía
-                    string aux2 = row[22].ToString();
+                    string aux2 = row[23].ToString();
 
-                    if(aux2 == String.Empty || aux2 == null || int.Parse(row[22].ToString()) == 0)
+                    if(aux2 == String.Empty || aux2 == null || int.Parse(row[23].ToString()) == 0)
                     {
                         authEmpty = false;
                     }

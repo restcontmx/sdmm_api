@@ -16,6 +16,7 @@ namespace Business.Interface
         DetalleDevByCajaVo getDetalleByCaja(string folio);
         IList<Devolucion> getAll();
         IList<RegistroDetalleDev> detail(int id);
+        Devolucion detailComprobante(int id);
         /*TransactionResult update(DevolucionVo devolucion_vo);
         TransactionResult delete(int id);*/
 

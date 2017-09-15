@@ -60,6 +60,11 @@ namespace Business.Implementation
             return devolucion_repository.detail(id);
         }
 
+        public Devolucion detailComprobante(int id)
+        {
+            return devolucion_repository.detailComprobante(id);
+        }
+
         public DetalleDevByCajaVo getDetalleByCaja(string folio)
         {
             return DetalleDevByCajaAdapter.objectToVo(devolucion_repository.getDetalleByCaja(folio));

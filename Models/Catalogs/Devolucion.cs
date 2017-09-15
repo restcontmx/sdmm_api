@@ -17,6 +17,7 @@ namespace Models.Catalogs
         public Vale vale { get; set; }
 
         public IList<RegistroDetalleDev> registros { get; set; }
+        public IList<DetalleVale> detalles { get; set; }
 
         public User user { get; set; }
         public DateTime timestamp { get; set; }
