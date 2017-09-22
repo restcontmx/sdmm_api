@@ -128,6 +128,21 @@ namespace SDMM_API.Controllers
                 }
             }
 
+            IList<int> idsProductos = new List<int>();
+            IList<DetalleValeVo> detallesAux = new List<DetalleValeVo>();
+
+            foreach (DetalleValeVo d in vale_vo.detalles)
+            {
+                if (!idsProductos.Contains(d.producto_id))
+                {
+                    detallesAux.Add(d);
+                    idsProductos.Add(d.producto_id);
+                }
+            }
+
+
+            vale_vo.detalles = detallesAux;
+
             TransactionResult tr;
 
             if (vale_vo.user_id != 0)
