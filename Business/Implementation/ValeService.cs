@@ -218,40 +218,49 @@ namespace Business.Implementation
 
             vale_repository.deleteDetalleVale(vale_vo.id);
 
+            IList<int> idsProductos = new List<int>();
+
             foreach (DetalleValeVo dvo in vale_vo.detalles)
             {
-                dvo.vale_id = vale_vo.id;
-                int tr = vale_repository.createDetalle(DetalleValeAdapter.voToObject(dvo));
-                if (0 >= tr)
+                //Revisar si ya fue agregado otro registro del mismo producto
+                if (!idsProductos.Contains(dvo.producto_id))
                 {
-                    return TransactionResult.ERROR;
-                }
-                else
-                {
-                    if (dvo.registros != null)
+                    dvo.vale_id = vale_vo.id;
+                    int tr = vale_repository.createDetalle(DetalleValeAdapter.voToObject(dvo));
+                    if (0 >= tr)
                     {
-                        bool insert = true;
-                        foreach (RegistroDetalleVo r in dvo.registros)
+                        return TransactionResult.ERROR;
+                    }
+                    else
+                    {
+                        //Candado para evitar duplicidad
+                        idsProductos.Add(dvo.producto_id);
+
+                        if (dvo.registros != null)
                         {
-                            if (r.folio == null || r.producto_id == 0)
+                            bool insert = true;
+                            foreach (RegistroDetalleVo r in dvo.registros)
                             {
-                                insert = false;
-                                break;
-                            }
-                        }
-                        if (insert)
-                        {
-                            var tr2 = TransactionResult.CREATED;
-                            foreach (RegistroDetalleVo rvo in dvo.registros)
-                            {
-                                dvo.vale_id = vale_vo.id;
-                                rvo.user_id = vale_vo.user_id;
-                                rvo.vale_id = vale_vo.id;
-                                rvo.detallevale_id = tr;
-                                tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
-                                if (tr2 != TransactionResult.CREATED)
+                                if (r.folio == null || r.producto_id == 0)
                                 {
-                                    return tr2;
+                                    insert = false;
+                                    break;
+                                }
+                            }
+                            if (insert)
+                            {
+                                var tr2 = TransactionResult.CREATED;
+                                foreach (RegistroDetalleVo rvo in dvo.registros)
+                                {
+                                    dvo.vale_id = vale_vo.id;
+                                    rvo.user_id = vale_vo.user_id;
+                                    rvo.vale_id = vale_vo.id;
+                                    rvo.detallevale_id = tr;
+                                    tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
+                                    if (tr2 != TransactionResult.CREATED)
+                                    {
+                                        return tr2;
+                                    }
                                 }
                             }
                         }
