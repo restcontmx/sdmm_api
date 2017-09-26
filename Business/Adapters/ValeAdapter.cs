@@ -22,7 +22,8 @@ namespace Business.Adapters
                 active = vo.active,
                 autorizo = vo.autorizo,
                 fuente = vo.fuente,
-                folio_fisico = vo.folio_fisico
+                folio_fisico = vo.folio_fisico,
+                isSync = vo.isSync
             };
         }
     }
