@@ -257,7 +257,7 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_getAllSubNivel", connection);
+                    SqlCommand command = new SqlCommand("sp_getAllSubNivelActivos", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
