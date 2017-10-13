@@ -151,6 +151,7 @@
     <Compile Include="VOs\RegistroDetalleOverVo.cs" />
     <Compile Include="VOs\RegistroDetalleVo.cs" />
     <Compile Include="VOs\RegistrosCompararVo.cs" />
+    <Compile Include="VOs\ReportesVo.cs" />
     <Compile Include="VOs\SegmentoProductoVo.cs" />
     <Compile Include="VOs\SubNivelVo.cs" />
     <Compile Include="VOs\TipoEmpleadoVo.cs" />

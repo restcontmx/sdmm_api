@@ -111,6 +111,7 @@
     <Compile Include="Implementation\ProcesoMineroRepository.cs" />
     <Compile Include="Implementation\ProductoRepository.cs" />
     <Compile Include="Implementation\ProveedorRepository.cs" />
+    <Compile Include="Implementation\ReportesRepository.cs" />
     <Compile Include="Implementation\SegmentoProductoRepository.cs" />
     <Compile Include="Implementation\SubNivelRepository.cs" />
     <Compile Include="Implementation\TipoEmpleadoRepository.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Interface\IProcesoMineroRepository.cs" />
     <Compile Include="Interface\IProductoRepository.cs" />
     <Compile Include="Interface\IProveedorRepository.cs" />
+    <Compile Include="Interface\IReportesRepository.cs" />
     <Compile Include="Interface\ISegmentoProductoRepository.cs" />
     <Compile Include="Interface\ISubNivelRepository.cs" />
     <Compile Include="Interface\ITipoEmpleadoRepository.cs" />

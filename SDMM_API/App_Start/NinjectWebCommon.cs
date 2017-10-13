@@ -91,7 +91,7 @@ namespace SDMM_API.App_Start
             kernel.Bind<ISegmentoProductoService>().To<SegmentoProductoService>();
             kernel.Bind<IInventarioService>().To<InventarioService>();
             kernel.Bind<IBultoService>().To<BultoService>();
-
+            kernel.Bind<IReportesService>().To<ReportesService>();
         }
     }
 }

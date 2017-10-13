@@ -141,6 +141,7 @@
     <Compile Include="Implementation\ProcesoMineroService.cs" />
     <Compile Include="Implementation\ProductoService.cs" />
     <Compile Include="Implementation\ProveedorService.cs" />
+    <Compile Include="Implementation\ReportesService.cs" />
     <Compile Include="Implementation\SegmentoProductoService.cs" />
     <Compile Include="Implementation\SubNivelService.cs" />
     <Compile Include="Implementation\TipoEmpleadoService.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Interface\IProcesoMineroService.cs" />
     <Compile Include="Interface\IProductoService.cs" />
     <Compile Include="Interface\IProveedorService.cs" />
+    <Compile Include="Interface\IReportesService.cs" />
     <Compile Include="Interface\ISegmentoProductoService.cs" />
     <Compile Include="Interface\ISubNivelService.cs" />
     <Compile Include="Interface\ITipoEmpleadoService.cs" />
