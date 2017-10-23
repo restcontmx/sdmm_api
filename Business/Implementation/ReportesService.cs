@@ -23,9 +23,9 @@ namespace Business.Implementation
             return reportes_repository.getListaSedena(reportes_vo);
         }
 
-        public IList<Vale> getListaVale(ReportesVo reportes_vo)
+        public IList<ReporteAccPac> getListVale(ReportesVo reportes_vo)
         {
-            return reportes_repository.getListaVale(reportes_vo);
+            return reportes_repository.getListVale(reportes_vo);
         }
     }
 }

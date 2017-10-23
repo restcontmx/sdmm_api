@@ -42,14 +42,14 @@ namespace SDMM_API.Controllers
             }
         }
 
-        [Route("api/reporte/vale")]
-        [HttpGet]
+        [Route("api/reporte/accpac")]
+        [HttpPost]
         public HttpResponseMessage listVale([FromBody] ReportesVo list)
         {
             try
             {
-                IDictionary<string, IList<Vale>> data = new Dictionary<string, IList<Vale>>();
-                data.Add("data", reportes_service.getListaVale(list));
+                IDictionary<string, IList<ReporteAccPac>> data = new Dictionary<string, IList<ReporteAccPac>>();
+                data.Add("data", reportes_service.getListVale(list));
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

@@ -11,7 +11,7 @@ namespace Data.Interface
     public interface IReportesRepository
     {
         IList<RegistroDetalle> getListaSedena(ReportesVo reportesVo);
-        IList<Vale> getListaVale(ReportesVo reportesVo);
+        IList<ReporteAccPac> getListVale(ReportesVo reportes);
 
     }
 }

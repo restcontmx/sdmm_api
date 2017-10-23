@@ -119,6 +119,7 @@
     <Compile Include="Catalogs\Proveedor.cs" />
     <Compile Include="Catalogs\RegistroDetalle.cs" />
     <Compile Include="Catalogs\RegistroDetalleDev.cs" />
+    <Compile Include="Catalogs\ReporteAccPac.cs" />
     <Compile Include="Catalogs\SegmentoProducto.cs" />
     <Compile Include="Catalogs\SubNivel.cs" />
     <Compile Include="Catalogs\TipoEmpleado.cs" />

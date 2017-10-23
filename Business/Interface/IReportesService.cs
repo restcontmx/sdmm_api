@@ -11,6 +11,6 @@ namespace Business.Interface
     public interface IReportesService
     {
         IList<RegistroDetalle> getListaSedena(ReportesVo reportesVo);
-        IList<Vale> getListaVale(ReportesVo reportesVo);
+        IList<ReporteAccPac> getListVale(ReportesVo reportesVo);
     }
 }
