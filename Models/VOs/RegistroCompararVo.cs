@@ -9,6 +9,5 @@ namespace Models.VOs
     {
         public int id { get; set; }
         public int estatus { get; set; }
-        public string folio { get; set; }
     }
 }
