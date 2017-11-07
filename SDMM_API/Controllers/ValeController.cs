@@ -258,6 +258,77 @@ namespace SDMM_API.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+        [Route("api/vale/historicoNum/")]
+        [HttpPost]
+        public HttpResponseMessage iteracionesHistorico([FromBody] RegistrosCompararVo listComparar)
+        {
+            try
+            {
+                IList<int> list = new List<int>();
+                /*IList<RegistroDetalle> listH = vale_service.getAllRegistersHistorico();
+
+                foreach(RegistroDetalle r in listH)
+                {
+                    list.Add(r.id);
+                }*/
+                if (listComparar != null && listComparar.registros_vo.Count != 0)
+                {
+                    IList<RegistroDetalle> registrosResponse = new List<RegistroDetalle>();
+                    IList<RegistroDetalle> registrosH = new List<RegistroDetalle>();
+                    registrosH = vale_service.getAllRegistersHistorico();
+
+                    IList<int> idsExistentes = new List<int>();
+                    foreach (RegistroCompararVo reg in listComparar.registros_vo)
+                    {
+                        idsExistentes.Add(reg.id);
+                    }
+
+
+                    foreach (RegistroDetalle r in registrosH)
+                    {
+                        if (idsExistentes.Contains(r.id))
+                        {
+                            foreach (RegistroCompararVo reg in listComparar.registros_vo)
+                            {
+                                if (r.id == reg.id)
+                                {
+                                    if (r.status != reg.estatus)
+                                    {
+                                        registrosResponse.Add(r);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            registrosResponse.Add(r);
+                        }
+                    }
+
+                    list.Add(registrosResponse.Count);
+                }
+                else
+                {
+                    list.Add(vale_service.getAllRegistersHistorico().Count);
+                }
+                IDictionary<string, IList<int>> data = new Dictionary<string, IList<int>>();
+                data.Add("data", list);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// List registers by detalle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("api/vale/detalle/registro/historico/")]
         [HttpGet]
         public HttpResponseMessage listRegistersHist([FromBody] IList<RegistroCompararVo> listComparar)
@@ -288,36 +359,88 @@ namespace SDMM_API.Controllers
         {
             try
             {
+                int iteracion = listComparar.registros_vo[listComparar.registros_vo.Count - 1].id;
+                listComparar.registros_vo.RemoveAt(listComparar.registros_vo.Count - 1);
                 IList<RegistroDetalle> registrosResponse = new List<RegistroDetalle>();
                 IList<RegistroDetalle> registrosH = new List<RegistroDetalle>();
                 registrosH = vale_service.getAllRegistersHistorico();
 
                 IList<int> idsExistentes = new List<int>();
-                foreach (RegistroCompararVo reg in listComparar.registros_vo)
-                {
-                    idsExistentes.Add(reg.id);
-                }
 
-
-                foreach (RegistroDetalle r in registrosH)
+                if (listComparar.registros_vo.Count > 1 && listComparar.registros_vo != null)
                 {
-                    if (idsExistentes.Contains(r.id))
+
+                    IList<RegistroDetalle> registrosResponseAux = new List<RegistroDetalle>();
+
+                    idsExistentes = new List<int>();
+                    foreach (RegistroCompararVo reg in listComparar.registros_vo)
                     {
-                        foreach (RegistroCompararVo reg in listComparar.registros_vo)
+                        idsExistentes.Add(reg.id);
+                    }
+
+
+                    foreach (RegistroDetalle r in registrosH)
+                    {
+                        if (idsExistentes.Contains(r.id))
                         {
-                            if (r.id == reg.id)
+                            foreach (RegistroCompararVo reg in listComparar.registros_vo)
                             {
-                                if (r.status != reg.estatus || r.folio != reg.folio)
+                                if (r.id == reg.id)
                                 {
-                                    registrosResponse.Add(r);
-                                    break;
+                                    if (r.status != reg.estatus)
+                                    {
+                                        registrosResponseAux.Add(r);
+                                        break;
+                                    }
                                 }
                             }
                         }
-                    }else
-                    {
-                        registrosResponse.Add(r);
+                        else
+                        {
+                            registrosResponseAux.Add(r);
+                        }
                     }
+
+                    iteracion = iteracion * 800;
+                    int cont = 0;
+                    foreach (RegistroDetalle reg in registrosResponseAux)
+                    {
+                        if ((iteracion + cont) != registrosResponseAux.Count)
+                        {
+                            registrosResponse.Add(registrosResponseAux[iteracion + cont]);
+                            cont = cont + 1;
+                            if (cont == 800)
+                            {
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                }
+                else
+                {
+                    iteracion = iteracion * 800;
+                    int cont = 0;
+                    foreach(RegistroDetalle reg in registrosH)
+                    {
+                        if ((iteracion + cont) != registrosH.Count)
+                        {
+                            registrosResponse.Add(registrosH[iteracion + cont]);
+                            cont = cont + 1;
+                            if (cont == 800)
+                            {
+                                break;
+                            }
+                        }else
+                        {
+                            break;
+                        }
+                    }
+                    
                 }
 
                 IDictionary<string, IList<RegistroDetalle>> data = new Dictionary<string, IList<RegistroDetalle>>();
