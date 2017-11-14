@@ -87,7 +87,7 @@ namespace Data.Implementation
         public IList<ReporteAccPac> getListVale(ReportesVo reportes_vo)
         {
 
-            DateTime rangeStart = DateTime.Parse(reportes_vo.rangeStart);
+            DateTime rangeStart = DateTime.Parse(reportes_vo.rangeStart).AddHours(6.25);
             DateTime rangeEnd = DateTime.Parse(reportes_vo.rangeEnd);
 
 
@@ -107,6 +107,52 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
+                        DateTime rangeEndAux = rangeEnd;
+                        Vale valeAux = new Vale
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            turno = int.Parse(row[1].ToString()),
+                            updated = Convert.ToDateTime(row[2].ToString()),
+                            subnivel = new SubNivel
+
+                            {
+                                nombre = row[3].ToString(),
+                                categoria = new Categoria
+                                {
+                                    numero = row[4].ToString(),
+                                    procesominero = new ProcesoMinero
+                                    {
+                                        nombre = row[5].ToString()
+                                    }
+                                },
+                                cuenta = new Cuenta
+                                {
+                                    numero = row[6].ToString()
+                                }
+                            },
+                            compania = new Compania
+                            {
+
+                                razon_social = row[7].ToString()
+
+                            }
+                        };
+
+
+                        if(valeAux.updated > rangeEndAux.AddDays(1.0))
+                        {
+                            rangeEndAux = rangeEnd.AddDays(1.0).AddHours(6.25);
+                            if (valeAux.updated < rangeEndAux)
+                            {
+                                objects.Add(new ReporteAccPac { vale = valeAux });
+                            }
+                        }
+                        else
+                        {
+                            objects.Add(new ReporteAccPac { vale = valeAux });
+                        }
+
+                        /*
                         objects.Add(new ReporteAccPac
                         {
                             vale = new Vale
@@ -138,7 +184,7 @@ namespace Data.Implementation
 
                                 }
                             }
-                        });
+                        });*/
                     }
 
                     connection.Close();
@@ -255,8 +301,64 @@ namespace Data.Implementation
                     return objects;
                 }
             }
+        }
+
+        public DateTime fechaAdministrativa(string fecha)
+        {
+            string[] sqlDateArr1 = fecha.Split('/');
+
+            var sDay = sqlDateArr1[0];
+            var sMonth = (int.Parse(sqlDateArr1[1])).ToString();
+            string[] sqlDateArr2 = sqlDateArr1[2].Split(' ');
+
+            var sYear = sqlDateArr2[0];
+            string[] sqlDateArr3 = sqlDateArr2[1].Split(':');
+            var sHour = sqlDateArr3[0];
+            var sMinute = sqlDateArr3[1];
+            var sSecond = sqlDateArr3[2];
+
+            var dateV = new DateTime(int.Parse(sYear), 
+                                     int.Parse(sMonth), 
+                                     int.Parse(sDay), 
+                                     int.Parse(sHour), 
+                                     int.Parse(sMinute), 
+                                     int.Parse(sSecond));
 
 
+
+            var dateIni = new DateTime(int.Parse(sYear),
+                                        int.Parse(sMonth),
+                                        int.Parse(sDay), 
+                                        0, 
+                                        0, 
+                                        0);
+
+            var dateFin = new DateTime(int.Parse(sYear),
+                                        int.Parse(sMonth),
+                                        int.Parse(sDay),
+                                        6,
+                                        15,
+                                        0);
+
+            if (dateV > dateIni && dateV < dateFin)
+            {
+                var minusOneDay = dateV.AddDays(-1.0);
+
+                //alert("menos un día: " + minusOneDay2);
+                return minusOneDay;
+            }
+            else
+            {
+                var convertTime = new DateTime(int.Parse(sYear),
+                                                int.Parse(sMonth),
+                                                int.Parse(sDay),
+                                                int.Parse(sHour),
+                                                int.Parse(sMinute),
+                                                int.Parse(sSecond));
+
+                //alert("fecha normal: " +convertTime);
+                return convertTime;
+            }
         }
     }
 }
