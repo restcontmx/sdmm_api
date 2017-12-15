@@ -88,7 +88,8 @@ namespace Data.Implementation
         {
 
             DateTime rangeStart = DateTime.Parse(reportes_vo.rangeStart).AddHours(6.25);
-            DateTime rangeEnd = DateTime.Parse(reportes_vo.rangeEnd);
+            DateTime rangeEnd = DateTime.Parse(reportes_vo.rangeEnd).AddHours(23.99);
+
 
             SqlConnection connection = null;
             IList<ReporteAccPac> objects = new List<ReporteAccPac>();
@@ -138,7 +139,7 @@ namespace Data.Implementation
                         };
 
 
-                        if (valeAux.updated > rangeEndAux.AddDays(1.0))
+                        if(valeAux.updated > rangeEndAux.AddDays(1.0))
                         {
                             rangeEndAux = rangeEnd.AddDays(1.0).AddHours(6.25);
                             if (valeAux.updated < rangeEndAux)
@@ -150,6 +151,40 @@ namespace Data.Implementation
                         {
                             objects.Add(new ReporteAccPac { vale = valeAux });
                         }
+
+                        /*
+                        objects.Add(new ReporteAccPac
+                        {
+                            vale = new Vale
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                turno = int.Parse(row[1].ToString()),
+                                updated = Convert.ToDateTime(row[2].ToString()),
+                                subnivel = new SubNivel
+
+                                {
+                                    nombre = row[3].ToString(),
+                                    categoria = new Categoria
+                                    {
+                                        numero = row[4].ToString(),
+                                        procesominero = new ProcesoMinero
+                                        {
+                                            nombre = row[5].ToString()
+                                        }
+                                    },
+                                    cuenta = new Cuenta
+                                    {
+                                        numero = row[6].ToString()
+                                    }
+                                },
+                                compania = new Compania
+                                {
+
+                                    razon_social = row[7].ToString()
+
+                                }
+                            }
+                        });*/
                     }
 
                     connection.Close();
@@ -157,6 +192,7 @@ namespace Data.Implementation
 
                     foreach (ReporteAccPac reporte in objects)
                     {
+
                         IList<int> idsp = new List<int>();
                         IList<string> codigos = new List<string>();
                         int cantidad = 0;
@@ -199,8 +235,7 @@ namespace Data.Implementation
                             {
                                 if (productoActivo)
                                 {
-                                    reporte.registros.Add(new DetalleVale
-                                    {
+                                    reporte.registros.Add(new DetalleVale {
                                         producto = new Producto { id = idsp[idsp.Count - 1], codigo = codigoaux },
                                         cantidad = cantidad
                                     });
@@ -244,8 +279,7 @@ namespace Data.Implementation
                                         cantidad = 0;
                                         cantidad = cantidad + 1;
                                         productoActivo = true;
-                                    }
-                                    else
+                                    }else
                                     {
                                         if (codigos.Contains(row[4].ToString()))
                                         {
@@ -302,11 +336,11 @@ namespace Data.Implementation
                                                 cantidad = cantidad + int.Parse(row[1].ToString());
                                             }
 
-
+                                            
                                         }
                                     }
                                 }
-
+                                
                             }
 
                             codigoaux = row[4].ToString();
@@ -314,7 +348,7 @@ namespace Data.Implementation
                     }
 
                     return objects;
-
+                        
                 }
                 catch (SqlException ex)
                 {
@@ -327,5 +361,62 @@ namespace Data.Implementation
             }
         }
 
+        public DateTime fechaAdministrativa(string fecha)
+        {
+            string[] sqlDateArr1 = fecha.Split('/');
+
+            var sDay = sqlDateArr1[0];
+            var sMonth = (int.Parse(sqlDateArr1[1])).ToString();
+            string[] sqlDateArr2 = sqlDateArr1[2].Split(' ');
+
+            var sYear = sqlDateArr2[0];
+            string[] sqlDateArr3 = sqlDateArr2[1].Split(':');
+            var sHour = sqlDateArr3[0];
+            var sMinute = sqlDateArr3[1];
+            var sSecond = sqlDateArr3[2];
+
+            var dateV = new DateTime(int.Parse(sYear), 
+                                     int.Parse(sMonth), 
+                                     int.Parse(sDay), 
+                                     int.Parse(sHour), 
+                                     int.Parse(sMinute), 
+                                     int.Parse(sSecond));
+
+
+
+            var dateIni = new DateTime(int.Parse(sYear),
+                                        int.Parse(sMonth),
+                                        int.Parse(sDay), 
+                                        0, 
+                                        0, 
+                                        0);
+
+            var dateFin = new DateTime(int.Parse(sYear),
+                                        int.Parse(sMonth),
+                                        int.Parse(sDay),
+                                        6,
+                                        15,
+                                        0);
+
+            if (dateV > dateIni && dateV < dateFin)
+            {
+                var minusOneDay = dateV.AddDays(-1.0);
+
+                //alert("menos un día: " + minusOneDay2);
+                return minusOneDay;
+            }
+            else
+            {
+                var convertTime = new DateTime(int.Parse(sYear),
+                                                int.Parse(sMonth),
+                                                int.Parse(sDay),
+                                                int.Parse(sHour),
+                                                int.Parse(sMinute),
+                                                int.Parse(sSecond));
+
+                //alert("fecha normal: " +convertTime);
+                return convertTime;
+            }
+        }
     }
 }
