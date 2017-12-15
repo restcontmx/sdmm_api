@@ -87,9 +87,8 @@ namespace Data.Implementation
         public IList<ReporteAccPac> getListVale(ReportesVo reportes_vo)
         {
 
-            DateTime rangeStart = DateTime.Parse(reportes_vo.rangeStart);
+            DateTime rangeStart = DateTime.Parse(reportes_vo.rangeStart).AddHours(6.25);
             DateTime rangeEnd = DateTime.Parse(reportes_vo.rangeEnd);
-
 
             SqlConnection connection = null;
             IList<ReporteAccPac> objects = new List<ReporteAccPac>();
@@ -107,38 +106,50 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
-                        objects.Add(new ReporteAccPac
+                        DateTime rangeEndAux = rangeEnd;
+                        Vale valeAux = new Vale
                         {
-                            vale = new Vale
-                            {
-                                id = int.Parse(row[0].ToString()),
-                                turno = int.Parse(row[1].ToString()),
-                                updated = Convert.ToDateTime(row[2].ToString()),
-                                subnivel = new SubNivel
+                            id = int.Parse(row[0].ToString()),
+                            turno = int.Parse(row[1].ToString()),
+                            updated = Convert.ToDateTime(row[2].ToString()),
+                            subnivel = new SubNivel
 
+                            {
+                                nombre = row[3].ToString(),
+                                categoria = new Categoria
                                 {
-                                    nombre = row[3].ToString(),
-                                    categoria = new Categoria
+                                    numero = row[4].ToString(),
+                                    procesominero = new ProcesoMinero
                                     {
-                                        numero = row[4].ToString(),
-                                        procesominero = new ProcesoMinero
-                                        {
-                                            nombre = row[5].ToString()
-                                        }
-                                    },
-                                    cuenta = new Cuenta
-                                    {
-                                        numero = row[6].ToString()
+                                        nombre = row[5].ToString()
                                     }
                                 },
-                                compania = new Compania
+                                cuenta = new Cuenta
                                 {
-
-                                    razon_social = row[7].ToString()
-
+                                    numero = row[6].ToString()
                                 }
+                            },
+                            compania = new Compania
+                            {
+
+                                razon_social = row[7].ToString()
+
                             }
-                        });
+                        };
+
+
+                        if (valeAux.updated > rangeEndAux.AddDays(1.0))
+                        {
+                            rangeEndAux = rangeEnd.AddDays(1.0).AddHours(6.25);
+                            if (valeAux.updated < rangeEndAux)
+                            {
+                                objects.Add(new ReporteAccPac { vale = valeAux });
+                            }
+                        }
+                        else
+                        {
+                            objects.Add(new ReporteAccPac { vale = valeAux });
+                        }
                     }
 
                     connection.Close();
@@ -147,6 +158,7 @@ namespace Data.Implementation
                     foreach (ReporteAccPac reporte in objects)
                     {
                         IList<int> idsp = new List<int>();
+                        IList<string> codigos = new List<string>();
                         int cantidad = 0;
 
                         SqlCommand command2 = new SqlCommand("sp_reporteAccPacDetail", connection);
@@ -187,7 +199,8 @@ namespace Data.Implementation
                             {
                                 if (productoActivo)
                                 {
-                                    reporte.registros.Add(new DetalleVale {
+                                    reporte.registros.Add(new DetalleVale
+                                    {
                                         producto = new Producto { id = idsp[idsp.Count - 1], codigo = codigoaux },
                                         cantidad = cantidad
                                     });
@@ -201,16 +214,25 @@ namespace Data.Implementation
                                     }
                                     else
                                     {
-                                        idsp.Add(int.Parse(row[2].ToString()));
-                                        productoActivo = false;
-
-                                        reporte.registros.Add(new DetalleVale
+                                        if (codigos.Contains(row[4].ToString()))
                                         {
-                                            producto = new Producto { id = idsp[idsp.Count - 1], codigo = row[4].ToString() },
-                                            cantidad = int.Parse(row[1].ToString())
-                                        });
+                                            cantidad = cantidad + int.Parse(row[1].ToString());
+                                        }
+                                        else
+                                        {
+                                            idsp.Add(int.Parse(row[2].ToString()));
+                                            codigos.Add(row[4].ToString());
+                                            cantidad = 0;
+                                            productoActivo = false;
 
-                                        
+                                            cantidad = cantidad + int.Parse(row[1].ToString());
+
+                                            /*reporte.registros.Add(new DetalleVale
+                                            {
+                                                producto = new Producto { id = idsp[idsp.Count - 1], codigo = row[4].ToString() },
+                                                cantidad = cantidad
+                                            });*/
+                                        }
                                     }
 
                                 }
@@ -222,21 +244,69 @@ namespace Data.Implementation
                                         cantidad = 0;
                                         cantidad = cantidad + 1;
                                         productoActivo = true;
-                                    }else
+                                    }
+                                    else
                                     {
-                                        idsp.Add(int.Parse(row[2].ToString()));
-                                        productoActivo = false;
-
-                                        reporte.registros.Add(new DetalleVale
+                                        if (codigos.Contains(row[4].ToString()))
                                         {
-                                            producto = new Producto { id = idsp[idsp.Count - 1], codigo = row[4].ToString() },
-                                            cantidad = int.Parse(row[1].ToString())
-                                        });
+                                            if (cont == data_set2.Tables[0].Rows.Count)
+                                            {
+                                                cantidad = cantidad + int.Parse(row[1].ToString());
 
-                                        
+                                                reporte.registros.Add(new DetalleVale
+                                                {
+                                                    producto = new Producto { id = idsp[idsp.Count - 1], codigo = row[4].ToString() },
+                                                    cantidad = cantidad
+                                                });
+                                            }
+                                            else
+                                            {
+                                                cantidad = cantidad + int.Parse(row[1].ToString());
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (cont == data_set2.Tables[0].Rows.Count)
+                                            {
+
+                                                reporte.registros.Add(new DetalleVale
+                                                {
+                                                    producto = new Producto { id = idsp[idsp.Count - 1], codigo = codigoaux },
+                                                    cantidad = cantidad
+                                                });
+
+                                                idsp.Add(int.Parse(row[2].ToString()));
+                                                cantidad = 0;
+                                                cantidad = cantidad + int.Parse(row[1].ToString());
+
+                                                reporte.registros.Add(new DetalleVale
+                                                {
+                                                    producto = new Producto { id = idsp[idsp.Count - 1], codigo = row[4].ToString() },
+                                                    cantidad = cantidad
+                                                });
+                                            }
+                                            else
+                                            {
+                                                idsp.Add(int.Parse(row[2].ToString()));
+                                                codigos.Add(row[4].ToString());
+
+                                                productoActivo = false;
+
+                                                reporte.registros.Add(new DetalleVale
+                                                {
+                                                    producto = new Producto { id = idsp[idsp.Count - 1], codigo = codigoaux },
+                                                    cantidad = cantidad
+                                                });
+
+                                                cantidad = 0;
+                                                cantidad = cantidad + int.Parse(row[1].ToString());
+                                            }
+
+
+                                        }
                                     }
                                 }
-                                
+
                             }
 
                             codigoaux = row[4].ToString();
@@ -244,7 +314,7 @@ namespace Data.Implementation
                     }
 
                     return objects;
-                        
+
                 }
                 catch (SqlException ex)
                 {
@@ -255,8 +325,7 @@ namespace Data.Implementation
                     return objects;
                 }
             }
-
-
         }
+
     }
 }

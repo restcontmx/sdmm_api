@@ -255,6 +255,8 @@ namespace Data.Implementation
                                 listProductos.Add(reg.producto.id);
                                 contP = 0;
                             }
+
+                            dev.vale = detailVale(dev.vale.id);
                         }
                         else if (reg.tipodev == 3)
                         {
@@ -571,9 +573,9 @@ namespace Data.Implementation
                     bool authEmpty = true;
 
                     //Revisa si la autorización está vacía
-                    string aux2 = row[23].ToString();
+                    string aux2 = row[24].ToString();
 
-                    if (aux2 == String.Empty || aux2 == null || int.Parse(row[23].ToString()) == 0)
+                    if (aux2 == String.Empty || aux2 == null || int.Parse(row[24].ToString()) == 0)
                     {
                         authEmpty = false;
                     }
@@ -607,14 +609,14 @@ namespace Data.Implementation
                             cargador1 = new Empleado
                             {
                                 id = int.Parse(row[12].ToString()),
-                                nombre = row[29].ToString(),
-                                ap_paterno = row[30].ToString()
+                                nombre = row[30].ToString(),
+                                ap_paterno = row[31].ToString()
                             },
                             cargador2 = new Empleado
                             {
                                 id = int.Parse(row[13].ToString()),
-                                nombre = row[33].ToString(),
-                                ap_paterno = row[34].ToString()
+                                nombre = row[34].ToString(),
+                                ap_paterno = row[35].ToString()
                             },
                             subnivel = new SubNivel
                             {
@@ -626,15 +628,19 @@ namespace Data.Implementation
                                     nombre = row[19].ToString(),
                                     codigo = row[20].ToString()
                                 },
+                                cuenta = new Cuenta
+                                {
+                                    numero = row[23].ToString()
+                                }
                             },
                             active = int.Parse(row[16].ToString()),
                             fuente = int.Parse(row[21].ToString()),
                             folio_fisico = row[22].ToString(),
                             userAutorizo = new User
                             {
-                                id = int.Parse(row[24].ToString()),
-                                first_name = row[25].ToString(),
-                                second_name = row[26].ToString()
+                                id = int.Parse(row[25].ToString()),
+                                first_name = row[26].ToString(),
+                                second_name = row[27].ToString()
                             }
                         };
                     }
@@ -668,14 +674,14 @@ namespace Data.Implementation
                             cargador1 = new Empleado
                             {
                                 id = int.Parse(row[12].ToString()),
-                                nombre = row[29].ToString(),
-                                ap_paterno = row[30].ToString()
+                                nombre = row[30].ToString(),
+                                ap_paterno = row[31].ToString()
                             },
                             cargador2 = new Empleado
                             {
                                 id = int.Parse(row[13].ToString()),
-                                nombre = row[33].ToString(),
-                                ap_paterno = row[34].ToString()
+                                nombre = row[34].ToString(),
+                                ap_paterno = row[35].ToString()
                             },
                             subnivel = new SubNivel
                             {
@@ -687,6 +693,10 @@ namespace Data.Implementation
                                     nombre = row[19].ToString(),
                                     codigo = row[20].ToString()
                                 },
+                                cuenta = new Cuenta
+                                {
+                                    numero = row[23].ToString()
+                                }
                             },
                             active = int.Parse(row[16].ToString()),
                             fuente = int.Parse(row[21].ToString()),
