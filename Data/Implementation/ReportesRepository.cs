@@ -117,17 +117,14 @@ namespace Data.Implementation
 
                             {
                                 nombre = row[3].ToString(),
-                                categoria = new Categoria
+                                proceso = new ProcesoMinero
                                 {
-                                    numero = row[4].ToString(),
-                                    procesominero = new ProcesoMinero
-                                    {
-                                        nombre = row[5].ToString()
-                                    }
+                                    nombre = row[6].ToString()
                                 },
                                 cuenta = new Cuenta
                                 {
-                                    numero = row[6].ToString()
+                                    numero = row[4].ToString(),
+                                    num_categoria = row[5].ToString()
                                 }
                             },
                             compania = new Compania

@@ -6,10 +6,10 @@ namespace Data.Interface
 {
     public interface ICuentaRepository
     {
-        IList<Cuenta> getAll();
-        Cuenta detail(int id);
-        TransactionResult create(Cuenta cuenta);
-        TransactionResult update(Cuenta cuenta);
-        TransactionResult delete(int id);
+        IList<Cuenta> getAll(int sistema);
+        Cuenta detail(int id, int sistema);
+        TransactionResult create(Cuenta cuenta, int sistema);
+        TransactionResult update(Cuenta cuenta, int sistema);
+        TransactionResult delete(int id, int sistema);
     }
 }

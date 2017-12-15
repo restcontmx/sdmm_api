@@ -12,7 +12,7 @@ namespace Models.VOs
         public string nombre { get; set; }
         public int status { get; set; }
         public int cuenta_id { get; set; }
-        public int categoria_id { get; set; }
+        public int proceso_id { get; set; }
         public int user_id { get; set; }
     }
 }

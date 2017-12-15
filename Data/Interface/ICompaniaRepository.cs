@@ -6,10 +6,10 @@ namespace Data.Interface
 {
     public interface ICompaniaRepository
     {
-        IList<Compania> getAll();
-        Compania detail(int id);
-        TransactionResult create(Compania compania);
-        TransactionResult update(Compania compania);
-        TransactionResult delete(int id);
+        IList<Compania> getAll(int sistema);
+        Compania detail(int id, int sistema);
+        TransactionResult create(Compania compania, int sistema);
+        TransactionResult update(Compania compania, int sistema);
+        TransactionResult delete(int id, int sistema);
     }
 }

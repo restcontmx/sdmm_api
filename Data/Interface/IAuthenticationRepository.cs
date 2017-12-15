@@ -15,26 +15,26 @@ namespace Data.Interface
         /// </summary>
         /// <param name="username"></param>
         /// <returns>Authentication model</returns>
-        AuthModel validateUser(string username);
+        AuthModel validateUser(string username, int sistema);
 
         /// <summary>
         /// Create new authentication model
         /// </summary>
         /// <param name="auth_model">Authentication model</param>
         /// <returns></returns>
-        TransactionResult create(AuthModel auth_model);
+        TransactionResult create(AuthModel auth_model, int sistema);
 
         /// <summary>
         /// Gets all the rols
         /// </summary>
         /// <returns>A list of rols</returns>
-        IList<Rol> getAllRols();
+        IList<Rol> getAllRols(int sistema);
 
         /// <summary>
         /// Delete authentication register
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        TransactionResult deleteAuth(int id);
+        TransactionResult deleteAuth(int id, int sistema);
     }
 }

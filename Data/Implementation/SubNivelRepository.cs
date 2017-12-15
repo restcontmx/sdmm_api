@@ -31,7 +31,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("user_id", subnivel.user.id));
                     command.Parameters.Add(new SqlParameter("nivel_id", subnivel.nivel.id));
                     command.Parameters.Add(new SqlParameter("cuenta_id", subnivel.cuenta.id));
-                    command.Parameters.Add(new SqlParameter("categoria_id", subnivel.categoria.id));
+                    command.Parameters.Add(new SqlParameter("proceso_id", subnivel.proceso.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -115,13 +115,14 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[3].ToString()),
                             nombre = row[13].ToString(),
-                            numero = row[14].ToString()
+                            numero = row[14].ToString(),
+                            num_categoria = row[15].ToString(),
                         },
-                        categoria = new Categoria
+                        proceso = new ProcesoMinero
                         {
                             id = int.Parse(row[4].ToString()),
-                            nombre = row[11].ToString(),
-                            numero = row[12].ToString()
+                            codigo = row[11].ToString(),
+                            nombre = row[12].ToString()
                         },
                         user = new User { id = int.Parse(row[5].ToString()) },
                         timestamp = Convert.ToDateTime(row[6].ToString()),
@@ -171,13 +172,14 @@ namespace Data.Implementation
                             {
                                 id = int.Parse(row[3].ToString()),
                                 nombre = row[13].ToString(),
-                                numero = row[14].ToString()
+                                numero = row[14].ToString(),
+                                num_categoria = row[15].ToString(),
                             },
-                            categoria = new Categoria
+                            proceso = new ProcesoMinero
                             {
                                 id = int.Parse(row[4].ToString()),
-                                nombre = row[11].ToString(),
-                                numero = row[12].ToString()
+                                codigo = row[11].ToString(),
+                                nombre = row[12].ToString()
                             },
                             user = new User { id = int.Parse(row[5].ToString())},
                             timestamp = Convert.ToDateTime(row[6].ToString()),
@@ -220,7 +222,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("user_id", subnivel.user.id));
                     command.Parameters.Add(new SqlParameter("nivel_id", subnivel.nivel.id));
                     command.Parameters.Add(new SqlParameter("cuenta_id", subnivel.cuenta.id));
-                    command.Parameters.Add(new SqlParameter("categoria_id", subnivel.categoria.id));
+                    command.Parameters.Add(new SqlParameter("proceso_id", subnivel.proceso.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
                 }

@@ -31,6 +31,8 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("proveedor_id", producto.proveedor.id));
                     command.Parameters.Add(new SqlParameter("segmentoproducto_id", producto.segmento.id));
                     command.Parameters.Add(new SqlParameter("revision", producto.revision));
+                    command.Parameters.Add(new SqlParameter("cantidad_caja_promedio", producto.cantidad_caja_promedio));
+                    command.Parameters.Add(new SqlParameter("rango_caja_cierre", producto.rango_caja_cierre));
                     command.Parameters.Add(new SqlParameter("user_id", producto.user.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
@@ -114,33 +116,33 @@ namespace Data.Implementation
                         costo = decimal.Parse(row[3].ToString()),
                         peso = decimal.Parse(row[4].ToString()),
                         revision = int.Parse(row[5].ToString()),
-                        proveedor = new Proveedor
+                        cantidad_caja_promedio = int.Parse(row[6].ToString()),
+                        rango_caja_cierre = int.Parse(row[7].ToString()),
+                        timestamp = Convert.ToDateTime(row[8].ToString()),
+                        updated = Convert.ToDateTime(row[9].ToString()),
+                        tipo_producto = new TipoProducto
                         {
-                            id = int.Parse(row[6].ToString()),
-                            nombre_comercial = row[17].ToString()
-                        },
-                        segmento = new SegmentoProducto
-                        {
-                            id = int.Parse(row[7].ToString()),
-                            name = row[18].ToString()
+                            id = int.Parse(row[10].ToString()),
+                            name = row[11].ToString(),
+                            description = row[12].ToString(),
+                            value = int.Parse(row[13].ToString())
                         },
                         user = new Models.Auth.User
                         {
-                            id = int.Parse(row[8].ToString()),
+                            id = int.Parse(row[14].ToString()),
                             first_name = row[15].ToString(),
                             second_name = row[16].ToString()
                         },
-                        timestamp = Convert.ToDateTime(row[9].ToString()),
-                        updated = Convert.ToDateTime(row[10].ToString()),
-                        tipo_producto = new TipoProducto
+                        proveedor = new Proveedor
                         {
-                            id = int.Parse(row[11].ToString()),
-                            name = row[12].ToString(),
-                            description = row[13].ToString(),
-                            value = int.Parse(row[14].ToString())
-                        }
-                        
-
+                            id = int.Parse(row[17].ToString()),
+                            nombre_comercial = row[18].ToString()
+                        },
+                        segmento = new SegmentoProducto
+                        {
+                            id = int.Parse(row[19].ToString()),
+                            name = row[20].ToString()
+                        }                     
                     };
 
                 }
@@ -179,25 +181,26 @@ namespace Data.Implementation
                             costo = decimal.Parse(row[3].ToString()),
                             peso = decimal.Parse(row[4].ToString()),
                             revision = int.Parse(row[5].ToString()),
-                            proveedor =  new Proveedor
+                            cantidad_caja_promedio = int.Parse(row[6].ToString()),
+                            rango_caja_cierre = int.Parse(row[7].ToString()),
+                            timestamp = Convert.ToDateTime(row[8].ToString()),
+                            updated = Convert.ToDateTime(row[9].ToString()),
+                            tipo_producto = new TipoProducto
                             {
-                                id = int.Parse(row[6].ToString()),
+                                id = int.Parse(row[10].ToString()),
+                                name = row[11].ToString(),
+                                description = row[12].ToString(),
+                                value = int.Parse(row[13].ToString())
+                            },
+                            proveedor = new Proveedor
+                            {
+                                id = int.Parse(row[14].ToString()),
                                 nombre_comercial = row[15].ToString()
                             },
                             segmento = new SegmentoProducto
                             {
-                                id = int.Parse(row[7].ToString()),
-                                name = row[16].ToString()
-                            },
-                            user = new Models.Auth.User { id = int.Parse(row[8].ToString()) },
-                            timestamp = Convert.ToDateTime(row[9].ToString()),
-                            updated = Convert.ToDateTime(row[10].ToString()),
-                            tipo_producto = new TipoProducto
-                            {
-                                id = int.Parse(row[11].ToString()),
-                                name = row[12].ToString(),
-                                description = row[13].ToString(),
-                                value = int.Parse(row[14].ToString())
+                                id = int.Parse(row[16].ToString()),
+                                name = row[17].ToString()
                             }
                         });
                     }
@@ -233,6 +236,8 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("segmentoproducto_id", producto.segmento.id));
                     command.Parameters.Add(new SqlParameter("tipoproducto_id", producto.tipo_producto.id));
                     command.Parameters.Add(new SqlParameter("revision", producto.revision));
+                    command.Parameters.Add(new SqlParameter("cantidad_caja_promedio", producto.cantidad_caja_promedio));
+                    command.Parameters.Add(new SqlParameter("rango_caja_cierre", producto.rango_caja_cierre));
                     command.Parameters.Add(new SqlParameter("id", producto.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;

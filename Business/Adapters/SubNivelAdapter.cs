@@ -25,7 +25,7 @@ namespace Business.Adapters
                 nombre = vo.nombre,
                 status = vo.status==0? false : true,
                 cuenta = new Cuenta { id = vo.cuenta_id },
-                categoria =  new Categoria { id = vo.categoria_id },
+                proceso =  new ProcesoMinero { id = vo.proceso_id },
                 user = new Models.Auth.User { id = vo.user_id }
             };
         }

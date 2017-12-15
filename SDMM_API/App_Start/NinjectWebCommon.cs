@@ -92,6 +92,14 @@ namespace SDMM_API.App_Start
             kernel.Bind<IInventarioService>().To<InventarioService>();
             kernel.Bind<IBultoService>().To<BultoService>();
             kernel.Bind<IReportesService>().To<ReportesService>();
+            kernel.Bind<IOperadorService>().To<OperadorService>();
+            kernel.Bind<IPipaService>().To<PipaService>();
+            kernel.Bind<IMaquinariaService>().To<MaquinariaService>();
+            kernel.Bind<ICombustibleService>().To<CombustibleService>();
+            kernel.Bind<ITipoMaquinariaService>().To<TipoMaquinariaService>();
+            kernel.Bind<ISalidaCombustibleService>().To<SalidaCombustibleService>();
+            kernel.Bind<IAbastecimientoService>().To<AbastecimientoService>();
+            kernel.Bind<IFichaEntregaService>().To<FichaEntregaService>();
         }
     }
 }

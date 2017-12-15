@@ -16,5 +16,6 @@ namespace Models.VOs
         public string timestamp { get; set; }
         public string updated { get; set; }
         public int rol { get; set; }
+        public int sistema { get; set; }
     }
 }

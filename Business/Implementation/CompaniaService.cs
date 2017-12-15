@@ -17,31 +17,31 @@ namespace Business.Implementation
             this.compania_repository = compania_repository;
         }
 
-        public TransactionResult create(CompaniaVo compania_vo, User user_log)
+        public TransactionResult create(CompaniaVo compania_vo, User user_log, int sistema)
         {
             Compania obj = CompaniaAdapter.voToObject(compania_vo);
             obj.user = user_log;
-            return compania_repository.create(obj);
+            return compania_repository.create(obj, sistema);
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
-            return compania_repository.delete(id);
+            return compania_repository.delete(id, sistema);
         }
 
-        public Compania detail(int id)
+        public Compania detail(int id, int sistema)
         {
-            return compania_repository.detail(id);
+            return compania_repository.detail(id, sistema);
         }
 
-        public IList<Compania> getAll()
+        public IList<Compania> getAll(int sistema)
         {
-            return compania_repository.getAll();
+            return compania_repository.getAll(sistema);
         }
 
-        public TransactionResult update(CompaniaVo compania_vo)
+        public TransactionResult update(CompaniaVo compania_vo, int sistema)
         {
-            return compania_repository.update(CompaniaAdapter.voToObject(compania_vo));
+            return compania_repository.update(CompaniaAdapter.voToObject(compania_vo), sistema);
         }
     }
 }

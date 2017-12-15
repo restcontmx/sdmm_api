@@ -29,7 +29,9 @@ namespace Business.Adapters
                 costo = vo.costo,
                 peso = vo.peso,
                 user = new Models.Auth.User { id = vo.user_id },
-                revision =  vo.revision
+                revision =  vo.revision,
+                cantidad_caja_promedio = vo.cantidad_caja_promedio,
+                rango_caja_cierre = vo.rango_caja_cierre
             };
         }
     }

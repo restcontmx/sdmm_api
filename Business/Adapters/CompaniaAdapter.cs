@@ -20,7 +20,7 @@ namespace Business.Adapters
                 id = vo.id,
                 razon_social = vo.razon_social,
                 nombre_sistema = vo.nombre_sistema,
-                categoria = new Categoria { id = int.Parse(vo.categoria_id)},
+                cuenta_propia = vo.cuenta_propia,
                 cuenta = new Cuenta { id = int.Parse(vo.cuenta_id)},
                 user = new Models.Auth.User { id = vo.user_id }
                 

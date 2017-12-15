@@ -14,6 +14,8 @@ namespace Models.VOs
         public decimal costo { get; set; }
         public decimal peso { get; set; }
         public int revision { get; set; }
+        public int cantidad_caja_promedio { get; set; }
+        public int rango_caja_cierre { get; set; }
         public int proveedor_id { get; set; }
         public int segmentoproducto_id { get; set; }
         public int tipoproducto_id { get; set; }

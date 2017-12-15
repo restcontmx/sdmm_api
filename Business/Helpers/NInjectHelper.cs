@@ -30,6 +30,14 @@ namespace Business.Helpers
             kernel.Bind<IInventarioRepository>().To<InventarioRepository>();
             kernel.Bind<IBultoRepository>().To<BultoRepository>();
             kernel.Bind<IReportesRepository>().To<ReportesRepository>();
+            kernel.Bind<IOperadorRepository>().To<OperadorRepository>();
+            kernel.Bind<IPipaRepository>().To<PipaRepository>();
+            kernel.Bind<IMaquinaRepository>().To<MaquinariaRepository>();
+            kernel.Bind<ICombustibleRepository>().To<CombustibleRepository>();
+            kernel.Bind<ITipoMaquinariaRepository>().To<TipoMaquinariaRepository>();
+            kernel.Bind<ISalidaCombustibleRepository>().To<SalidaCombustibleRepository>();
+            kernel.Bind<IAbastecimientoRepository>().To<AbastecimientoRepository>();
+            kernel.Bind<IFichaEntregaRepository>().To<FichaEntregaRepository>();
         }
     }
 }

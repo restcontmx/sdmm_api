@@ -13,10 +13,20 @@ namespace Data.Implementation
 {
     public class CuentaRepository : ICuentaRepository
     {
-        public TransactionResult create(Cuenta cuenta)
+        public TransactionResult create(Cuenta cuenta, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -25,6 +35,7 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(cuenta.nombre)));
                     command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(cuenta.numero)));
+                    command.Parameters.Add(new SqlParameter("num_categoria", Validations.defaultString(cuenta.num_categoria)));
                     command.Parameters.Add(new SqlParameter("user_id", cuenta.user.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
@@ -52,10 +63,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -85,10 +106,20 @@ namespace Data.Implementation
             }
         }
 
-        public Cuenta detail(int id)
+        public Cuenta detail(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -104,10 +135,11 @@ namespace Data.Implementation
                     {
                         id = int.Parse(row[0].ToString()),
                         nombre = row[1].ToString(),
-                        numero = row[2].ToString(),  
-                        user = new User { id = int.Parse( row[3].ToString() ) },                      
-                        timestamp = Convert.ToDateTime(row[4].ToString()),
-                        updated = Convert.ToDateTime(row[5].ToString())
+                        num_categoria = row[2].ToString(),
+                        numero = row[3].ToString(),  
+                        user = new User { id = int.Parse( row[4].ToString() ) },                      
+                        timestamp = Convert.ToDateTime(row[5].ToString()),
+                        updated = Convert.ToDateTime(row[6].ToString())
                     };
 
                 }
@@ -122,11 +154,22 @@ namespace Data.Implementation
             }
         }
 
-        public IList<Cuenta> getAll()
+        public IList<Cuenta> getAll(int sistema)
         {
-            SqlConnection connection = null;
             IList<Cuenta> objects = new List<Cuenta>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            SqlConnection connection = null;
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -142,10 +185,11 @@ namespace Data.Implementation
                         {
                             id = int.Parse(row[0].ToString()),
                             nombre = row[1].ToString(),
-                            numero = row[2].ToString(),
-                         
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString())
+                            num_categoria = row[2].ToString(),
+                            numero = row[3].ToString(),
+                            user = new User { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
                         });
                     }
                     return objects;
@@ -162,10 +206,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult update(Cuenta cuenta)
+        public TransactionResult update(Cuenta cuenta, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -174,6 +228,7 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(cuenta.nombre)));
                     command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(cuenta.numero)));
+                    command.Parameters.Add(new SqlParameter("num_categoria", Validations.defaultString(cuenta.num_categoria)));
                     command.Parameters.Add(new SqlParameter("id", cuenta.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;

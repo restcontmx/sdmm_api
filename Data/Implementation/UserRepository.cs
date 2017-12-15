@@ -19,10 +19,20 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="auth_model"></param>
         /// <returns></returns>
-        public TransactionResult create(AuthModel auth_model)
+        public TransactionResult create(AuthModel auth_model, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -62,10 +72,20 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public TransactionResult create(User user)
+        public TransactionResult create(User user, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -76,7 +96,12 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("password", user.password.Trim()));
                     command.Parameters.Add(new SqlParameter("first_name", user.first_name));
                     command.Parameters.Add(new SqlParameter("second_name", user.second_name));
-                    command.Parameters.Add(new SqlParameter("email", user.email));
+
+                    if (sistema == 1)
+                    {
+                        command.Parameters.Add(new SqlParameter("email", user.email));
+                    }
+
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -108,10 +133,20 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -144,10 +179,20 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TransactionResult deleteAuth(int id)
+        public TransactionResult deleteAuth(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -182,31 +227,70 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="id">id for primary key field on the db</param>
         /// <returns></returns>
-        public User detail(int id)
+        public User detail(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_userDetail", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("id", id));
-                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
-                    DataSet data_set = new DataSet();
-                    data_adapter.Fill(data_set);
-                    DataRow row = data_set.Tables[0].Rows[0];
-                    return new User {
-                        id = int.Parse( row[0].ToString() ),
-                        username = row[1].ToString(),
-                        password = row[2].ToString(),
-                        first_name = row[3].ToString(),
-                        second_name = row[4].ToString(),
-                        email = row[5].ToString(),
-                        timestamp = Convert.ToDateTime( row[6].ToString() ),
-                        updated = Convert.ToDateTime( row[7].ToString() )
-                    };
+                    if (sistema == 1)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_userDetail", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("id", id));
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        DataRow row = data_set.Tables[0].Rows[0];
+                        return new User
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            username = row[1].ToString(),
+                            password = row[2].ToString(),
+                            first_name = row[3].ToString(),
+                            second_name = row[4].ToString(),
+                            email = row[5].ToString(),
+                            timestamp = Convert.ToDateTime(row[6].ToString()),
+                            updated = Convert.ToDateTime(row[7].ToString())
+                        };
+                    }
+                    else if (sistema == 2)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_userDetail", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("id", id));
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        DataRow row = data_set.Tables[0].Rows[0];
+                        return new User
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            username = row[1].ToString(),
+                            password = row[2].ToString(),
+                            first_name = row[3].ToString(),
+                            second_name = row[4].ToString(),
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        };
+                    }
+                    else
+                    {
+                        return null;
+                    }
 
                 }
                 catch (Exception ex) {
@@ -222,39 +306,79 @@ namespace Data.Implementation
         /// gets all objects from the db
         /// </summary>
         /// <returns></returns>
-        public IList<User> getAll()
+        public IList<User> getAll(int sistema)
         {
             SqlConnection connection = null;
             IList<User> objects = new List<User>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString)) {
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
+            { 
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_getAllUsers", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
-                    DataSet data_set = new DataSet();
-                    data_adapter.Fill(data_set);
-                    foreach (DataRow row in data_set.Tables[0].Rows) {
-                        objects.Add(new User {
-                            id = int.Parse(row[0].ToString()),
-                            username = row[1].ToString(),
-                            password = row[2].ToString(),
-                            first_name = row[3].ToString(),
-                            second_name = row[4].ToString(),
-                            email = row[5].ToString(),
-                            timestamp = Convert.ToDateTime( row[6].ToString() ),
-                            updated = Convert.ToDateTime( row[7].ToString() )
-                        });
+                    if (sistema == 1)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_getAllUsers", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        foreach (DataRow row in data_set.Tables[0].Rows)
+                        {
+                            objects.Add(new User
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                username = row[1].ToString(),
+                                password = row[2].ToString(),
+                                first_name = row[3].ToString(),
+                                second_name = row[4].ToString(),
+                                email = row[5].ToString(),
+                                timestamp = Convert.ToDateTime(row[6].ToString()),
+                                updated = Convert.ToDateTime(row[7].ToString())
+                            });
+                        }
+                    }
+                    else if (sistema == 2)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_getAllUsers", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        foreach (DataRow row in data_set.Tables[0].Rows)
+                        {
+                            objects.Add(new User
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                username = row[1].ToString(),
+                                password = row[2].ToString(),
+                                first_name = row[3].ToString(),
+                                second_name = row[4].ToString(),
+                                timestamp = Convert.ToDateTime(row[5].ToString()),
+                                updated = Convert.ToDateTime(row[6].ToString())
+                            });
+                        }
                     }
                     return objects;
 
                 }
-                catch (SqlException ex){
+                catch (SqlException ex)
+                {
                     if (connection != null)
                     {
                         connection.Close();
-                    }return objects;
+                    }
+                    return objects;
                 }
             }
 
@@ -264,11 +388,21 @@ namespace Data.Implementation
         /// Gets all the rols
         /// </summary>
         /// <returns>A list of rols</returns>
-        public IList<Rol> getAllRols()
+        public IList<Rol> getAllRols(int sistema)
         {
             SqlConnection connection = null;
             IList<Rol> objects = new List<Rol>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -307,32 +441,70 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public User getUserByUserName(string username)
+        public User getUserByUserName(string username, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_getUserByUserName", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("username", username));
-                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
-                    DataSet data_set = new DataSet();
-                    data_adapter.Fill(data_set);
-                    DataRow row = data_set.Tables[0].Rows[0];
-                    return new User
+                    if (sistema == 1)
                     {
-                        id = int.Parse(row[0].ToString()),
-                        username = row[1].ToString(),
-                        password = row[2].ToString(),
-                        first_name = row[3].ToString(),
-                        second_name = row[4].ToString(),
-                        email = row[5].ToString(),
-                        timestamp = Convert.ToDateTime(row[6].ToString()),
-                        updated = Convert.ToDateTime(row[7].ToString())
-                    };
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_getUserByUserName", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("username", username));
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        DataRow row = data_set.Tables[0].Rows[0];
+                        return new User
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            username = row[1].ToString(),
+                            password = row[2].ToString(),
+                            first_name = row[3].ToString(),
+                            second_name = row[4].ToString(),
+                            email = row[5].ToString(),
+                            timestamp = Convert.ToDateTime(row[6].ToString()),
+                            updated = Convert.ToDateTime(row[7].ToString())
+                        };
+                    }
+                    else if (sistema == 2)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_getUserByUserName", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("username", username));
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        DataRow row = data_set.Tables[0].Rows[0];
+                        return new User
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            username = row[1].ToString(),
+                            password = row[2].ToString(),
+                            first_name = row[3].ToString(),
+                            second_name = row[4].ToString(),
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        };
+                    }
+                    else
+                    {
+                        return null;
+                    }
 
                 }
                 catch (Exception ex)
@@ -351,23 +523,53 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="user">object to update</param>
         /// <returns></returns>
-        public TransactionResult update(User user)
+        public TransactionResult update(User user, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString)) {
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
+            {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_updateUser", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("id", user.id));
-                    command.Parameters.Add(new SqlParameter("username", user.username));
-                    command.Parameters.Add(new SqlParameter("password", user.password));
-                    command.Parameters.Add(new SqlParameter("first_name", user.first_name));
-                    command.Parameters.Add(new SqlParameter("second_name", user.second_name));
-                    command.Parameters.Add(new SqlParameter("email", user.email));
-                    command.ExecuteNonQuery();
-                    return TransactionResult.OK;
+                    if (sistema == 1)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_updateUser", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("id", user.id));
+                        command.Parameters.Add(new SqlParameter("username", user.username));
+                        command.Parameters.Add(new SqlParameter("password", user.password));
+                        command.Parameters.Add(new SqlParameter("first_name", user.first_name));
+                        command.Parameters.Add(new SqlParameter("second_name", user.second_name));
+                        command.Parameters.Add(new SqlParameter("email", user.email));
+                        command.ExecuteNonQuery();
+                        return TransactionResult.OK;
+                    }
+                    else if (sistema == 2)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_updateUser", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("id", user.id));
+                        command.Parameters.Add(new SqlParameter("username", user.username));
+                        command.Parameters.Add(new SqlParameter("password", user.password));
+                        command.Parameters.Add(new SqlParameter("first_name", user.first_name));
+                        command.Parameters.Add(new SqlParameter("second_name", user.second_name));
+                        command.ExecuteNonQuery();
+                        return TransactionResult.OK;
+                    }else
+                    {
+                        return TransactionResult.ERROR;
+                    }
                 }
                 catch (SqlException ex)
                 {
@@ -395,10 +597,20 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public AuthModel validateUser(string username)
+        public AuthModel validateUser(string username, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if(sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -410,28 +622,58 @@ namespace Data.Implementation
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     DataRow row = data_set.Tables[0].Rows[0];
-                    return new AuthModel
+
+                    if (sistema == 1)
                     {
-                        id = int.Parse( row[0].ToString() ),
-                        rol = new Rol
+                        return new AuthModel
                         {
-                            id = int.Parse(row[1].ToString()),
-                            name = row[2].ToString(),
-                            description = row[3].ToString(),
-                            value = int.Parse( row[4].ToString() )
-                        },
-                        user = new User
+                            id = int.Parse(row[0].ToString()),
+                            rol = new Rol
+                            {
+                                id = int.Parse(row[1].ToString()),
+                                name = row[2].ToString(),
+                                description = row[3].ToString(),
+                                value = int.Parse(row[4].ToString())
+                            },
+                            user = new User
+                            {
+                                id = int.Parse(row[5].ToString()),
+                                username = row[6].ToString(),
+                                password = row[7].ToString(),
+                                first_name = row[8].ToString(),
+                                second_name = row[9].ToString(),
+                                email = row[10].ToString(),
+                                timestamp = Convert.ToDateTime(row[11].ToString()),
+                                updated = Convert.ToDateTime(row[12].ToString())
+                            }
+                        };
+                    }else if (sistema == 2)
+                    {
+                        return new AuthModel
                         {
-                            id = int.Parse(row[5].ToString()),
-                            username = row[6].ToString(),
-                            password = row[7].ToString(),
-                            first_name = row[8].ToString(),
-                            second_name = row[9].ToString(),
-                            email = row[10].ToString(),
-                            timestamp = Convert.ToDateTime(row[11].ToString()),
-                            updated = Convert.ToDateTime(row[12].ToString())
-                        }
-                    };
+                            id = int.Parse(row[0].ToString()),
+                            rol = new Rol
+                            {
+                                id = int.Parse(row[1].ToString()),
+                                name = row[2].ToString(),
+                                description = row[3].ToString(),
+                                value = int.Parse(row[4].ToString())
+                            },
+                            user = new User
+                            {
+                                id = int.Parse(row[5].ToString()),
+                                username = row[6].ToString(),
+                                password = row[7].ToString(),
+                                first_name = row[8].ToString(),
+                                second_name = row[9].ToString(),
+                                timestamp = Convert.ToDateTime(row[10].ToString()),
+                                updated = Convert.ToDateTime(row[11].ToString())
+                            }
+                        };
+                    }else
+                    {
+                        return null;
+                    }
 
                 }
                 catch (Exception ex)
@@ -443,6 +685,65 @@ namespace Data.Implementation
                     return null;
                 }
             }
+        }
+
+        /// <summary>
+        /// gets all objects from the db
+        /// </summary>
+        /// <returns></returns>
+        public IList<User> getAllDespachadores()
+        {
+            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            IList<User> objects = new List<User>();
+
+            IList<int> ids = new List<int>();
+
+            using (connection)
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllDespachadores", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        ids.Add(int.Parse(row[0].ToString()));
+                    }
+
+
+                    foreach(int x in ids)
+                    {
+                        objects.Add(detail(x,2));
+                    }
+
+                    return objects;
+
+                    /*
+                     *objects.Add(new User
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            username = row[1].ToString(),
+                            password = row[2].ToString(),
+                            first_name = row[3].ToString(),
+                            second_name = row[4].ToString(),
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        });
+                     * */
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+
         }
     }
 }

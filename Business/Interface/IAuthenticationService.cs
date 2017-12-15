@@ -14,12 +14,12 @@ namespace Business.Interface
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        AuthModel validateUser(string username, string password );
+        AuthModel validateUser(string username, string password, int sistema);
 
         /// <summary>
         /// Gets all the rols from the repository
         /// </summary>
         /// <returns></returns>
-        IList<Rol> getAllRols();
+        IList<Rol> getAllRols(int sistema);
     }
 }

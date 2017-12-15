@@ -35,7 +35,7 @@ namespace SDMM_API.Controllers
         [Route("api/auth/login")]
         [HttpPost]
         public HttpResponseMessage login([FromBody]  UserVo user ) {
-            AuthModel authentication_model = authentication_service.validateUser(user.username, user.password);
+            AuthModel authentication_model = authentication_service.validateUser(user.username, user.password, user.sistema);
             if (authentication_model != null)
             {
                 IDictionary<string, AuthModel> data = new Dictionary<string, AuthModel>();
@@ -54,13 +54,13 @@ namespace SDMM_API.Controllers
         /// Get all the rols pettition route
         /// </summary>
         /// <returns>A dictionary with data or error message</returns>
-        [Route("api/auth/rols")]
+        [Route("api/auth/rols/{id}")]
         [HttpGet]
-        public HttpResponseMessage listRols() {
+        public HttpResponseMessage listRols(int id) {
             try
             {
                 IDictionary<string, IList<Rol>> data = new Dictionary<string, IList<Rol>>();
-                data.Add("data", authentication_service.getAllRols());
+                data.Add("data", authentication_service.getAllRols(id));
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)

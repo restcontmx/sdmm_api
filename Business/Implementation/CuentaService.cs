@@ -16,31 +16,31 @@ namespace Business.Implementation
         {
             this.Cuenta_repository = Cuenta_repository;
         }
-        public TransactionResult create(CuentaVo Cuenta_vo, User user_log)
+        public TransactionResult create(CuentaVo Cuenta_vo, User user_log, int sistema)
         {
             Cuenta obj = CuentaAdapter.voToObject(Cuenta_vo);
             obj.user = user_log;
-            return Cuenta_repository.create(obj);
+            return Cuenta_repository.create(obj, sistema);
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
-            return Cuenta_repository.delete(id);
+            return Cuenta_repository.delete(id, sistema);
         }
 
-        public Cuenta detail(int id)
+        public Cuenta detail(int id, int sistema)
         {
-            return Cuenta_repository.detail(id);
+            return Cuenta_repository.detail(id, sistema);
         }
 
-        public IList<Cuenta> getAll()
+        public IList<Cuenta> getAll(int sistema)
         {
-            return Cuenta_repository.getAll();
+            return Cuenta_repository.getAll(sistema);
         }
 
-        public TransactionResult update(CuentaVo Cuenta_vo)
+        public TransactionResult update(CuentaVo Cuenta_vo, int sistema)
         {
-            return Cuenta_repository.update(CuentaAdapter.voToObject(Cuenta_vo));
+            return Cuenta_repository.update(CuentaAdapter.voToObject(Cuenta_vo), sistema);
         }
     }
 }

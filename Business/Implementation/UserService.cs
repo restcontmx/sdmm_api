@@ -29,9 +29,9 @@ namespace Business.Implementation
         /// Get all the objects from the repostitory
         /// </summary>
         /// <returns></returns>
-        public IList<User> getAll()
+        public IList<User> getAll(int sistema)
         {
-            return user_repository.getAll();
+            return user_repository.getAll(sistema);
         }
 
         /// <summary>
@@ -39,12 +39,12 @@ namespace Business.Implementation
         /// </summary>
         /// <param name="id"> pirmary field of the model </param>
         /// <returns></returns>
-        public AuthModel detail(int id)
+        public AuthModel detail(int id, int sistema)
         {
-            User temp_user = user_repository.detail(id);
+            User temp_user = user_repository.detail(id, sistema);
             if (temp_user != null)
             {
-                return authentication_repository.validateUser(user_repository.detail(id).username);
+                return authentication_repository.validateUser(user_repository.detail(id, sistema).username, sistema);
             } return null;
         }
 
@@ -53,9 +53,9 @@ namespace Business.Implementation
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public TransactionResult create(UserVo user)
+        public TransactionResult create(UserVo user, int sistema)
         {
-            TransactionResult user_tr = user_repository.create(UserAdapter.voToObject(user));
+            TransactionResult user_tr = user_repository.create(UserAdapter.voToObject(user), sistema);
             if (user_tr == TransactionResult.CREATED) {
                 return authentication_repository.create(new AuthModel
                 {
@@ -63,8 +63,9 @@ namespace Business.Implementation
                     {
                         id = user.rol
                     },
-                    user = user_repository.getUserByUserName(user.username)
-                });
+                    user = user_repository.getUserByUserName(user.username, sistema),
+
+                }, sistema);
             }return user_tr;
         }
 
@@ -73,9 +74,9 @@ namespace Business.Implementation
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public TransactionResult update(UserVo user)
+        public TransactionResult update(UserVo user, int sistema)
         {
-            return user_repository.update(UserAdapter.voToObject(user));
+            return user_repository.update(UserAdapter.voToObject(user), sistema);
         }
 
         /// <summary>
@@ -83,11 +84,11 @@ namespace Business.Implementation
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
-            TransactionResult tr_auth = authentication_repository.deleteAuth(id);
+            TransactionResult tr_auth = authentication_repository.deleteAuth(id, sistema);
             if (tr_auth == TransactionResult.DELETED) {
-                return user_repository.delete(id);
+                return user_repository.delete(id, sistema);
             }return tr_auth;
         }
 
@@ -98,10 +99,10 @@ namespace Business.Implementation
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <returns></returns>
-        public AuthModel validateUser(string username, string password)
+        public AuthModel validateUser(string username, string password, int sistema)
         {
             // Get the user auth model by username
-            AuthModel authentication_model = authentication_repository.validateUser(username);
+            AuthModel authentication_model = authentication_repository.validateUser(username, sistema);
             // then validate the password here with the encrryption method (TODO)
             if (authentication_model != null)
             {
@@ -113,9 +114,18 @@ namespace Business.Implementation
         /// Get all the roles from the repository
         /// </summary>
         /// <returns>A list of rols</returns>
-        public IList<Rol> getAllRols()
+        public IList<Rol> getAllRols(int sistema)
         {
-            return authentication_repository.getAllRols();
+            return authentication_repository.getAllRols(sistema);
+        }
+
+        /// <summary>
+        /// Get all the objects from the repostitory
+        /// </summary>
+        /// <returns></returns>
+        public IList<User> getAllDespachadores()
+        {
+            return user_repository.getAllDespachadores();
         }
     }
 }

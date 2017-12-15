@@ -11,8 +11,8 @@ namespace Models.VOs
 
         public string razon_social { get; set; }
         public string nombre_sistema { get; set; }
+        public int cuenta_propia { get; set; }
         public string cuenta_id { get; set; }
-        public string categoria_id { get; set; }
         public int user_id { get; set; }
         public string timestamp { get; set; }
         public string updated { get; set; }

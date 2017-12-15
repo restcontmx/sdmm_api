@@ -13,7 +13,7 @@ namespace Models.Catalogs
         public string nombre { get; set; }
         public bool status { get; set; }
         public Cuenta cuenta { get; set; }
-        public Categoria categoria { get; set; }
+        public ProcesoMinero proceso { get; set; }
         public User user { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }

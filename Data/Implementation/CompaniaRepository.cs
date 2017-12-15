@@ -14,10 +14,20 @@ namespace Data.Implementation
     public class CompaniaRepository : ICompaniaRepository
     {
 
-        public TransactionResult create(Compania compania)
+        public TransactionResult create(Compania compania, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -26,9 +36,14 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("razon_social", compania.razon_social));
                     command.Parameters.Add(new SqlParameter("nombre_sistema", compania.nombre_sistema));
-                    command.Parameters.Add(new SqlParameter("cuenta_id", compania.cuenta.id));
-                    command.Parameters.Add(new SqlParameter("categoria_id", compania.categoria.id));
                     command.Parameters.Add(new SqlParameter("user_id ", compania.user.id));
+
+                    if(sistema == 1)
+                    {
+                        command.Parameters.Add(new SqlParameter("cuenta_id", compania.cuenta.id));
+                        command.Parameters.Add(new SqlParameter("cuenta_propia", compania.cuenta_propia));
+                    }
+
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -55,10 +70,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -88,49 +113,113 @@ namespace Data.Implementation
             }
         }
 
-        public Compania detail(int id)
+        public Compania detail(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_companiaDetail", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("id", id));
-                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
-                    DataSet data_set = new DataSet();
-                    data_adapter.Fill(data_set);
-                    DataRow row = data_set.Tables[0].Rows[0];
-                    return new Compania
+                    if (sistema == 1)
                     {
-                        id = int.Parse(row[0].ToString()),
-                        razon_social = row[1].ToString(),
-                        nombre_sistema = row[2].ToString(),
-                        timestamp = Convert.ToDateTime(row[3].ToString()),
-                        updated = Convert.ToDateTime(row[4].ToString()),
-                        user = new User
-                        {
-                            id = int.Parse(row[5].ToString()),
-                            first_name = row[12].ToString(),
-                            second_name = row[13].ToString()
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_companiaDetail", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("id", id));
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        DataRow row = data_set.Tables[0].Rows[0];
 
-                        },
-                        cuenta = new Cuenta
+                        int cuentaPropia = int.Parse(row[7].ToString());
+
+                        if (cuentaPropia != 0)
                         {
-                            id = int.Parse(row[6].ToString()),
-                            nombre = row[8].ToString(),
-                            numero = row[9].ToString()
-                        },
-                        categoria = new Categoria
-                        {
-                            id = int.Parse(row[7].ToString()),
-                            nombre = row[10].ToString(),
-                            numero = row[11].ToString()
+                            return new Compania
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                razon_social = row[1].ToString(),
+                                nombre_sistema = row[2].ToString(),
+                                timestamp = Convert.ToDateTime(row[3].ToString()),
+                                updated = Convert.ToDateTime(row[4].ToString()),
+                                cuenta_propia = int.Parse(row[5].ToString()),
+                                user = new User
+                                {
+                                    id = int.Parse(row[6].ToString()),
+                                    first_name = row[11].ToString(),
+                                    second_name = row[12].ToString()
+
+                                },
+                                cuenta = new Cuenta
+                                {
+                                    id = int.Parse(row[7].ToString()),
+                                    nombre = row[8].ToString(),
+                                    numero = row[9].ToString(),
+                                    num_categoria = row[10].ToString()
+                                }
+                            };
                         }
-                    };
+                        else
+                        {
+                            return new Compania
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                razon_social = row[1].ToString(),
+                                nombre_sistema = row[2].ToString(),
+                                timestamp = Convert.ToDateTime(row[3].ToString()),
+                                updated = Convert.ToDateTime(row[4].ToString()),
+                                cuenta_propia = int.Parse(row[5].ToString()),
+                                user = new User
+                                {
+                                    id = int.Parse(row[6].ToString()),
+                                    first_name = row[11].ToString(),
+                                    second_name = row[12].ToString()
 
+                                },
+                                cuenta = new Cuenta()
+                            };
+                        }
+                    }
+                    else if (sistema == 2)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_companiaDetail", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("id", id));
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        DataRow row = data_set.Tables[0].Rows[0];
+                        return new Compania
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            razon_social = row[1].ToString(),
+                            nombre_sistema = row[2].ToString(),
+                            timestamp = Convert.ToDateTime(row[3].ToString()),
+                            updated = Convert.ToDateTime(row[4].ToString()),
+                            user = new User
+                            {
+                                id = int.Parse(row[5].ToString()),
+                                first_name = row[6].ToString(),
+                                second_name = row[7].ToString()
+
+                            },
+                            cuenta = new Cuenta()
+                        };
+                    }else
+                    {
+                        return null;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -143,49 +232,115 @@ namespace Data.Implementation
             }
         }
 
-        public IList<Compania> getAll()
+        public IList<Compania> getAll(int sistema)
         {
             SqlConnection connection = null;
             IList<Compania> objects = new List<Compania>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand("sp_getAllCompania", connection);
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
-                    DataSet data_set = new DataSet();
-                    data_adapter.Fill(data_set);
-                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    if (sistema == 1)
                     {
-                        objects.Add(new Compania
-                        {
-                            id = int.Parse(row[0].ToString()),
-                            razon_social = row[1].ToString(),
-                            nombre_sistema = row[2].ToString(),
-                            timestamp = Convert.ToDateTime(row[3].ToString()),
-                            updated = Convert.ToDateTime(row[4].ToString()),
-                            user = new User
-                            {
-                                id = int.Parse(row[5].ToString()),
-                                first_name = row[12].ToString(),
-                                second_name = row[13].ToString()
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_getAllCompania", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
 
-                            },
-                            cuenta = new Cuenta
+
+                        foreach (DataRow row in data_set.Tables[0].Rows)
+                        {
+                            int cuentaPropia = int.Parse(row[7].ToString());
+
+                            if (cuentaPropia != 0)
                             {
-                                id = int.Parse(row[6].ToString()),
-                                nombre = row[8].ToString(),
-                                numero = row[9].ToString()
-                            },
-                            categoria = new Categoria
-                            {
-                                id = int.Parse(row[7].ToString()),
-                                nombre = row[10].ToString(),
-                                numero = row[11].ToString()
+                                objects.Add(new Compania
+                                {
+                                    id = int.Parse(row[0].ToString()),
+                                    razon_social = row[1].ToString(),
+                                    nombre_sistema = row[2].ToString(),
+                                    timestamp = Convert.ToDateTime(row[3].ToString()),
+                                    updated = Convert.ToDateTime(row[4].ToString()),
+                                    cuenta_propia = int.Parse(row[5].ToString()),
+                                    user = new User
+                                    {
+                                        id = int.Parse(row[6].ToString()),
+                                        first_name = row[11].ToString(),
+                                        second_name = row[12].ToString()
+
+                                    },
+                                    cuenta = new Cuenta
+                                    {
+                                        id = int.Parse(row[7].ToString()),
+                                        nombre = row[8].ToString(),
+                                        numero = row[9].ToString(),
+                                        num_categoria = row[10].ToString()
+                                    }
+                                });
                             }
-                        });
+                            else
+                            {
+                                objects.Add(new Compania
+                                {
+                                    id = int.Parse(row[0].ToString()),
+                                    razon_social = row[1].ToString(),
+                                    nombre_sistema = row[2].ToString(),
+                                    timestamp = Convert.ToDateTime(row[3].ToString()),
+                                    updated = Convert.ToDateTime(row[4].ToString()),
+                                    cuenta_propia = int.Parse(row[5].ToString()),
+                                    user = new User
+                                    {
+                                        id = int.Parse(row[6].ToString()),
+                                        first_name = row[11].ToString(),
+                                        second_name = row[12].ToString()
+
+                                    },
+                                    cuenta = new Cuenta()
+                                });
+                            }
+                        }
+
+                    }
+                    else if (sistema == 2)
+                    {
+                        connection.Open();
+                        SqlCommand command = new SqlCommand("sp_getAllCompania", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                        DataSet data_set = new DataSet();
+                        data_adapter.Fill(data_set);
+                        foreach (DataRow row in data_set.Tables[0].Rows)
+                        {
+                            objects.Add(new Compania
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                razon_social = row[1].ToString(),
+                                nombre_sistema = row[2].ToString(),
+                                timestamp = Convert.ToDateTime(row[3].ToString()),
+                                updated = Convert.ToDateTime(row[4].ToString()),
+                                user = new User
+                                {
+                                    id = int.Parse(row[5].ToString()),
+                                    first_name = row[6].ToString(),
+                                    second_name = row[7].ToString()
+
+                                },
+                                cuenta = new Cuenta()
+                            });
+                        }
+
                     }
                     return objects;
 
@@ -201,10 +356,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult update(Compania compania)
+        public TransactionResult update(Compania compania, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -213,10 +378,13 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id ", compania.id));
                     command.Parameters.Add(new SqlParameter("razon_social", compania.razon_social));
-                    command.Parameters.Add(new SqlParameter("razon_social", compania.razon_social));
                     command.Parameters.Add(new SqlParameter("nombre_sistema", compania.nombre_sistema));
-                    command.Parameters.Add(new SqlParameter("cuenta_id", compania.cuenta.id));
-                    command.Parameters.Add(new SqlParameter("categoria_id", compania.categoria.id));
+
+                    if (sistema == 1)
+                    {
+                        command.Parameters.Add(new SqlParameter("cuenta_id", compania.cuenta.id));
+                        command.Parameters.Add(new SqlParameter("cuenta_propia", compania.cuenta_propia));
+                    }
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
                 }

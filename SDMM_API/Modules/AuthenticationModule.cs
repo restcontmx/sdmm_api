@@ -90,7 +90,7 @@ namespace SDMM_API.Modules
             {
                 var credentials = Encoding.GetEncoding("utf-8").GetString(Convert.FromBase64String(credentialValues));
                 var values = credentials.Split(':');
-                AuthModel auth_model = authentication_service.validateUser(values[0], values[1]);
+                AuthModel auth_model = authentication_service.validateUser(values[0], values[1], int.Parse(values[2]));
                 if( auth_model != null ) { 
                     SetPrincipal(new GenericPrincipal(new GenericIdentity(auth_model.user.id.ToString()), null));
                     return true;
@@ -109,7 +109,7 @@ namespace SDMM_API.Modules
         /// <returns></returns>
         private bool ValidateUser(string username, string password)
         {
-            return authentication_service.validateUser(username, password) != null;
+            return authentication_service.validateUser(username, password, 1) != null;
         }
 
         /// <summary>
