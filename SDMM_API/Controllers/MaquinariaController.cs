@@ -73,7 +73,20 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage create([FromBody] MaquinariaVo maquina_vo)
         {
+            if (maquina_vo.cuentas != null)
+            {
+                foreach (CuentaVo c in maquina_vo.cuentas)
+                {
+                    c.user_id = int.Parse(RequestContext.Principal.Identity.Name);
+                }
+            }
+            else
+            {
+                maquina_vo.cuentas = new List<CuentaVo>();
+            }
+
             TransactionResult tr = maquinaria_service.create(maquina_vo);
+            //TransactionResult tr = TransactionResult.CREATED;
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
             {
@@ -101,6 +114,18 @@ namespace SDMM_API.Controllers
         [HttpPut]
         public HttpResponseMessage update([FromBody] MaquinariaVo maquina_vo)
         {
+            if (maquina_vo.cuentas != null)
+            {
+                foreach (CuentaVo c in maquina_vo.cuentas)
+                {
+                    c.user_id = int.Parse(RequestContext.Principal.Identity.Name);
+                }
+            }
+            else
+            {
+                maquina_vo.cuentas = new List<CuentaVo>();
+            }
+
             TransactionResult tr = maquinaria_service.update(maquina_vo);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.OK)

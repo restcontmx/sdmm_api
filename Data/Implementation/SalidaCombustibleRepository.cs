@@ -31,6 +31,7 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("odometro", salida.odometro));
                     command.Parameters.Add(new SqlParameter("foto", salida.foto));
+                    command.Parameters.Add(new SqlParameter("foto", salida.turno));
                     command.Parameters.Add(new SqlParameter("maquinaria_id", salida.maquinaria.id));
                     command.Parameters.Add(new SqlParameter("compania_id", salida.compania.id));
                     command.Parameters.Add(new SqlParameter("operador_id", salida.operador.id));
@@ -194,40 +195,41 @@ namespace Data.Implementation
                         id = int.Parse(row[0].ToString()),
                         odometro = int.Parse(row[1].ToString()),
                         foto = row[2].ToString(),
-                        timestamp = Convert.ToDateTime(row[3].ToString()),
-                        updated = Convert.ToDateTime(row[4].ToString()),
+                        turno = int.Parse(row[3].ToString()),
+                        timestamp = Convert.ToDateTime(row[4].ToString()),
+                        updated = Convert.ToDateTime(row[5].ToString()),
                         maquinaria = new Maquinaria
                         {
-                            id = int.Parse(row[5].ToString()),
-                            nombre = row[6].ToString()
+                            id = int.Parse(row[6].ToString()),
+                            nombre = row[7].ToString()
                         },
                         compania = new Compania
                         {
-                            id = int.Parse(row[7].ToString()),
-                            nombre_sistema = row[8].ToString()
+                            id = int.Parse(row[8].ToString()),
+                            nombre_sistema = row[9].ToString()
                         },
                         operador = new Operador
                         {
-                            id = int.Parse(row[9].ToString()),
-                            nombre = row[10].ToString(),
-                            ap_paterno = row[11].ToString(),
-                            ap_materno = row[12].ToString()
+                            id = int.Parse(row[10].ToString()),
+                            nombre = row[11].ToString(),
+                            ap_paterno = row[12].ToString(),
+                            ap_materno = row[13].ToString()
                         },
                         subnivel = new SubNivel
                         {
-                            id = int.Parse(row[13].ToString()),
-                            nombre = row[14].ToString(),
+                            id = int.Parse(row[14].ToString()),
+                            nombre = row[15].ToString(),
                             nivel = new Nivel
                             {
-                                codigo = row[15].ToString(),
-                                nombre = row[16].ToString()
+                                codigo = row[16].ToString(),
+                                nombre = row[17].ToString()
                             }
                         },
                         despachador = new User
                         {
-                            id = int.Parse(row[17].ToString()),
-                            first_name = row[18].ToString(),
-                            second_name = row[19].ToString()
+                            id = int.Parse(row[18].ToString()),
+                            first_name = row[19].ToString(),
+                            second_name = row[20].ToString()
                         }
                     };
                 }
@@ -263,40 +265,41 @@ namespace Data.Implementation
                             id = int.Parse(row[0].ToString()),
                             odometro = int.Parse(row[1].ToString()),
                             foto = row[2].ToString(),
-                            timestamp = Convert.ToDateTime(row[3].ToString()),
-                            updated = Convert.ToDateTime(row[4].ToString()),
+                            turno = int.Parse(row[3].ToString()),
+                            timestamp = Convert.ToDateTime(row[4].ToString()),
+                            updated = Convert.ToDateTime(row[5].ToString()),
                             maquinaria = new Maquinaria
                             {
-                                id = int.Parse(row[5].ToString()),
-                                nombre = row[6].ToString()
+                                id = int.Parse(row[6].ToString()),
+                                nombre = row[7].ToString()
                             },
                             compania = new Compania
                             {
-                                id = int.Parse(row[7].ToString()),
-                                nombre_sistema = row[8].ToString()
+                                id = int.Parse(row[8].ToString()),
+                                nombre_sistema = row[9].ToString()
                             },
                             operador = new Operador
                             {
-                                id = int.Parse(row[9].ToString()),
-                                nombre = row[10].ToString(),
-                                ap_paterno = row[11].ToString(),
-                                ap_materno = row[12].ToString()
+                                id = int.Parse(row[10].ToString()),
+                                nombre = row[11].ToString(),
+                                ap_paterno = row[12].ToString(),
+                                ap_materno = row[13].ToString()
                             },
                             subnivel = new SubNivel
                             {
-                                id = int.Parse(row[13].ToString()),
-                                nombre = row[14].ToString(),
+                                id = int.Parse(row[14].ToString()),
+                                nombre = row[15].ToString(),
                                 nivel = new Nivel
                                 {
-                                    codigo = row[15].ToString(),
-                                    nombre = row[16].ToString()
+                                    codigo = row[16].ToString(),
+                                    nombre = row[17].ToString()
                                 }
                             },
                             despachador = new User
                             {
-                                id = int.Parse(row[17].ToString()),
-                                first_name = row[18].ToString(),
-                                second_name = row[19].ToString()
+                                id = int.Parse(row[18].ToString()),
+                                first_name = row[19].ToString(),
+                                second_name = row[20].ToString()
                             }
                         });
                     }
@@ -378,6 +381,7 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("odometro", salida.odometro));
                     command.Parameters.Add(new SqlParameter("foto", salida.foto));
+                    command.Parameters.Add(new SqlParameter("turno", salida.turno));
                     command.Parameters.Add(new SqlParameter("maquinaria_id", salida.maquinaria.id));
                     command.Parameters.Add(new SqlParameter("compania_id", salida.compania.id));
                     command.Parameters.Add(new SqlParameter("operador_id", salida.operador.id));

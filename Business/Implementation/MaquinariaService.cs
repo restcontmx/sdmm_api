@@ -39,6 +39,17 @@ namespace Business.Implementation
                         return tr2;
                     }
                 }
+
+                foreach (CuentaVo cvo in maquina_vo.cuentas)
+                {
+                    var tr2 = TransactionResult.CREATED;
+
+                    tr2 = maquinaria_repository.createCuenta(CuentaAdapter.voToObject(cvo), id);
+                    if (tr2 != TransactionResult.CREATED)
+                    {
+                        return tr2;
+                    }
+                }
                 return TransactionResult.CREATED;
             }
             return TransactionResult.ERROR;
@@ -56,6 +67,7 @@ namespace Business.Implementation
         {
             Maquinaria maq = maquinaria_repository.detail(id);
             maq.detalles = maquinaria_repository.getAllDetallesByMaquinariaId(maq.id);
+            maq.cuentas = maquinaria_repository.getAllCuentasByMaquinariaId(maq.id);
             return maq;
         }
 
@@ -79,6 +91,49 @@ namespace Business.Implementation
                 if (tr2 != TransactionResult.CREATED)
                 {
                     return tr2;
+                }
+            }
+
+            //Revisamos que la maquinaria ya tenga cuentas, de lo contrario las creamos
+            IList<Cuenta> cuentas = maquinaria_repository.getAllCuentasByMaquinariaId(maquina_vo.id);
+
+            if (cuentas.Count > 0 && cuentas != null)
+            {
+
+                foreach (CuentaVo cvo in maquina_vo.cuentas)
+                {
+                    var tr2 = TransactionResult.OK;
+                    Cuenta cuentaAux = maquinaria_repository.cuentaDetail(cvo.id);
+
+                    if (cuentaAux == null)
+                    {
+                        tr2 = maquinaria_repository.createCuenta(CuentaAdapter.voToObject(cvo), maquina_vo.id);
+                        if (tr2 != TransactionResult.CREATED)
+                        {
+                            return tr2;
+                        }
+                    }
+                    else
+                    {
+                        tr2 = maquinaria_repository.updateCuenta(CuentaAdapter.voToObject(cvo));
+                        if (tr2 != TransactionResult.OK)
+                        {
+                            return tr2;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (CuentaVo cvo in maquina_vo.cuentas)
+                {
+                    var tr2 = TransactionResult.CREATED;
+
+                    tr2 = maquinaria_repository.createCuenta(CuentaAdapter.voToObject(cvo), maquina_vo.id);
+                    if (tr2 != TransactionResult.CREATED)
+                    {
+                        return tr2;
+                    }
                 }
             }
 

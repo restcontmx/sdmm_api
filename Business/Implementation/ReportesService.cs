@@ -25,7 +25,8 @@ namespace Business.Implementation
 
         public IList<ReporteAccPac> getListVale(ReportesVo reportes_vo)
         {
-            return reportes_repository.getListVale(reportes_vo);
+            //return reportes_repository.getListVale(reportes_vo);
+            return reportes_repository.getListValeFeb2018(reportes_vo);
         }
     }
 }

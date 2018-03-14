@@ -26,15 +26,11 @@ namespace Business.Adapters
             return new Empleado
             {
                 id = vo.id,
-                afiliacion = vo.afiliacion,
                 tipo_empleado = new TipoEmpleado { id = vo.tipoempleado_id },
                 nombre = vo.nombre,
                 ap_paterno = vo.ap_paterno,
                 ap_materno = vo.ap_materno,
-                nss = vo.nss,
-                codigo = vo.codigo,
-                ingreso = Convert.ToDateTime(vo.ingreso),
-                salida = Convert.ToDateTime(vo.salida),
+                compania = new Compania { id = vo.compania_id},
                 status = vo.status == 0 ? false : true,
                 user = new Models.Auth.User { id = vo.user_id }
             };

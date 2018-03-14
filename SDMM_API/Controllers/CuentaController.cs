@@ -79,6 +79,7 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage create([FromBody] CuentaVo cuenta_vo)
         {
+            cuenta_vo.tipo_producto_id = 0;
             TransactionResult tr = cuenta_service.create(cuenta_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) }, 1);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
@@ -107,6 +108,7 @@ namespace SDMM_API.Controllers
         [HttpPut]
         public HttpResponseMessage update([FromBody] CuentaVo cuenta_vo)
         {
+            cuenta_vo.tipo_producto_id = 0;
             TransactionResult tr = cuenta_service.update(cuenta_vo, 1);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.OK)

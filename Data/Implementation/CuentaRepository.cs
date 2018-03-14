@@ -131,16 +131,37 @@ namespace Data.Implementation
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     DataRow row = data_set.Tables[0].Rows[0];
-                    return new Cuenta
+                    if (sistema == 1)
                     {
-                        id = int.Parse(row[0].ToString()),
-                        nombre = row[1].ToString(),
-                        num_categoria = row[2].ToString(),
-                        numero = row[3].ToString(),  
-                        user = new User { id = int.Parse( row[4].ToString() ) },                      
-                        timestamp = Convert.ToDateTime(row[5].ToString()),
-                        updated = Convert.ToDateTime(row[6].ToString())
-                    };
+                        return new Cuenta
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            nombre = row[1].ToString(),
+                            num_categoria = row[2].ToString(),
+                            numero = row[3].ToString(),
+                            user = new User { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
+                        };
+                    }
+                    else if (sistema == 2)
+                    {
+                        return new Cuenta
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            nombre = row[1].ToString(),
+                            num_categoria = row[2].ToString(),
+                            numero = row[3].ToString(),
+                            tipo_producto  = new TipoProducto { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            timestamp = Convert.ToDateTime(row[6].ToString()),
+                            updated = Convert.ToDateTime(row[7].ToString())
+                        };
+                    }
+                    else
+                    {
+                        return null;
+                    }
 
                 }
                 catch (Exception ex)

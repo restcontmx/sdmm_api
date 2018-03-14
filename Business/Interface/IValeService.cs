@@ -31,5 +31,7 @@ namespace Business.Interface
         TransactionResult createRegistroDetalleByList(IList<RegistroDetalleVo> registrodetalles_vo, User user);
 
         User validarLoginTablet(UserVo user);
+
+        TransactionResult cerrarVale(ValeVo vale_vo, User user_log);
     }
 }

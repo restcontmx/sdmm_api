@@ -17,30 +17,30 @@ namespace Business.Implementation
             this.tipoproducto_repository = tipoproducto_repository;
         }
 
-        public TransactionResult create(TipoProductoVo tipoproducto_vo, User user_log)
+        public TransactionResult create(TipoProductoVo tipoproducto_vo, User user_log, int sistema)
         {
             TipoProducto tipoproducto = TipoProductoAdapter.voToObject(tipoproducto_vo);
-            return tipoproducto_repository.create(tipoproducto);
+            return tipoproducto_repository.create(tipoproducto, sistema);
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
-            return tipoproducto_repository.delete(id);
+            return tipoproducto_repository.delete(id, sistema);
         }
 
-        public TipoProducto detail(int id)
+        public TipoProducto detail(int id, int sistema)
         {
-            return tipoproducto_repository.detail(id);
+            return tipoproducto_repository.detail(id, sistema);
         }
 
-        public IList<TipoProducto> getAll()
+        public IList<TipoProducto> getAll(int sistema)
         {
-            return tipoproducto_repository.getAll();
+            return tipoproducto_repository.getAll(sistema);
         }
 
-        public TransactionResult update(TipoProductoVo tipoproducto_vo)
+        public TransactionResult update(TipoProductoVo tipoproducto_vo, int sistema)
         {
-            return tipoproducto_repository.update(TipoProductoAdapter.voToObject(tipoproducto_vo));
+            return tipoproducto_repository.update(TipoProductoAdapter.voToObject(tipoproducto_vo), sistema);
         }
     }
 }

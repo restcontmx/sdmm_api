@@ -11,6 +11,7 @@ namespace Models.Catalogs
         public int id { get; set; }
         public int odometro { get; set; }
         public string foto { get; set; }
+        public int turno { get; set; }
         public Maquinaria maquinaria { get; set; }
         public Compania compania { get; set; }
         public Operador operador { get; set; }

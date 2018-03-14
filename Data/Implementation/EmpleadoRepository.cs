@@ -31,15 +31,11 @@ namespace Data.Implementation
                     connection.Open();
                     SqlCommand command = new SqlCommand("sp_createEmpleado", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("afiliacion", Validations.defaultString(empleado.afiliacion)));
                     command.Parameters.Add(new SqlParameter("tipoempleado_id", empleado.tipo_empleado.id));
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(empleado.nombre)));
                     command.Parameters.Add(new SqlParameter("ap_paterno", Validations.defaultString(empleado.ap_paterno)));
                     command.Parameters.Add(new SqlParameter("ap_materno", Validations.defaultString(empleado.ap_materno)));
-                    command.Parameters.Add(new SqlParameter("nss", Validations.defaultString(empleado.nss)));
-                    command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(empleado.codigo)));
-                    command.Parameters.Add(new SqlParameter("ingreso", DateTime.Now));
-                    command.Parameters.Add(new SqlParameter("salida", DateTime.Now));
+                    command.Parameters.Add(new SqlParameter("compania_id", empleado.compania.id));
                     command.Parameters.Add(new SqlParameter("status", Validations.setBooleanValue(empleado.status)));
                     command.Parameters.Add(new SqlParameter("user_id", empleado.user.id));
                     command.ExecuteNonQuery();
@@ -119,29 +115,29 @@ namespace Data.Implementation
                     return new Empleado
                     {
                         id = int.Parse(row[0].ToString()),
-                        afiliacion = row[1].ToString(),
-                        nombre = row[2].ToString(),
-                        ap_paterno = row[3].ToString(),
-                        ap_materno = row[4].ToString(),
-                        nss = row[5].ToString(),
-                        codigo = row[6].ToString(),
-                        ingreso = Convert.ToDateTime(row[7].ToString()),
-                        salida = Convert.ToDateTime(row[8].ToString()),
-                        status = int.Parse(row[9].ToString()) == 0 ? false : true,
+                        nombre = row[1].ToString(),
+                        ap_paterno = row[2].ToString(),
+                        ap_materno = row[3].ToString(),
+                        compania = new Compania
+                        {
+                            id = int.Parse(row[4].ToString()),
+                            nombre_sistema = row[5].ToString()
+                        },
+                        status = int.Parse(row[6].ToString()) == 0 ? false : true,
                         user = new User
                         {
-                            id = int.Parse(row[10].ToString()),
-                            first_name = row[17].ToString(),
-                            second_name = row[18].ToString()
+                            id = int.Parse(row[7].ToString()),
+                            first_name = row[14].ToString(),
+                            second_name = row[15].ToString()
                         },
-                        timestamp = Convert.ToDateTime(row[11].ToString()),
-                        updated = Convert.ToDateTime(row[12].ToString()),
+                        timestamp = Convert.ToDateTime(row[8].ToString()),
+                        updated = Convert.ToDateTime(row[9].ToString()),
                         tipo_empleado = new TipoEmpleado
                         {
-                            id = int.Parse(row[13].ToString()),
-                            name = row[14].ToString(),
-                            description = row[15].ToString(),
-                            value = int.Parse(row[16].ToString())
+                            id = int.Parse(row[10].ToString()),
+                            name = row[11].ToString(),
+                            description = row[12].ToString(),
+                            value = int.Parse(row[13].ToString())
                         }
                     };
                 }
@@ -175,23 +171,23 @@ namespace Data.Implementation
                         objects.Add(new Empleado
                         {
                             id = int.Parse(row[0].ToString()),
-                            afiliacion = row[1].ToString(),
-                            nombre = row[2].ToString(),
-                            ap_paterno = row[3].ToString(),
-                            ap_materno = row[4].ToString(),
-                            nss = row[5].ToString(),
-                            codigo = row[6].ToString(),
-                            ingreso = Convert.ToDateTime(row[7].ToString()),
-                            salida = Convert.ToDateTime(row[8].ToString()),
-                            status = int.Parse(row[9].ToString()) == 0 ? false : true,
-                            user = new User { id = int.Parse(row[10].ToString()) },
-                            timestamp = Convert.ToDateTime(row[11].ToString()),
-                            updated = Convert.ToDateTime(row[12].ToString()),
+                            nombre = row[1].ToString(),
+                            ap_paterno = row[2].ToString(),
+                            ap_materno = row[3].ToString(),
+                            compania = new Compania
+                            {
+                                id = int.Parse(row[4].ToString()),
+                                nombre_sistema = row[5].ToString()
+                            },
+                            status = int.Parse(row[6].ToString()) == 0 ? false : true,
+                            user = new User { id = int.Parse(row[7].ToString()) },
+                            timestamp = Convert.ToDateTime(row[8].ToString()),
+                            updated = Convert.ToDateTime(row[9].ToString()),
                             tipo_empleado = new TipoEmpleado {
-                                id = int.Parse(row[13].ToString()),
-                                name = row[14].ToString(),
-                                description = row[15].ToString(),
-                                value = int.Parse( row[16].ToString())
+                                id = int.Parse(row[10].ToString()),
+                                name = row[11].ToString(),
+                                description = row[12].ToString(),
+                                value = int.Parse( row[13].ToString())
                             }
                         });
                     }
@@ -219,15 +215,11 @@ namespace Data.Implementation
                     connection.Open();
                     SqlCommand command = new SqlCommand("sp_updateEmpleado", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add(new SqlParameter("afiliacion", Validations.defaultString(empleado.afiliacion)));
                     command.Parameters.Add(new SqlParameter("tipoempleado_id", empleado.tipo_empleado.id));
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(empleado.nombre)));
                     command.Parameters.Add(new SqlParameter("ap_paterno", Validations.defaultString(empleado.ap_paterno)));
                     command.Parameters.Add(new SqlParameter("ap_materno", Validations.defaultString(empleado.ap_materno)));
-                    command.Parameters.Add(new SqlParameter("nss", Validations.defaultString(empleado.nss)));
-                    command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(empleado.codigo)));
-                    command.Parameters.Add(new SqlParameter("ingreso", empleado.ingreso));
-                    command.Parameters.Add(new SqlParameter("salida", empleado.salida));
+                    command.Parameters.Add(new SqlParameter("compania_id", empleado.compania.id));
                     command.Parameters.Add(new SqlParameter("status", Validations.setBooleanValue(empleado.status)));
                     command.Parameters.Add(new SqlParameter("id", empleado.id));
                     command.ExecuteNonQuery();

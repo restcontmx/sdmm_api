@@ -27,6 +27,64 @@ namespace SDMM_API.Controllers
         /// Get all objects route
         /// </summary>
         /// <returns></returns>
+        [Route("api/reporteInventario/")]
+        [HttpPost]
+        public HttpResponseMessage list([FromBody] ReporteInvVo rep)
+        {
+            try
+            {
+                IDictionary<string, IList<InfoInventario>> data = new Dictionary<string, IList<InfoInventario>>();
+                data.Add("data", inventario_service.getAll(rep.rangeStart.ToString()));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/inventario/mobile/")]
+        [HttpPost]
+        public HttpResponseMessage listMobile([FromBody] ReporteInvVo rep)
+        {
+            try
+            {
+                IList<InfoInventario> aux = inventario_service.getAll(rep.rangeStart.ToString());
+
+                List<InfoInventario> aux2 = new List<InfoInventario>();
+
+                foreach (InfoInventario inf in aux)
+                {
+                    if (inf.existenciaFinal > 0)
+                    {
+                        aux2.Add(inf);
+                    }
+                }
+
+
+                IDictionary<string, IList<InfoInventario>> data = new Dictionary<string, IList<InfoInventario>>();
+                data.Add("data", (IList<InfoInventario>)aux2);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
         [Route("api/inventario/")]
         [HttpGet]
         public HttpResponseMessage list()

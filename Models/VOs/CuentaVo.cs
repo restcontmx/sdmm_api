@@ -13,5 +13,8 @@ namespace Models.VOs
         public string num_categoria { get; set; }
         public string numero { get; set; }
         public int user_id { get; set; }
+
+        //Se usa solo para el sistema de combustibles
+        public int tipo_producto_id { get; set; }
     }
 }

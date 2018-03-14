@@ -11,6 +11,7 @@ namespace Models.Catalogs
         public string nombre { get; set; }
         public string unidad { get; set; }
         public string codigo { get; set; }
+        public TipoProducto tipo_producto { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
     }

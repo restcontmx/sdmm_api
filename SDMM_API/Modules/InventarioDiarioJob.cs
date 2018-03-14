@@ -59,7 +59,7 @@ namespace SDMM_API.Modules
                     }
                     return TransactionResult.NOT_PERMITTED;
                 }
-                catch
+                catch (Exception ex)
                 {
                     if (connection != null)
                     {
@@ -95,25 +95,26 @@ namespace SDMM_API.Modules
                             costo = decimal.Parse(row[3].ToString()),
                             peso = decimal.Parse(row[4].ToString()),
                             revision = int.Parse(row[5].ToString()),
+                            cantidad_caja_promedio = int.Parse(row[6].ToString()),
+                            rango_caja_cierre = int.Parse(row[7].ToString()),
+                            timestamp = Convert.ToDateTime(row[8].ToString()),
+                            updated = Convert.ToDateTime(row[9].ToString()),
+                            tipo_producto = new TipoProducto
+                            {
+                                id = int.Parse(row[10].ToString()),
+                                name = row[11].ToString(),
+                                description = row[12].ToString(),
+                                value = int.Parse(row[13].ToString())
+                            },
                             proveedor = new Proveedor
                             {
-                                id = int.Parse(row[6].ToString()),
+                                id = int.Parse(row[14].ToString()),
                                 nombre_comercial = row[15].ToString()
                             },
                             segmento = new SegmentoProducto
                             {
-                                id = int.Parse(row[7].ToString()),
-                                name = row[16].ToString()
-                            },
-                            user = new Models.Auth.User { id = int.Parse(row[8].ToString()) },
-                            timestamp = Convert.ToDateTime(row[9].ToString()),
-                            updated = Convert.ToDateTime(row[10].ToString()),
-                            tipo_producto = new TipoProducto
-                            {
-                                id = int.Parse(row[11].ToString()),
-                                name = row[12].ToString(),
-                                description = row[13].ToString(),
-                                value = int.Parse(row[14].ToString())
+                                id = int.Parse(row[16].ToString()),
+                                name = row[17].ToString()
                             }
                         });
                     }

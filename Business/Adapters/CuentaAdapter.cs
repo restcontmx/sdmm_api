@@ -20,8 +20,9 @@ namespace Business.Adapters
                 nombre = vo.nombre,
                 numero = vo.numero,
                 num_categoria = vo.num_categoria,
-                user = new Models.Auth.User { id = vo.user_id }
-
+                user = new Models.Auth.User { id = vo.user_id },
+                tipo_producto = new TipoProducto { id = vo.tipo_producto_id}
+                
             };
         }
     }

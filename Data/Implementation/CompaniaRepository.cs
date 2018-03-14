@@ -59,8 +59,9 @@ namespace Data.Implementation
                     }
                     return TransactionResult.NOT_PERMITTED;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Console.WriteLine(e.ToString());
                     if (connection != null)
                     {
                         connection.Close();

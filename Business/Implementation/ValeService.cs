@@ -327,5 +327,11 @@ namespace Business.Implementation
         {
             return vale_repository.validarLoginTablet(UserAdapter.voToObject(user));
         }
+
+        public TransactionResult cerrarVale(ValeVo vale_vo, User user_log)
+        {
+            vale_vo.user_id = user_log.id;
+            return vale_repository.cerrarVale(ValeAdapter.voToObject(vale_vo));
+        }
     }
 }

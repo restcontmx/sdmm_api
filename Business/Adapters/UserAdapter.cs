@@ -18,7 +18,9 @@ namespace Business.Adapters
                 password = obj.password,
                 email = obj.email,
                 timestamp = obj.timestamp.ToString(),
-                updated = obj.timestamp.ToString()
+                updated = obj.timestamp.ToString(),
+                rol = obj.rol.id
+                
             };
         }
 
@@ -30,7 +32,8 @@ namespace Business.Adapters
                 first_name = vo.first_name,
                 second_name = vo.second_name,
                 password = vo.password,
-                email = vo.email
+                email = vo.email,
+                rol = new Rol { id = vo.rol }
             };
         }
     }

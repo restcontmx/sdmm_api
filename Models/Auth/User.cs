@@ -13,6 +13,7 @@ namespace Models.Auth
         public string first_name { get; set; }
         public string second_name { get; set; }
         public string email { get; set; }
+        public Rol rol { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
 

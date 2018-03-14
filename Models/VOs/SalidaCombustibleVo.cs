@@ -10,6 +10,7 @@ namespace Models.VOs
         public int id { get; set; }
         public int odometro { get; set; }
         public string foto { get; set; }
+        public int turno { get; set; }
         public int maquinaria_id { get; set; }
         public int compania_id { get; set; }
         public int operador_id { get; set; }

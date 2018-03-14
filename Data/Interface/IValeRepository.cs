@@ -33,5 +33,7 @@ namespace Data.Interface
         TransactionResult createRegistroDetalleOver(RegistroDetalle registro);
 
         User validarLoginTablet(User user);
+
+        TransactionResult cerrarVale(Vale vale);
     }
 }

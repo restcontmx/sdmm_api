@@ -8,10 +8,10 @@ namespace Business.Interface
 {
     public interface ITipoProductoService
     {
-        IList<TipoProducto> getAll();
-        TipoProducto detail(int id);
-        TransactionResult create(TipoProductoVo tipoproducto_vo, User user_log);
-        TransactionResult update(TipoProductoVo tipoproducto_vo);
-        TransactionResult delete(int id);
+        IList<TipoProducto> getAll(int sistema);
+        TipoProducto detail(int id, int sistema);
+        TransactionResult create(TipoProductoVo tipoproducto_vo, User user_log, int sistema);
+        TransactionResult update(TipoProductoVo tipoproducto_vo, int sistema);
+        TransactionResult delete(int id, int sistema);
     }
 }

@@ -23,7 +23,8 @@ namespace Business.Adapters
                 autorizo = vo.autorizo,
                 fuente = vo.fuente,
                 folio_fisico = vo.folio_fisico,
-                isSync = vo.isSync
+                isSync = vo.isSync,
+                observaciones = vo.observaciones
             };
         }
     }

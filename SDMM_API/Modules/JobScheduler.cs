@@ -17,7 +17,7 @@ namespace SDMM_API.Modules
                   (s =>
                      s.WithIntervalInHours(24)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(22, 00))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(06, 30))
                     .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"))
                   )
                 .Build();

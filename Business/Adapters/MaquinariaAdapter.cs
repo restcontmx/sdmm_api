@@ -24,7 +24,7 @@ namespace Business.Adapters
             {
                 id = vo.id,
                 nombre = vo.nombre,
-                cuenta = new Cuenta { id = vo.cuenta_id },
+                tipo_maquinaria = new TipoMaquinaria { id = vo.tipo_maquinaria_id },
                 timestamp = Convert.ToDateTime(vo.timestamp),
                 updated = Convert.ToDateTime(vo.updated)
             };

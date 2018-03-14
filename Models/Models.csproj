@@ -175,6 +175,7 @@
     <Compile Include="VOs\RegistroDetalleOverVo.cs" />
     <Compile Include="VOs\RegistroDetalleVo.cs" />
     <Compile Include="VOs\RegistrosCompararVo.cs" />
+    <Compile Include="VOs\ReporteInvVo.cs" />
     <Compile Include="VOs\ReportesVo.cs" />
     <Compile Include="VOs\SalidaCombustibleVo.cs" />
     <Compile Include="VOs\SegmentoProductoVo.cs" />

@@ -24,6 +24,7 @@ namespace Business.Adapters
                 id = vo.id,
                 odometro = vo.odometro,
                 foto = vo.foto,
+                turno = vo.turno,
                 maquinaria = new Maquinaria { id = vo.maquinaria_id },
                 compania = new Compania { id = vo.compania_id },
                 operador =  new Operador { id = vo.operador_id },

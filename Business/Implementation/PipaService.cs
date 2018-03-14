@@ -64,7 +64,14 @@ namespace Business.Implementation
 
         public IList<Pipa> getAll()
         {
-            return pipa_repository.getAll();
+            IList<Pipa> pipas = pipa_repository.getAll();
+
+            foreach (Pipa p in pipas)
+            {
+                p.tanques = pipa_repository.getAllTanquesByIdPipa(p.id);
+            }
+
+            return pipas;
         }
 
         public TransactionResult update(PipaVo pipa_vo)

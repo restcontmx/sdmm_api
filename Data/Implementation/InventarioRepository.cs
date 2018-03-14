@@ -161,6 +161,8 @@ namespace Data.Implementation
             SqlConnection connection = null;
             IList<InfoInventario> objects = new List<InfoInventario>();
 
+            DateTime date = DateTime.Parse(DateCheck);
+
             IList<Producto> productos = getAllProductos();
 
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -177,7 +179,7 @@ namespace Data.Implementation
                         //Selecciona la existencia inicial del turno 1
                         SqlCommand command = new SqlCommand("sp_getExistenciaInicial", connection);
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter("fecha", DateCheck));
+                        command.Parameters.Add(new SqlParameter("fecha", date));
                         command.Parameters.Add(new SqlParameter("producto_id", p.id));
                         SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                         DataSet data_set = new DataSet();
@@ -191,7 +193,7 @@ namespace Data.Implementation
                         SqlCommand command2 = new SqlCommand("sp_getInfoInventario", connection);
                         command2.CommandType = CommandType.StoredProcedure;
                         command2.Parameters.Add(new SqlParameter("turno", 1));
-                        command2.Parameters.Add(new SqlParameter("fecha", DateCheck));
+                        command2.Parameters.Add(new SqlParameter("fecha", date));
                         command2.Parameters.Add(new SqlParameter("producto_id", p.id));
                         SqlDataAdapter data_adapter2 = new SqlDataAdapter(command2);
                         DataSet data_set2 = new DataSet();
@@ -210,7 +212,7 @@ namespace Data.Implementation
                         SqlCommand command3 = new SqlCommand("sp_getInfoInventario", connection);
                         command3.CommandType = CommandType.StoredProcedure;
                         command3.Parameters.Add(new SqlParameter("turno", 2));
-                        command3.Parameters.Add(new SqlParameter("fecha", DateCheck));
+                        command3.Parameters.Add(new SqlParameter("fecha", date));
                         command3.Parameters.Add(new SqlParameter("producto_id", p.id));
                         SqlDataAdapter data_adapter3 = new SqlDataAdapter(command3);
                         DataSet data_set3 = new DataSet();
@@ -273,25 +275,26 @@ namespace Data.Implementation
                             costo = decimal.Parse(row[3].ToString()),
                             peso = decimal.Parse(row[4].ToString()),
                             revision = int.Parse(row[5].ToString()),
+                            cantidad_caja_promedio = int.Parse(row[6].ToString()),
+                            rango_caja_cierre = int.Parse(row[7].ToString()),
+                            timestamp = Convert.ToDateTime(row[8].ToString()),
+                            updated = Convert.ToDateTime(row[9].ToString()),
+                            tipo_producto = new TipoProducto
+                            {
+                                id = int.Parse(row[10].ToString()),
+                                name = row[11].ToString(),
+                                description = row[12].ToString(),
+                                value = int.Parse(row[13].ToString())
+                            },
                             proveedor = new Proveedor
                             {
-                                id = int.Parse(row[6].ToString()),
+                                id = int.Parse(row[14].ToString()),
                                 nombre_comercial = row[15].ToString()
                             },
                             segmento = new SegmentoProducto
                             {
-                                id = int.Parse(row[7].ToString()),
-                                name = row[16].ToString()
-                            },
-                            user = new Models.Auth.User { id = int.Parse(row[8].ToString()) },
-                            timestamp = Convert.ToDateTime(row[9].ToString()),
-                            updated = Convert.ToDateTime(row[10].ToString()),
-                            tipo_producto = new TipoProducto
-                            {
-                                id = int.Parse(row[11].ToString()),
-                                name = row[12].ToString(),
-                                description = row[13].ToString(),
-                                value = int.Parse(row[14].ToString())
+                                id = int.Parse(row[16].ToString()),
+                                name = row[17].ToString()
                             }
                         });
                     }

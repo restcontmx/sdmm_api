@@ -15,5 +15,10 @@ namespace Data.Interface
         TransactionResult deleteDetallesByIdMaquinaria(int id);
 
         IList<DetalleConsumoMaquinaria> getAllDetallesByMaquinariaId(int id);
+        IList<Cuenta> getAllCuentasByMaquinariaId(int id);
+
+        TransactionResult createCuenta(Cuenta cuenta, int maquinaria_id);
+        TransactionResult updateCuenta(Cuenta cuenta);
+        Cuenta cuentaDetail(int id);
     }
 }
