@@ -7,7 +7,7 @@ namespace Models.VOs
 {
     public class DetalleSalidaCombustibleVo
     {
-        public int litros_surtidos { get; set; }
+        public float litros_surtidos { get; set; }
         public int salida_combustible_id { get; set; }
         public int tanque_id { get; set; }
         public int pipa_id { get; set; }

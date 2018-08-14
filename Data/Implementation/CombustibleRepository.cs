@@ -32,6 +32,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(combustible.nombre)));
                     command.Parameters.Add(new SqlParameter("unidad", Validations.defaultString(combustible.unidad)));
                     command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(combustible.codigo)));
+                    command.Parameters.Add(new SqlParameter("tipoP", combustible.tipo_producto.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -112,8 +113,9 @@ namespace Data.Implementation
                         nombre = row[1].ToString(),
                         unidad = row[2].ToString(),
                         codigo = row[3].ToString(),
-                        timestamp = Convert.ToDateTime(row[4].ToString()),
-                        updated = Convert.ToDateTime(row[5].ToString())
+                        tipo_producto = new TipoProducto { id = int.Parse(row[4].ToString()) },
+                        timestamp = Convert.ToDateTime(row[5].ToString()),
+                        updated = Convert.ToDateTime(row[6].ToString())
                     };
                 }
                 catch (Exception ex)
@@ -149,8 +151,9 @@ namespace Data.Implementation
                             nombre = row[1].ToString(),
                             unidad = row[2].ToString(),
                             codigo = row[3].ToString(),
-                            timestamp = Convert.ToDateTime(row[4].ToString()),
-                            updated = Convert.ToDateTime(row[5].ToString())
+                            tipo_producto = new TipoProducto { id = int.Parse(row[4].ToString()) },
+                            timestamp = Convert.ToDateTime(row[5].ToString()),
+                            updated = Convert.ToDateTime(row[6].ToString())
                         });
                     }
                     return objects;
@@ -180,6 +183,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(combustible.nombre)));
                     command.Parameters.Add(new SqlParameter("unidad", Validations.defaultString(combustible.unidad)));
                     command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(combustible.codigo)));
+                    command.Parameters.Add(new SqlParameter("tipoP", combustible.tipo_producto.id));
                     command.Parameters.Add(new SqlParameter("id", combustible.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;

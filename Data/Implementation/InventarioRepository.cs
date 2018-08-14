@@ -50,7 +50,38 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult createIventarioDiario()
+        public TransactionResult createAllIventarioDiario()
+        {
+            try
+            {
+                    IList<Producto> productos = getAllProductos();
+
+                //Crea el objeto log para el inventario
+                Log logObject = new Log();
+                logObject.message = "Inserción iniciada en Inventario repository a las " + DateTime.Now.ToString();
+                logObject.source = "Repositorio";
+                createLog(logObject);
+
+                foreach (Producto p in productos)
+                {
+                    if (checkCorteInventario(p.id))
+                    {
+                        createIventarioDiario(p.id);
+                        //Console.WriteLine("Holi");
+                    }
+                }
+
+                closeCajasPasadas();
+                return TransactionResult.CREATED;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return TransactionResult.ERROR;
+            }
+        }
+
+        public TransactionResult createIventarioDiario(int id)
         {
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -58,15 +89,22 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_createInvetario", connection);
+                    SqlCommand command = new SqlCommand("sp_createExistenciaInventario", connection);
                     command.CommandType = CommandType.StoredProcedure;
-                    //command.Parameters.Add(new SqlParameter("producto_id", inventario.producto.id));
-                    
+                    command.Parameters.Add(new SqlParameter("producto_id", id));
                     command.ExecuteNonQuery();
+                    connection.Close();
                     return TransactionResult.CREATED;
                 }
                 catch (SqlException ex)
                 {
+
+                    //Crea el Log del Error
+                    Log logObject = new Log();
+                    logObject.message = "Error en inserción de id " + id.ToString() + " con mensaje: " + ex.Message;
+                    logObject.source = "Repositorio, excepción SQL";
+                    createLog(logObject);
+
                     if (connection != null)
                     {
                         connection.Close();
@@ -77,8 +115,14 @@ namespace Data.Implementation
                     }
                     return TransactionResult.NOT_PERMITTED;
                 }
-                catch
+                catch (Exception ex)
                 {
+                    //Crea el Log del Error
+                    Log logObject = new Log();
+                    logObject.message = "Error en inserción de id " + id.ToString() + " con mensaje: " + ex.Message;
+                    logObject.source = "Repositorio, excepción general";
+                    createLog(logObject);
+
                     if (connection != null)
                     {
                         connection.Close();
@@ -161,7 +205,18 @@ namespace Data.Implementation
             SqlConnection connection = null;
             IList<InfoInventario> objects = new List<InfoInventario>();
 
+            DateTime date = DateTime.Parse(DateCheck);
+
+            //Entra al ciclo cuando se solicita el inventario desde la sección de reporte
+            if (date.Hour == 0 && date.Minute == 0 && date.Second == 0)
+            {
+                date = new DateTime(date.Year, date.Month, date.Day, 10, 0, 0);
+            }
+
+            Console.WriteLine(date);
+
             IList<Producto> productos = getAllProductos();
+            int pGlobal = 0;
 
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
@@ -170,14 +225,18 @@ namespace Data.Implementation
                     foreach (Producto p in productos)
                     {
                         InfoInventario auxInfoInventario = new InfoInventario();
-
+                        pGlobal = p.id;
                         connection.Open();
 
+                        if(pGlobal == 18)
+                        {
+                            Console.WriteLine("");
+                        }
 
                         //Selecciona la existencia inicial del turno 1
                         SqlCommand command = new SqlCommand("sp_getExistenciaInicial", connection);
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter("fecha", DateCheck));
+                        command.Parameters.Add(new SqlParameter("fecha", date));
                         command.Parameters.Add(new SqlParameter("producto_id", p.id));
                         SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                         DataSet data_set = new DataSet();
@@ -191,7 +250,7 @@ namespace Data.Implementation
                         SqlCommand command2 = new SqlCommand("sp_getInfoInventario", connection);
                         command2.CommandType = CommandType.StoredProcedure;
                         command2.Parameters.Add(new SqlParameter("turno", 1));
-                        command2.Parameters.Add(new SqlParameter("fecha", DateCheck));
+                        command2.Parameters.Add(new SqlParameter("fecha", date));
                         command2.Parameters.Add(new SqlParameter("producto_id", p.id));
                         SqlDataAdapter data_adapter2 = new SqlDataAdapter(command2);
                         DataSet data_set2 = new DataSet();
@@ -210,7 +269,7 @@ namespace Data.Implementation
                         SqlCommand command3 = new SqlCommand("sp_getInfoInventario", connection);
                         command3.CommandType = CommandType.StoredProcedure;
                         command3.Parameters.Add(new SqlParameter("turno", 2));
-                        command3.Parameters.Add(new SqlParameter("fecha", DateCheck));
+                        command3.Parameters.Add(new SqlParameter("fecha", date));
                         command3.Parameters.Add(new SqlParameter("producto_id", p.id));
                         SqlDataAdapter data_adapter3 = new SqlDataAdapter(command3);
                         DataSet data_set3 = new DataSet();
@@ -240,6 +299,16 @@ namespace Data.Implementation
                 }
                 catch (SqlException ex)
                 {
+                    Console.WriteLine(pGlobal.ToString());
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return null;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(pGlobal.ToString());
                     if (connection != null)
                     {
                         connection.Close();
@@ -273,25 +342,26 @@ namespace Data.Implementation
                             costo = decimal.Parse(row[3].ToString()),
                             peso = decimal.Parse(row[4].ToString()),
                             revision = int.Parse(row[5].ToString()),
+                            cantidad_caja_promedio = int.Parse(row[6].ToString()),
+                            rango_caja_cierre = int.Parse(row[7].ToString()),
+                            timestamp = Convert.ToDateTime(row[8].ToString()),
+                            updated = Convert.ToDateTime(row[9].ToString()),
+                            tipo_producto = new TipoProducto
+                            {
+                                id = int.Parse(row[10].ToString()),
+                                name = row[11].ToString(),
+                                description = row[12].ToString(),
+                                value = int.Parse(row[13].ToString())
+                            },
                             proveedor = new Proveedor
                             {
-                                id = int.Parse(row[6].ToString()),
+                                id = int.Parse(row[14].ToString()),
                                 nombre_comercial = row[15].ToString()
                             },
                             segmento = new SegmentoProducto
                             {
-                                id = int.Parse(row[7].ToString()),
-                                name = row[16].ToString()
-                            },
-                            user = new Models.Auth.User { id = int.Parse(row[8].ToString()) },
-                            timestamp = Convert.ToDateTime(row[9].ToString()),
-                            updated = Convert.ToDateTime(row[10].ToString()),
-                            tipo_producto = new TipoProducto
-                            {
-                                id = int.Parse(row[11].ToString()),
-                                name = row[12].ToString(),
-                                description = row[13].ToString(),
-                                value = int.Parse(row[14].ToString())
+                                id = int.Parse(row[16].ToString()),
+                                name = row[17].ToString()
                             }
                         });
                     }
@@ -305,6 +375,143 @@ namespace Data.Implementation
                         connection.Close();
                     }
                     return objects;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        //Hace el cierre de cajas antiguas
+        public TransactionResult closeCajasPasadas()
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_closeCajasPasadas", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        //Revisa si ya existe un corte de inventario de un producto
+        public bool checkCorteInventario(int producto_id)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    int result = 0;
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_existeCorteInventario", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("producto_id", producto_id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+
+                    result = int.Parse(row[0].ToString());
+
+                    if (result == 1)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return false;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return false;
+                }
+            }
+        }
+
+        //Create Log en la tabla
+        public TransactionResult createLog(Log log)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_createLogs", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("message", log.message));
+                    command.Parameters.Add(new SqlParameter("source", log.source));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
                 }
             }
         }

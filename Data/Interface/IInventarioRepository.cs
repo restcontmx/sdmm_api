@@ -10,7 +10,8 @@ namespace Data.Interface
         IList<InfoInventario> getAll(string DateCheck);
         Inventario detail(int id);
         TransactionResult create(Inventario inventario);
-        TransactionResult createIventarioDiario();
+        TransactionResult createIventarioDiario(int id);
+        TransactionResult createAllIventarioDiario();
         TransactionResult delete(int id);
     }
 }

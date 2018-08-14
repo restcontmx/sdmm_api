@@ -14,6 +14,7 @@ namespace Data.Interface
         TransactionResult create(Caja caja);
         TransactionResult update(Caja caja);
         TransactionResult delete(int id);
+        TransactionResult updateCantidad(Caja caja);
 
         TransactionResult createObservacion(Observacion obs);
     }

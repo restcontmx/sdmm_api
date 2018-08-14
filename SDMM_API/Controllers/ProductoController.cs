@@ -45,6 +45,28 @@ namespace SDMM_API.Controllers
         }
 
         /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/producto/existencias/")]
+        [HttpGet]
+        public HttpResponseMessage listExistencias()
+        {
+            try
+            {
+                IDictionary<string, IList<Producto>> data = new Dictionary<string, IList<Producto>>();
+                data.Add("data", producto_service.getAllConExistencias());
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
         /// Retrieve object request
         /// </summary>
         /// <param name="id">primary field on the db</param>

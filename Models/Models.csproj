@@ -109,6 +109,8 @@
     <Compile Include="Catalogs\DetalleFichaEntregaRecepcion.cs" />
     <Compile Include="Catalogs\DetalleSalidaCombustible.cs" />
     <Compile Include="Catalogs\FichaEntregaRecepcion.cs" />
+    <Compile Include="Catalogs\Log.cs" />
+    <Compile Include="Catalogs\ReporteDetalleSalidaC.cs" />
     <Compile Include="Catalogs\SalidaCombustible.cs" />
     <Compile Include="Catalogs\Tanque.cs" />
     <Compile Include="Catalogs\TipoMaquinaria.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="VOs\FichaEntregaRecepcionVo.cs" />
     <Compile Include="VOs\InfoInventarioVo.cs" />
     <Compile Include="VOs\InventarioVo.cs" />
+    <Compile Include="VOs\LogVo.cs" />
     <Compile Include="VOs\LugarVo.cs" />
     <Compile Include="VOs\MaquinariaVo.cs" />
     <Compile Include="VOs\ObservacionVo.cs" />
@@ -175,7 +178,10 @@
     <Compile Include="VOs\RegistroDetalleOverVo.cs" />
     <Compile Include="VOs\RegistroDetalleVo.cs" />
     <Compile Include="VOs\RegistrosCompararVo.cs" />
+    <Compile Include="VOs\ReporteInvVo.cs" />
     <Compile Include="VOs\ReportesVo.cs" />
+    <Compile Include="VOs\SalidaCombustibleReportePDFVo.cs" />
+    <Compile Include="VOs\SalidaCombustibleReporteVo.cs" />
     <Compile Include="VOs\SalidaCombustibleVo.cs" />
     <Compile Include="VOs\SegmentoProductoVo.cs" />
     <Compile Include="VOs\SubNivelVo.cs" />

@@ -33,5 +33,9 @@ namespace Data.Interface
         TransactionResult createRegistroDetalleOver(RegistroDetalle registro);
 
         User validarLoginTablet(User user);
+
+        TransactionResult cerrarVale(Vale vale);
+
+        IList<RegistroDetalle> getAllRegistersNoEscaneableByVale(int vale_id);
     }
 }

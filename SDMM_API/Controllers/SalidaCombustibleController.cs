@@ -66,6 +66,39 @@ namespace SDMM_API.Controllers
         }
 
         /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/salidas/reporte/")]
+        [HttpPost]
+        public HttpResponseMessage listParaReporte(ReportesVo reportes_vo)
+        {
+            try
+            {
+                IDictionary<string, IList<SalidaCombustible>> data = new Dictionary<string, IList<SalidaCombustible>>();
+                IList<SalidaCombustible> salidas = salida_service.getAll();
+                IList<SalidaCombustible> salidasAux = new List<SalidaCombustible>();
+
+                foreach (SalidaCombustible s in salidas)
+                {
+                    if (s.timestamp >= DateTime.Parse(reportes_vo.rangeStart) && s.timestamp <= DateTime.Parse(reportes_vo.rangeEnd))
+                    {
+                        salidasAux.Add(s);
+                    }
+                }
+
+                data.Add("data", salidasAux);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
         /// Create object pettition
         /// </summary>
         /// <param name="empleado_vo"></param>

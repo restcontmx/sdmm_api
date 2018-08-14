@@ -19,7 +19,8 @@ namespace Business.Adapters
                 id = vo.id,
                 nombre = vo.nombre,
                 unidad = vo.unidad,
-                codigo = vo.codigo
+                codigo = vo.codigo,
+                tipo_producto = new TipoProducto { id = vo.tipoproducto_id }
             };
         }
     }

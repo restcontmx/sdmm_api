@@ -101,6 +101,16 @@ namespace Data.Implementation
                     {
                         command.Parameters.Add(new SqlParameter("email", user.email));
                     }
+                    else if (sistema == 2)
+                    {
+                        if (user.email != null && user.email != "")
+                        {
+                            command.Parameters.Add(new SqlParameter("pipa_id", int.Parse(user.email)));
+                        }else
+                        {
+                            command.Parameters.Add(new SqlParameter("pipa_id", 0));
+                        }
+                    }
 
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
@@ -284,7 +294,8 @@ namespace Data.Implementation
                             first_name = row[3].ToString(),
                             second_name = row[4].ToString(),
                             timestamp = Convert.ToDateTime(row[5].ToString()),
-                            updated = Convert.ToDateTime(row[6].ToString())
+                            updated = Convert.ToDateTime(row[6].ToString()),
+                            email = row[7].ToString()
                         };
                     }
                     else
@@ -552,6 +563,13 @@ namespace Data.Implementation
                         command.Parameters.Add(new SqlParameter("second_name", user.second_name));
                         command.Parameters.Add(new SqlParameter("email", user.email));
                         command.ExecuteNonQuery();
+
+                        SqlCommand command2 = new SqlCommand("sp_updateAuthentication", connection);
+                        command2.CommandType = CommandType.StoredProcedure;
+                        command2.Parameters.Add(new SqlParameter("user_id", user.id));
+                        command2.Parameters.Add(new SqlParameter("rol_id", user.rol.id));
+                        command2.ExecuteNonQuery();
+
                         return TransactionResult.OK;
                     }
                     else if (sistema == 2)
@@ -564,6 +582,17 @@ namespace Data.Implementation
                         command.Parameters.Add(new SqlParameter("password", user.password));
                         command.Parameters.Add(new SqlParameter("first_name", user.first_name));
                         command.Parameters.Add(new SqlParameter("second_name", user.second_name));
+                        command.Parameters.Add(new SqlParameter("rol_id", user.rol.id));
+
+                        if (user.email != null && user.email != "")
+                        {
+                            command.Parameters.Add(new SqlParameter("pipa_id", int.Parse(user.email)));
+                        }
+                        else
+                        {
+                            command.Parameters.Add(new SqlParameter("pipa_id", int.Parse("0")));
+                        }
+
                         command.ExecuteNonQuery();
                         return TransactionResult.OK;
                     }else
@@ -667,7 +696,8 @@ namespace Data.Implementation
                                 first_name = row[8].ToString(),
                                 second_name = row[9].ToString(),
                                 timestamp = Convert.ToDateTime(row[10].ToString()),
-                                updated = Convert.ToDateTime(row[11].ToString())
+                                updated = Convert.ToDateTime(row[11].ToString()),
+                                email = row[12].ToString()
                             }
                         };
                     }else
@@ -711,28 +741,17 @@ namespace Data.Implementation
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
                         ids.Add(int.Parse(row[0].ToString()));
-                    }
 
+                        User u = detail(int.Parse(row[0].ToString()), 2);
+                        u.email = row[1].ToString();
 
-                    foreach(int x in ids)
-                    {
-                        objects.Add(detail(x,2));
+                        if (u.email != "0")
+                        {
+                            objects.Add(u);
+                        }
                     }
 
                     return objects;
-
-                    /*
-                     *objects.Add(new User
-                        {
-                            id = int.Parse(row[0].ToString()),
-                            username = row[1].ToString(),
-                            password = row[2].ToString(),
-                            first_name = row[3].ToString(),
-                            second_name = row[4].ToString(),
-                            timestamp = Convert.ToDateTime(row[5].ToString()),
-                            updated = Convert.ToDateTime(row[6].ToString())
-                        });
-                     * */
                 }
                 catch (SqlException ex)
                 {

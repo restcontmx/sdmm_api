@@ -25,7 +25,20 @@ namespace Business.Implementation
 
         public IList<ReporteAccPac> getListVale(ReportesVo reportes_vo)
         {
-            return reportes_repository.getListVale(reportes_vo);
+            //return reportes_repository.getListVale(reportes_vo);
+            return reportes_repository.getListValeFeb2018(reportes_vo);
+        }
+
+        public IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReporte(SalidaCombustibleReporteVo salidaComReporteVo)
+        {
+            //return reportes_repository.getListVale(reportes_vo);
+            return reportes_repository.getlistSalidaCombustibleReporte(salidaComReporteVo);
+        }
+
+        public IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReportePDF(SalidaCombustibleReportePDFVo reportesalidaPDFVo)
+        {
+            //return reportes_repository.getListVale(reportes_vo);
+            return reportes_repository.getlistSalidaCombustibleReportePDF(reportesalidaPDFVo);
         }
     }
 }

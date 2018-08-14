@@ -46,6 +46,31 @@ namespace SDMM_API.Controllers
         }
 
         /// <summary>
+        /// Get all cajas activas
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/caja/activas")]
+        [HttpGet]
+        public HttpResponseMessage listActivas()
+        {
+            try
+            {
+                IDictionary<string, IList<Caja>> data = new Dictionary<string, IList<Caja>>();
+                IList<Caja> cajas = new List<Caja>();
+
+                cajas = caja_service.getAll().Where(p => p.cantidad > 0 && p.active == true).ToList().OrderByDescending(a => a.id).ToList();
+                data.Add("data", cajas);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
         /// Retrieve object request
         /// </summary>
         /// <param name="id">primary field on the db</param>
@@ -111,6 +136,31 @@ namespace SDMM_API.Controllers
             if (tr == TransactionResult.OK)
             {
                 data.Add("message", "Object updated.");
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Update object request
+        /// </summary>
+        /// <param name="caja_vo"></param>
+        /// <returns></returns>
+        [Route("api/caja/cantidad/")]
+        [HttpPut]
+        public HttpResponseMessage updateCantidad([FromBody] CajaVo caja_vo)
+        {
+            TransactionResult tr = caja_service.updateCantidad(caja_vo);
+
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.OK)
+            {
+                data.Add("message", "Object updated.");
+                data.Add("status", "1");
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             else

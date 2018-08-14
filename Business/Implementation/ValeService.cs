@@ -215,37 +215,67 @@ namespace Business.Implementation
         /// <returns></returns>
         public TransactionResult update(ValeVo vale_vo)
         {
+            //Variables para evitar que se inserte un nuevo escaneo de ese producto
+            Vale vAux = vale_repository.detail(vale_vo.id);
+            IList<RegistroDetalle> regsExistentes = vale_repository.getAllRegistersNoEscaneableByVale(vale_vo.id);
+            IList<int> idProductosExistentes = new List<int>();
 
+            //Verificamos si ya tenemos registros de escaneo de ese vale
+            if (regsExistentes != null && regsExistentes.Count > 0)
+            {
+                foreach (RegistroDetalle r in regsExistentes)
+                {
+                    idProductosExistentes.Add(r.producto.id);
+                }
+            }
+
+            //Si por alguna razón el vale que intentamos sincronizar es nulo, lo inicializamos
+            if (vAux == null)
+            {
+                vAux = new Vale();
+            }
+
+            //Verificamos si la actualización es desencadenada por la sincronización
             if (vale_vo.isSync == 1)
             {
-                foreach (DetalleValeVo dvo in vale_vo.detalles)
+                //Verificamos que el vale todavía esté abierto
+                if (vAux.active == 1)
                 {
-                    dvo.vale_id = vale_vo.id;
 
-                    if (dvo.registros != null)
+                    foreach (DetalleValeVo dvo in vale_vo.detalles)
                     {
-                        bool insert = true;
-                        foreach (RegistroDetalleVo r in dvo.registros)
+                        dvo.vale_id = vale_vo.id;
+
+                        if (dvo.registros != null)
                         {
-                            if (r.folio == null || r.producto_id == 0)
+                            bool insert = true;
+                            foreach (RegistroDetalleVo r in dvo.registros)
                             {
-                                insert = false;
-                                break;
-                            }
-                        }
-                        if (insert)
-                        {
-                            var tr2 = TransactionResult.CREATED;
-                            foreach (RegistroDetalleVo rvo in dvo.registros)
-                            {
-                                dvo.vale_id = vale_vo.id;
-                                rvo.user_id = vale_vo.user_id;
-                                rvo.vale_id = vale_vo.id;
-                                rvo.detallevale_id = dvo.id;
-                                tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
-                                if (tr2 != TransactionResult.CREATED)
+                                if (r.folio == null || r.producto_id == 0)
                                 {
-                                    return tr2;
+                                    insert = false;
+                                    break;
+                                }
+                            }
+                            if (insert)
+                            {
+
+                                var tr2 = TransactionResult.CREATED;
+                                foreach (RegistroDetalleVo rvo in dvo.registros)
+                                {
+                                    //Verificamos si ya tenemos un registro de ese producto no escaneable para no duplicarlo
+                                    if (!idProductosExistentes.Contains(rvo.producto_id))
+                                    {
+                                        dvo.vale_id = vale_vo.id;
+                                        rvo.user_id = vale_vo.user_id;
+                                        rvo.vale_id = vale_vo.id;
+                                        rvo.detallevale_id = dvo.id;
+                                        tr2 = vale_repository.createRegistroDetalle(RegistroDetalleAdapter.voToObject(rvo));
+                                        if (tr2 != TransactionResult.CREATED)
+                                        {
+                                            return tr2;
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -326,6 +356,12 @@ namespace Business.Implementation
         public User validarLoginTablet(UserVo user)
         {
             return vale_repository.validarLoginTablet(UserAdapter.voToObject(user));
+        }
+
+        public TransactionResult cerrarVale(ValeVo vale_vo, User user_log)
+        {
+            vale_vo.user_id = user_log.id;
+            return vale_repository.cerrarVale(ValeAdapter.voToObject(vale_vo));
         }
     }
 }

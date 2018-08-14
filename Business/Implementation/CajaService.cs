@@ -70,6 +70,16 @@ namespace Business.Implementation
         }
 
         /// <summary>
+        /// Update object on the repository
+        /// </summary>
+        /// <param name="caja_vo"></param>
+        /// <returns></returns>
+        public TransactionResult updateCantidad(CajaVo caja_vo)
+        {
+            return caja_repository.updateCantidad(CajaAdapter.voToObject(caja_vo));
+        }
+
+        /// <summary>
         /// Create object on the repository
         /// </summary>
         /// <param name="obs_vo"></param>

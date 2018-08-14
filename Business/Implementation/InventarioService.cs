@@ -25,7 +25,7 @@ namespace Business.Implementation
 
         public TransactionResult createIventarioDiario()
         {
-            return inventario_repository.createIventarioDiario();
+            return inventario_repository.createAllIventarioDiario();
         }
 
         public TransactionResult delete(int id)

@@ -14,10 +14,20 @@ namespace Data.Implementation
 {
     public class TipoProductoRepository : ITipoProductoRepository
     {
-        public TransactionResult create(TipoProducto tipoproducto)
+        public TransactionResult create(TipoProducto tipoproducto, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -26,7 +36,11 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("name", tipoproducto.name));
                     command.Parameters.Add(new SqlParameter("description", Validations.defaultString(tipoproducto.description)));
-                    command.Parameters.Add(new SqlParameter("value", tipoproducto.value));
+
+                    if (sistema == 1)
+                    {
+                        command.Parameters.Add(new SqlParameter("value", tipoproducto.value));
+                    }
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }
@@ -53,10 +67,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -86,10 +110,20 @@ namespace Data.Implementation
             }
         }
 
-        public TipoProducto detail(int id)
+        public TipoProducto detail(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -101,13 +135,30 @@ namespace Data.Implementation
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);
                     DataRow row = data_set.Tables[0].Rows[0];
-                    return new TipoProducto
+
+                    if (sistema == 1)
                     {
-                        id = int.Parse(row[0].ToString()),
-                        name = row[1].ToString(),
-                        description = row[2].ToString(),
-                        value = int.Parse(row[3].ToString())
-                    };
+                        return new TipoProducto
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            name = row[1].ToString(),
+                            description = row[2].ToString(),
+                            value = int.Parse(row[3].ToString())
+                        };
+                    }
+                    else if (sistema == 2)
+                    {
+                        return new TipoProducto
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            name = row[1].ToString(),
+                            description = row[2].ToString()
+                        };
+                    }
+                    else
+                    {
+                        return new TipoProducto();
+                    }
 
                 }
                 catch (Exception ex)
@@ -121,11 +172,22 @@ namespace Data.Implementation
             }
         }
 
-        public IList<TipoProducto> getAll()
+        public IList<TipoProducto> getAll(int sistema)
         {
             SqlConnection connection = null;
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
             IList<TipoProducto> objects = new List<TipoProducto>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            using (connection)
             {
                 try
                 {
@@ -137,13 +199,26 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
-                        objects.Add(new TipoProducto
+
+                        if (sistema == 1)
                         {
-                            id = int.Parse(row[0].ToString()),
-                            name = row[1].ToString(),
-                            description = row[2].ToString(),
-                            value = int.Parse(row[3].ToString())
-                        });
+                            objects.Add(new TipoProducto
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                name = row[1].ToString(),
+                                description = row[2].ToString(),
+                                value = int.Parse(row[3].ToString())
+                            });
+                        }
+                        else if (sistema == 2)
+                        {
+                            objects.Add(new TipoProducto
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                name = row[1].ToString(),
+                                description = row[2].ToString()
+                            });
+                        }
                     }
                     return objects;
 
@@ -159,10 +234,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult update(TipoProducto tipoproducto)
+        public TransactionResult update(TipoProducto tipoproducto, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -171,7 +256,12 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("name", tipoproducto.name));
                     command.Parameters.Add(new SqlParameter("description", Validations.defaultString(tipoproducto.description)));
-                    command.Parameters.Add(new SqlParameter("value", tipoproducto.value));
+
+                    if (sistema == 1)
+                    {
+                        command.Parameters.Add(new SqlParameter("value", tipoproducto.value));
+                    }
+
                     command.Parameters.Add(new SqlParameter("id", tipoproducto.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;

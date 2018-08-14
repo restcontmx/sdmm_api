@@ -9,7 +9,8 @@ namespace Models.Catalogs
     {
         public int id { get; set; }
         public string nombre { get; set; }
-        public Cuenta cuenta { get; set; }
+        public IList<Cuenta> cuentas { get; set; }
+        public TipoMaquinaria tipo_maquinaria { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
 

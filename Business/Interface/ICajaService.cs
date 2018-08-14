@@ -16,6 +16,7 @@ namespace Business.Interface
         TransactionResult create(CajaVo caja_vo, User user_log);
         TransactionResult update(CajaVo caja_vo);
         TransactionResult delete(int id);
+        TransactionResult updateCantidad(CajaVo caja_vo);
 
         TransactionResult createObservacion(ObservacionVo obs_vo, User user_log);
     }

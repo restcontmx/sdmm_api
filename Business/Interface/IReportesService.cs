@@ -12,5 +12,8 @@ namespace Business.Interface
     {
         IList<RegistroDetalle> getListaSedena(ReportesVo reportesVo);
         IList<ReporteAccPac> getListVale(ReportesVo reportesVo);
+
+        IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReporte(SalidaCombustibleReporteVo salidaComReporteVo);
+        IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReportePDF(SalidaCombustibleReportePDFVo reportesalidaPDFVo);
     }
 }

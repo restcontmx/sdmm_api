@@ -270,7 +270,7 @@ namespace Data.Implementation
                             id = int.Parse(row[0].ToString()),
                             nombre = row[1].ToString(),
                             capacidad = int.Parse(row[2].ToString()),
-                            litros = int.Parse(row[3].ToString()),
+                            litros = float.Parse(row[3].ToString()),
                             pipa = new Pipa
                             {
                                 id = int.Parse(row[4].ToString()),

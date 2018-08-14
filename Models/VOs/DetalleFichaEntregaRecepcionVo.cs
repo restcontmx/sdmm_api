@@ -7,7 +7,7 @@ namespace Models.VOs
 {
     public class DetalleFichaEntregaRecepcionVo
     {
-        public int litros { get; set; }
+        public float litros { get; set; }
         public int tanque_id { get; set; }
         public int pipa_id { get; set; }
         public int ficha_id { get; set; }

@@ -10,10 +10,10 @@ namespace Data.Interface
 {
     public interface ITipoProductoRepository
     {
-        IList<TipoProducto> getAll();
-        TipoProducto detail(int id);
-        TransactionResult create(TipoProducto tipoproducto);
-        TransactionResult update(TipoProducto tipoproducto);
-        TransactionResult delete(int id);
+        IList<TipoProducto> getAll(int sistema);
+        TipoProducto detail(int id, int sistema);
+        TransactionResult create(TipoProducto tipoproducto, int sistema);
+        TransactionResult update(TipoProducto tipoproducto, int sistema);
+        TransactionResult delete(int id, int sistema);
     }
 }

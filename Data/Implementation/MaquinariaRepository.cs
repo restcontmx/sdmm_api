@@ -14,6 +14,7 @@ namespace Data.Implementation
 {
     public class MaquinariaRepository : IMaquinaRepository
     {
+        private CuentaRepository cuentaRepo = new CuentaRepository();
         /// <summary>
         /// Create new object on the db
         /// </summary>
@@ -30,7 +31,7 @@ namespace Data.Implementation
                     SqlCommand command = new SqlCommand("sp_createMaquinaria", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(maquina.nombre)));
-                    command.Parameters.Add(new SqlParameter("cuenta_id", maquina.cuenta.id));
+                    command.Parameters.Add(new SqlParameter("tipo_id", maquina.tipo_maquinaria.id));
 
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
@@ -104,6 +105,50 @@ namespace Data.Implementation
                 }
             }
         }
+
+        public TransactionResult createCuenta(Cuenta cuenta, int maquinaria_id)
+        {
+            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+
+            using (connection)
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_createCuenta", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(cuenta.nombre)));
+                    command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(cuenta.numero)));
+                    command.Parameters.Add(new SqlParameter("num_categoria", Validations.defaultString(cuenta.num_categoria)));
+                    command.Parameters.Add(new SqlParameter("tipoP", cuenta.tipo_producto.id));
+                    command.Parameters.Add(new SqlParameter("user_id", cuenta.user.id));
+                    command.Parameters.Add(new SqlParameter("maquinaria_id", maquinaria_id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
 
         public TransactionResult delete(int id)
         {
@@ -192,13 +237,12 @@ namespace Data.Implementation
                         nombre = row[1].ToString(),
                         timestamp = Convert.ToDateTime(row[2].ToString()),
                         updated = Convert.ToDateTime(row[3].ToString()),
-                        cuenta = new Cuenta {
-                                    id = int.Parse(row[4].ToString()),
-                                    num_categoria = row[5].ToString(),
-                                    numero = row[6].ToString(),
-                                    nombre = row[7].ToString()
+                        tipo_maquinaria = new TipoMaquinaria
+                        {
+                            id = int.Parse(row[4].ToString()),
+                            name = row[5].ToString()
                         }
-                        
+
                     };
                 }
                 catch (Exception ex)
@@ -234,15 +278,19 @@ namespace Data.Implementation
                             nombre = row[1].ToString(),
                             timestamp = Convert.ToDateTime(row[2].ToString()),
                             updated = Convert.ToDateTime(row[3].ToString()),
-                            cuenta = new Cuenta
+                            tipo_maquinaria = new TipoMaquinaria
                             {
                                 id = int.Parse(row[4].ToString()),
-                                num_categoria = row[5].ToString(),
-                                numero = row[6].ToString(),
-                                nombre = row[7].ToString()
+                                name = row[5].ToString()
                             }
                         });
                     }
+
+                    foreach (Maquinaria m in objects)
+                    {
+                        m.cuentas = getAllCuentasByMaquinariaId(m.id);
+                    }
+
                     return objects;
 
                 }
@@ -301,6 +349,46 @@ namespace Data.Implementation
             }
         }
 
+
+        public IList<Cuenta> getAllCuentasByMaquinariaId(int id)
+        {
+            SqlConnection connection = null;
+            IList<Cuenta> objects = new List<Cuenta>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllCuentasByIdMaquinaria", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("id", id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new Cuenta
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            nombre = row[1].ToString(),
+                            num_categoria = row[2].ToString(),
+                            numero = row[3].ToString(),
+                            tipo_producto = new TipoProducto { id = int.Parse(row[4].ToString()) }
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
         public TransactionResult update(Maquinaria maquina)
         {
             SqlConnection connection = null;
@@ -312,7 +400,7 @@ namespace Data.Implementation
                     SqlCommand command = new SqlCommand("sp_updateMaquinaria", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(maquina.nombre)));
-                    command.Parameters.Add(new SqlParameter("cuenta_id", maquina.cuenta.id));
+                    command.Parameters.Add(new SqlParameter("tipo_id", maquina.tipo_maquinaria.id));
                     command.Parameters.Add(new SqlParameter("id", maquina.id));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
@@ -338,6 +426,54 @@ namespace Data.Implementation
                     return TransactionResult.ERROR;
                 }
             }
+        }
+
+
+        public TransactionResult updateCuenta(Cuenta cuenta)
+        {
+            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+
+            using (connection)
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_updateCuenta", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("nombre", Validations.defaultString(cuenta.nombre)));
+                    command.Parameters.Add(new SqlParameter("numero", Validations.defaultString(cuenta.numero)));
+                    command.Parameters.Add(new SqlParameter("num_categoria", Validations.defaultString(cuenta.num_categoria)));
+                    command.Parameters.Add(new SqlParameter("tipoP", cuenta.tipo_producto.id));
+                    command.Parameters.Add(new SqlParameter("id", cuenta.id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.OK;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        public Cuenta cuentaDetail(int id)
+        {
+            return cuentaRepo.detail(id, 2);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
                     command.Parameters.Add(new SqlParameter("fuente", vale.fuente));
                     command.Parameters.Add(new SqlParameter("folio_fisico", vale.folio_fisico));
-
+                    command.Parameters.Add(new SqlParameter("observaciones", vale.observaciones));
                     if (vale.userAutorizo.id != 0)
                     {
                         command.Parameters.Add(new SqlParameter("userAutorizo", vale.userAutorizo.id));
@@ -175,7 +175,7 @@ namespace Data.Implementation
                     }
                     return TransactionResult.NOT_PERMITTED;
                 }
-                catch
+                catch (Exception ex)
                 {
                     if (connection != null)
                     {
@@ -285,9 +285,9 @@ namespace Data.Implementation
                     bool authEmpty = true;
 
                     //Revisa si la autorización está vacía
-                    string aux2 = row[24].ToString();
+                    string aux2 = row[27].ToString();
 
-                    if(aux2 == String.Empty || aux2 == null || int.Parse(row[24].ToString()) == 0)
+                    if (aux2 == String.Empty || aux2 == null || int.Parse(row[27].ToString()) == 0)
                     {
                         authEmpty = false;
                     }
@@ -321,14 +321,14 @@ namespace Data.Implementation
                             cargador1 = new Empleado
                             {
                                 id = int.Parse(row[12].ToString()),
-                                nombre = row[30].ToString(),
-                                ap_paterno = row[31].ToString()
+                                nombre = row[32].ToString(),
+                                ap_paterno = row[33].ToString()
                             },
                             cargador2 = new Empleado
                             {
                                 id = int.Parse(row[13].ToString()),
-                                nombre = row[34].ToString(),
-                                ap_paterno = row[35].ToString()
+                                nombre = row[36].ToString(),
+                                ap_paterno = row[37].ToString()
                             },
                             subnivel = new SubNivel
                             {
@@ -342,17 +342,19 @@ namespace Data.Implementation
                                 },
                                 cuenta = new Cuenta
                                 {
-                                    numero = row[23].ToString()
+                                    id = int.Parse(row[23].ToString()),
+                                    numero = row[24].ToString()
                                 }
                             },
+                            observaciones = row[25].ToString(),
                             active = int.Parse(row[16].ToString()),
                             fuente = int.Parse(row[21].ToString()),
                             folio_fisico = row[22].ToString(),
                             userAutorizo = new User
                             {
-                                id = int.Parse(row[25].ToString()),
-                                first_name = row[26].ToString(),
-                                second_name = row[27].ToString()
+                                id = int.Parse(row[27].ToString()),
+                                first_name = row[28].ToString(),
+                                second_name = row[29].ToString()
                             }
                         };
                     }
@@ -386,14 +388,14 @@ namespace Data.Implementation
                             cargador1 = new Empleado
                             {
                                 id = int.Parse(row[12].ToString()),
-                                nombre = row[30].ToString(),
-                                ap_paterno = row[31].ToString()
+                                nombre = row[32].ToString(),
+                                ap_paterno = row[33].ToString()
                             },
                             cargador2 = new Empleado
                             {
                                 id = int.Parse(row[13].ToString()),
-                                nombre = row[34].ToString(),
-                                ap_paterno = row[35].ToString()
+                                nombre = row[36].ToString(),
+                                ap_paterno = row[37].ToString()
                             },
                             subnivel = new SubNivel
                             {
@@ -407,18 +409,19 @@ namespace Data.Implementation
                                 },
                                 cuenta = new Cuenta
                                 {
-                                    numero = row[23].ToString()
+                                    id = int.Parse(row[23].ToString()),
+                                    numero = row[24].ToString()
                                 }
                             },
+                            observaciones = row[25].ToString(),
                             active = int.Parse(row[16].ToString()),
                             fuente = int.Parse(row[21].ToString()),
                             folio_fisico = row[22].ToString(),
                             userAutorizo = new User()
-                            
+
                         };
 
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -433,6 +436,7 @@ namespace Data.Implementation
 
         public IList<Vale> getAll()
         {
+            int idVale = 0;
             SqlConnection connection = null;
             IList<Vale> objects = new List<Vale>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -456,6 +460,8 @@ namespace Data.Implementation
                         {
                             authEmpty = false;
                         }
+
+                        idVale = int.Parse(row[0].ToString());
 
                         if (authEmpty)
                         {
@@ -549,6 +555,15 @@ namespace Data.Implementation
                 }
                 catch (SqlException ex)
                 {
+                    Console.WriteLine(idVale.ToString());
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }catch (Exception ex)
+                {
+                    Console.WriteLine(idVale.ToString());
                     if (connection != null)
                     {
                         connection.Close();
@@ -578,12 +593,18 @@ namespace Data.Implementation
                         objects.Add(new DetalleVale
                         {
                             id = int.Parse(row[0].ToString()),
-                            producto = new Producto {
+                            producto = new Producto
+                            {
                                 id = int.Parse(row[1].ToString()),
                                 nombre = row[2].ToString(),
+                                codigo = row[7].ToString(),
                                 segmento = new SegmentoProducto
                                 {
                                     name = row[5].ToString()
+                                },
+                                tipo_producto = new TipoProducto
+                                {
+                                    value = int.Parse(row[6].ToString())
                                 }
                             },
                             cantidad = int.Parse(row[3].ToString()),
@@ -952,6 +973,8 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("cargador2_id", vale.cargador2.id));
                     command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
                     command.Parameters.Add(new SqlParameter("active", vale.active));
+                    command.Parameters.Add(new SqlParameter("folio_fisico", vale.folio_fisico));
+                    command.Parameters.Add(new SqlParameter("observaciones", vale.observaciones));
                     command.ExecuteNonQuery();
                     return TransactionResult.OK;
                 }
@@ -1177,6 +1200,165 @@ namespace Data.Implementation
                         connection.Close();
                     }
                     return null;
+                }
+            }
+        }
+
+        public TransactionResult cerrarVale(Vale vale)
+        {
+            try
+            {
+                vale.detalles = getAllDetalles(vale.id);
+
+                foreach (DetalleVale dv in vale.detalles)
+                {
+                    dv.registros = new List<RegistroDetalle>();
+                    if (dv.producto.tipo_producto.value > 2)
+                    {
+                        dv.registros.Add(new RegistroDetalle
+                        {
+                            folio = dv.cantidad.ToString(),
+                            detallevale = new DetalleVale { id = dv.id },
+                            producto = new Producto { id = dv.producto.id },
+                            vale = new Vale { id = vale.id },
+                            turno = vale.turno,
+                            user = new User { id = vale.user.id },
+                            folioCaja = "N/C"
+                        });
+                    }
+                    else if (dv.producto.tipo_producto.value == 1)
+                    {
+                        for (int i = 0; i < dv.cantidad; i++)
+                        {
+                            dv.registros.Add(new RegistroDetalle
+                            {
+                                folio = "S/F",
+                                detallevale = new DetalleVale { id = dv.id },
+                                producto = new Producto { id = dv.producto.id },
+                                vale = new Vale { id = vale.id },
+                                turno = vale.turno,
+                                user = new User { id = vale.user.id },
+                                folioCaja = "S/C",
+
+                            });
+                        }
+                    }
+                    else if (dv.producto.tipo_producto.value == 2)
+                    {
+                        for (int i = 0; i < dv.cantidad; i++)
+                        {
+                            dv.registros.Add(new RegistroDetalle
+                            {
+                                folio = "S/F",
+                                detallevale = new DetalleVale { id = dv.id },
+                                producto = new Producto { id = dv.producto.id },
+                                vale = new Vale { id = vale.id },
+                                turno = vale.turno,
+                                user = new User { id = vale.user.id },
+                                folioCaja = "N/A"
+                            });
+                        }
+                    }
+
+                    foreach (RegistroDetalle r in dv.registros)
+                    {
+                        createRegistroDetalle(r);
+                    }
+                }
+
+                vale.active = 0;
+                return cerrarValeStatus(vale);
+            }
+            catch (Exception ex)
+            {
+                return TransactionResult.ERROR;
+            }
+        }
+
+        public TransactionResult cerrarValeStatus(Vale vale)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_updateCerrarValeStatus", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("id ", vale.id));
+                    command.Parameters.Add(new SqlParameter("active", vale.active));
+                    command.Parameters.Add(new SqlParameter("usuario_id", vale.user.id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        //Obtener todos los registros de salidas de un vale
+        public IList<RegistroDetalle> getAllRegistersNoEscaneableByVale(int vale_id)
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroDetalleNoEscaneableByValeId", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("valeid", vale_id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            folioCaja = row[2].ToString(),
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            producto = new Producto
+                            {
+                                id = int.Parse(row[6].ToString()),
+                                nombre = row[7].ToString(),
+                                codigo = row[8].ToString(),
+                                tipo_producto = new TipoProducto { value = int.Parse(row[9].ToString()) }
+                            }
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
                 }
             }
         }

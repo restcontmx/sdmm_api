@@ -13,5 +13,7 @@ namespace Business.Interface
         TransactionResult create(ProductoVo producto_vo, User user_log);
         TransactionResult update(ProductoVo producto_vo);
         TransactionResult delete(int id);
+
+        IList<Producto> getAllConExistencias();
     }
 }

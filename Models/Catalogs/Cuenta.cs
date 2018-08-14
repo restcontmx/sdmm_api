@@ -15,5 +15,8 @@ namespace Models.Catalogs
         public User user { get; set; }
         public DateTime timestamp { get; set; }
         public DateTime updated { get; set; }
+
+        //Se usa solamente para el sistema de combustibles
+        public TipoProducto tipo_producto;
     }
 }

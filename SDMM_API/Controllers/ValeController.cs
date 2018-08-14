@@ -60,7 +60,6 @@ namespace SDMM_API.Controllers
         {
             try
             {
-
                 IList<Vale> valesTodos = vale_service.getAll();
 
                 IList<Vale> valesActivos = new List<Vale>();
@@ -95,6 +94,11 @@ namespace SDMM_API.Controllers
         public HttpResponseMessage create([FromBody] ValeVo vale_vo)
         {
             IDictionary<string, string> data = new Dictionary<string, string>();
+
+            if (vale_vo.observaciones == null || vale_vo.observaciones == string.Empty)
+            {
+                vale_vo.observaciones = "";
+            }
 
             if (vale_vo == null)
             {
@@ -401,7 +405,7 @@ namespace SDMM_API.Controllers
                         }
                     }
 
-                    iteracion = iteracion * 800;
+                    iteracion = iteracion * 200;
                     int cont = 0;
                     foreach (RegistroDetalle reg in registrosResponseAux)
                     {
@@ -409,7 +413,7 @@ namespace SDMM_API.Controllers
                         {
                             registrosResponse.Add(registrosResponseAux[iteracion + cont]);
                             cont = cont + 1;
-                            if (cont == 800)
+                            if (cont == 200)
                             {
                                 break;
                             }
@@ -423,7 +427,7 @@ namespace SDMM_API.Controllers
                 }
                 else
                 {
-                    iteracion = iteracion * 800;
+                    iteracion = iteracion * 200;
                     int cont = 0;
                     foreach(RegistroDetalle reg in registrosH)
                     {
@@ -431,7 +435,7 @@ namespace SDMM_API.Controllers
                         {
                             registrosResponse.Add(registrosH[iteracion + cont]);
                             cont = cont + 1;
-                            if (cont == 800)
+                            if (cont == 200)
                             {
                                 break;
                             }
@@ -668,6 +672,11 @@ namespace SDMM_API.Controllers
         {
             TransactionResult tr;
 
+            if (vale.observaciones == null || vale.observaciones == string.Empty)
+            {
+                vale.observaciones = "";
+            }
+
             if (vale.autorizo == 1)
             {
                 tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
@@ -738,6 +747,36 @@ namespace SDMM_API.Controllers
             {
                 IDictionary<string, string> data = new Dictionary<string, string>();
                 data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Cerrar object pettition
+        /// </summary>
+        /// <param name="empleado_vo"></param>
+        /// <returns></returns>
+        [Route("api/vale/cerrarVale/")]
+        [HttpPost]
+        public HttpResponseMessage cerrarVale([FromBody] ValeVo vale_vo)
+        {
+            IDictionary<string, string> data = new Dictionary<string, string>();
+
+            TransactionResult tr = vale_service.cerrarVale(vale_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+
+            if (tr == TransactionResult.CREATED)
+            {
+                data.Add("message", "Object created.");
+                return Request.CreateResponse(HttpStatusCode.Created, data);
+            }
+            else if (tr == TransactionResult.EXISTS)
+            {
+                data.Add("message", "Object already existed.");
+                return Request.CreateResponse(HttpStatusCode.Conflict, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
         }
