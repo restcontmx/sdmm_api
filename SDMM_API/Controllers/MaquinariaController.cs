@@ -73,11 +73,6 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage create([FromBody] MaquinariaVo maquina_vo)
         {
-            if (maquina_vo.detalles == null)
-            {
-                maquina_vo.detalles = new List<DetalleConsumoMaquinariaVo>();
-            }
-
             if (maquina_vo.cuentas != null)
             {
                 foreach (CuentaVo c in maquina_vo.cuentas)
@@ -119,11 +114,6 @@ namespace SDMM_API.Controllers
         [HttpPut]
         public HttpResponseMessage update([FromBody] MaquinariaVo maquina_vo)
         {
-            if(maquina_vo.detalles == null)
-            {
-                maquina_vo.detalles = new List<DetalleConsumoMaquinariaVo>();
-            }
-
             if (maquina_vo.cuentas != null)
             {
                 foreach (CuentaVo c in maquina_vo.cuentas)

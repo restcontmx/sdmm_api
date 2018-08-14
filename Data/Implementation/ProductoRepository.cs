@@ -228,11 +228,15 @@ namespace Data.Implementation
                 {
                     IList<Producto> productos = getAll();
 
-                    foreach (Producto p in productos)
+                    foreach(Producto p in productos)
                     {
                         Producto pAux = detailInventario(p.id);
 
-                        if (pAux.cantidad_caja_promedio > 0)
+                        if(pAux.id == 175)
+                        {
+                            Console.WriteLine("Holi");
+                        }
+                        if(pAux.cantidad_caja_promedio > 0)
                         {
                             objects.Add(pAux);
                         }

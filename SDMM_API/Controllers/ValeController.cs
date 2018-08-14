@@ -60,6 +60,7 @@ namespace SDMM_API.Controllers
         {
             try
             {
+
                 IList<Vale> valesTodos = vale_service.getAll();
 
                 IList<Vale> valesActivos = new List<Vale>();
@@ -100,7 +101,7 @@ namespace SDMM_API.Controllers
                 vale_vo.observaciones = "";
             }
 
-            if (vale_vo == null)
+                if (vale_vo == null)
             {
                 data.Add("message", "El objeto recibido es nulo.");
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
@@ -317,7 +318,7 @@ namespace SDMM_API.Controllers
                     list.Add(vale_service.getAllRegistersHistorico().Count);
                 }
                 IDictionary<string, IList<int>> data = new Dictionary<string, IList<int>>();
-                data.Add("data", list);
+               data.Add("data", list);
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -751,6 +752,7 @@ namespace SDMM_API.Controllers
             }
         }
 
+
         /// <summary>
         /// Cerrar object pettition
         /// </summary>
@@ -760,7 +762,7 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage cerrarVale([FromBody] ValeVo vale_vo)
         {
-            IDictionary<string, string> data = new Dictionary<string, string>();
+            IDictionary<string, string> data = new Dictionary<string, string>();          
 
             TransactionResult tr = vale_service.cerrarVale(vale_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
 

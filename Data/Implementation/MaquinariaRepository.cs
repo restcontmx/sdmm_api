@@ -15,6 +15,7 @@ namespace Data.Implementation
     public class MaquinariaRepository : IMaquinaRepository
     {
         private CuentaRepository cuentaRepo = new CuentaRepository();
+
         /// <summary>
         /// Create new object on the db
         /// </summary>
@@ -286,7 +287,7 @@ namespace Data.Implementation
                         });
                     }
 
-                    foreach (Maquinaria m in objects)
+                    foreach(Maquinaria m in objects)
                     {
                         m.cuentas = getAllCuentasByMaquinariaId(m.id);
                     }

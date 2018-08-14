@@ -100,6 +100,10 @@ namespace SDMM_API.App_Start
             kernel.Bind<ISalidaCombustibleService>().To<SalidaCombustibleService>();
             kernel.Bind<IAbastecimientoService>().To<AbastecimientoService>();
             kernel.Bind<IFichaEntregaService>().To<FichaEntregaService>();
+            kernel.Bind<IBitacoraDesarrolloService>().To<BitacoraDesarrolloService>();
+            kernel.Bind<IDemoraService>().To<DemoraService>();
+            kernel.Bind<ITipoDesarrolloService>().To<TipoDesarrolloService>();
+            kernel.Bind<IBitacoraBarrenacionService>().To<BitacoraBarrenacionService>();
         }
     }
 }

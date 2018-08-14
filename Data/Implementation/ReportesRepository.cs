@@ -118,7 +118,7 @@ namespace Data.Implementation
 
                         int cuentaPropia = int.Parse(row[8].ToString());
 
-                        if (cuentaPropia != 0)
+                        if(cuentaPropia != 0)
                         {
                             cuentaAux.numero = row[12].ToString();
                             cuentaAux.num_categoria = row[13].ToString();
@@ -148,7 +148,7 @@ namespace Data.Implementation
                                     numero = row[4].ToString(),
                                     num_categoria = row[5].ToString()
                                 }*/
-                                cuenta = cuentaAux
+                                cuenta =  cuentaAux
                             },
                             compania = new Compania
                             {
@@ -159,7 +159,7 @@ namespace Data.Implementation
                         };
 
 
-                        if (valeAux.updated > rangeEndAux.AddDays(1.0))
+                        if(valeAux.updated > rangeEndAux.AddDays(1.0))
                         {
                             rangeEndAux = rangeEnd.AddDays(1.0).AddHours(6.25);
                             if (valeAux.updated < rangeEndAux)
@@ -256,8 +256,7 @@ namespace Data.Implementation
                             {
                                 if (productoActivo)
                                 {
-                                    reporte.registros.Add(new DetalleVale
-                                    {
+                                    reporte.registros.Add(new DetalleVale {
                                         producto = new Producto { id = idsp[idsp.Count - 1], codigo = codigoaux },
                                         cantidad = cantidad
                                     });
@@ -301,8 +300,7 @@ namespace Data.Implementation
                                         cantidad = 0;
                                         cantidad = cantidad + 1;
                                         productoActivo = true;
-                                    }
-                                    else
+                                    }else
                                     {
                                         if (codigos.Contains(row[4].ToString()))
                                         {
@@ -359,11 +357,11 @@ namespace Data.Implementation
                                                 cantidad = cantidad + int.Parse(row[1].ToString());
                                             }
 
-
+                                            
                                         }
                                     }
                                 }
-
+                                
                             }
 
                             codigoaux = row[4].ToString();
@@ -379,7 +377,7 @@ namespace Data.Implementation
                     }
 
                     return objects;
-
+                        
                 }
                 catch (SqlException ex)
                 {
@@ -398,7 +396,7 @@ namespace Data.Implementation
             DateTime rangeStart = DateTime.Parse(reportes_vo.rangeStart).AddHours(6.25);
             DateTime rangeEnd = DateTime.Parse(reportes_vo.rangeEnd).AddHours(23.99);
 
-            int auxIdR = 0;
+
             SqlConnection connection = null;
             IList<ReporteAccPac> objects = new List<ReporteAccPac>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -491,11 +489,9 @@ namespace Data.Implementation
                         int cantidad = 0;
                         bool devCompleta = false;
 
-                        auxIdR = reporte.vale.id;
-
                         reporte.registros = new List<DetalleVale>();
 
-                        if (reporte.vale.id == 2901)
+                        if (reporte.vale.id == 4473)
                         {
                             Console.WriteLine("holi");
                         }
@@ -504,9 +500,9 @@ namespace Data.Implementation
 
                         foreach (Devolucion d in devolucionesVale)
                         {
-                            if (d.registros.Count == 1)
+                            if(d.registros.Count == 1)
                             {
-                                if (d.registros[0].tipodev == 3)
+                                if(d.registros[0].tipodev == 3)
                                 {
                                     devCompleta = true;
                                     break;
@@ -729,7 +725,6 @@ namespace Data.Implementation
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(auxIdR);
                     if (connection != null)
                     {
                         connection.Close();
@@ -738,6 +733,7 @@ namespace Data.Implementation
                 }
             }
         }
+
 
         public IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReporte(SalidaCombustibleReporteVo reportesalidavo)
         {
@@ -913,14 +909,13 @@ namespace Data.Implementation
 
         }
 
+
         //Devuelve los detalles de una devolución por medio del vale id
         public IList<Devolucion> devolucionesDeVale(int id)
         {
             SqlConnection connection = null;
             IList<RegistroDetalleDev> objects = new List<RegistroDetalleDev>();
             IList<Devolucion> devs = new List<Devolucion>();
-            int devAux = 0;
-            int contReg = 0;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
                 try
@@ -945,7 +940,6 @@ namespace Data.Implementation
                             timestamp = Convert.ToDateTime(row[5].ToString())
                         };
 
-                        devAux = dev.id;
                         dev.vale = devRepo.detailVale(dev.vale.id);
                         dev.registros = devRepo.detail(dev.id);
                         dev.detalles = new List<DetalleVale>();
@@ -955,11 +949,6 @@ namespace Data.Implementation
 
                         foreach (RegistroDetalleDev reg in dev.registros)
                         {
-                            contReg = contReg + 1;
-                            if(contReg == 19)
-                            {
-                                Console.WriteLine("holi2");
-                            }
                             if (reg.tipodev == 1)
                             {
                                 if (!listProductos.Contains(reg.producto.id))
@@ -1038,34 +1027,18 @@ namespace Data.Implementation
                         objects.Clear();
                     }
 
-                    contReg = 0;
                     return devs;
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine(devAux);
-                    Console.WriteLine(contReg);
                     if (connection != null)
                     {
                         connection.Close();
                     }
-                    contReg = 0;
-                    return null;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(devAux);
-                    Console.WriteLine(contReg);
-                    if (connection != null)
-                    {
-                        connection.Close();
-                    }
-                    contReg = 0;
                     return null;
                 }
             }
         }
-
         public DateTime fechaAdministrativa(string fecha)
         {
             string[] sqlDateArr1 = fecha.Split('/');

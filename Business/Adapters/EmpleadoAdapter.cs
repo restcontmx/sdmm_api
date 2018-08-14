@@ -30,7 +30,7 @@ namespace Business.Adapters
                 nombre = vo.nombre,
                 ap_paterno = vo.ap_paterno,
                 ap_materno = vo.ap_materno,
-                compania = new Compania { id = vo.compania_id },
+                compania = new Compania { id = vo.compania_id},
                 status = vo.status == 0 ? false : true,
                 user = new Models.Auth.User { id = vo.user_id }
             };

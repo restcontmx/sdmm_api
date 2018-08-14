@@ -11,5 +11,6 @@ namespace Models.VOs
         public string message { get; set; }
         public string source { get; set; }
         public string timestamp { get; set; }
+        
     }
 }

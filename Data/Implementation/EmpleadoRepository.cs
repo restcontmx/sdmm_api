@@ -183,12 +183,11 @@ namespace Data.Implementation
                             user = new User { id = int.Parse(row[7].ToString()) },
                             timestamp = Convert.ToDateTime(row[8].ToString()),
                             updated = Convert.ToDateTime(row[9].ToString()),
-                            tipo_empleado = new TipoEmpleado
-                            {
+                            tipo_empleado = new TipoEmpleado {
                                 id = int.Parse(row[10].ToString()),
                                 name = row[11].ToString(),
                                 description = row[12].ToString(),
-                                value = int.Parse(row[13].ToString())
+                                value = int.Parse( row[13].ToString())
                             }
                         });
                     }

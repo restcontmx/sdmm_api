@@ -383,7 +383,7 @@ namespace Data.Implementation
         //Crear registro de la devolucion
         public TransactionResult createRegistroDetalleDev(RegistroDetalleDev registro)
         {
-
+            
             bool isVale = false;
             SqlConnection connection = null;
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))

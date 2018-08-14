@@ -54,7 +54,7 @@ namespace Data.Implementation
         {
             try
             {
-                    IList<Producto> productos = getAllProductos();
+                IList<Producto> productos = getAllProductos();
 
                 //Crea el objeto log para el inventario
                 Log logObject = new Log();
@@ -67,10 +67,12 @@ namespace Data.Implementation
                     if (checkCorteInventario(p.id))
                     {
                         createIventarioDiario(p.id);
-                        //Console.WriteLine("Holi");
+                        Console.WriteLine("Holi");
                     }
                 }
 
+                //Cierra cajas que se hallan quedado abiertas, desactiva vales que no se hallan surtido y revisa
+                // que no existan registros duplicados en inventario
                 closeCajasPasadas();
                 return TransactionResult.CREATED;
             }
@@ -113,10 +115,12 @@ namespace Data.Implementation
                     {
                         return TransactionResult.EXISTS;
                     }
+
                     return TransactionResult.NOT_PERMITTED;
                 }
                 catch (Exception ex)
                 {
+
                     //Crea el Log del Error
                     Log logObject = new Log();
                     logObject.message = "Error en inserción de id " + id.ToString() + " con mensaje: " + ex.Message;
@@ -127,6 +131,7 @@ namespace Data.Implementation
                     {
                         connection.Close();
                     }
+
                     return TransactionResult.ERROR;
                 }
             }
@@ -205,18 +210,16 @@ namespace Data.Implementation
             SqlConnection connection = null;
             IList<InfoInventario> objects = new List<InfoInventario>();
 
+            //DateCheck = "28/03/2018 05:32:47";
+
             DateTime date = DateTime.Parse(DateCheck);
 
-            //Entra al ciclo cuando se solicita el inventario desde la sección de reporte
             if (date.Hour == 0 && date.Minute == 0 && date.Second == 0)
             {
                 date = new DateTime(date.Year, date.Month, date.Day, 10, 0, 0);
             }
 
-            Console.WriteLine(date);
-
             IList<Producto> productos = getAllProductos();
-            int pGlobal = 0;
 
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
             {
@@ -225,13 +228,9 @@ namespace Data.Implementation
                     foreach (Producto p in productos)
                     {
                         InfoInventario auxInfoInventario = new InfoInventario();
-                        pGlobal = p.id;
+
                         connection.Open();
 
-                        if(pGlobal == 18)
-                        {
-                            Console.WriteLine("");
-                        }
 
                         //Selecciona la existencia inicial del turno 1
                         SqlCommand command = new SqlCommand("sp_getExistenciaInicial", connection);
@@ -264,6 +263,10 @@ namespace Data.Implementation
                             auxInfoInventario.devolucionesT1 = int.Parse(row[3].ToString());
                         }
 
+                        if (p.id == 23)
+                        {
+                            Console.WriteLine("");
+                        }
 
                         //Selecciona los datos del Turno 2
                         SqlCommand command3 = new SqlCommand("sp_getInfoInventario", connection);
@@ -299,7 +302,6 @@ namespace Data.Implementation
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine(pGlobal.ToString());
                     if (connection != null)
                     {
                         connection.Close();
@@ -308,7 +310,6 @@ namespace Data.Implementation
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(pGlobal.ToString());
                     if (connection != null)
                     {
                         connection.Close();
@@ -369,14 +370,6 @@ namespace Data.Implementation
 
                 }
                 catch (SqlException ex)
-                {
-                    if (connection != null)
-                    {
-                        connection.Close();
-                    }
-                    return objects;
-                }
-                catch (Exception ex)
                 {
                     if (connection != null)
                     {
@@ -445,7 +438,7 @@ namespace Data.Implementation
 
                     result = int.Parse(row[0].ToString());
 
-                    if (result == 1)
+                    if(result == 1)
                     {
                         return false;
                     }

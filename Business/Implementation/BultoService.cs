@@ -113,7 +113,7 @@ namespace Business.Implementation
                     turno = turno
                 };
 
-                bulto_repository.createInventario(inv);
+                bulto_repository.createInventario(inv); 
             }
             return TransactionResult.CREATED;
         }

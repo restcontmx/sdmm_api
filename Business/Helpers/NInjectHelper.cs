@@ -38,6 +38,10 @@ namespace Business.Helpers
             kernel.Bind<ISalidaCombustibleRepository>().To<SalidaCombustibleRepository>();
             kernel.Bind<IAbastecimientoRepository>().To<AbastecimientoRepository>();
             kernel.Bind<IFichaEntregaRepository>().To<FichaEntregaRepository>();
+            kernel.Bind<IBitacoraDesarrolloRepository>().To<BitacoraDesarrolloRepository>();
+            kernel.Bind<IDemoraRepository>().To<DemoraRepository>();
+            kernel.Bind<ITipoDesarrolloRepository>().To<TipoDesarrolloRepository>();
+            kernel.Bind<IBitacoraBarrenacionRepository>().To<BitacoraBarrenacionRepository>();
         }
     }
 }

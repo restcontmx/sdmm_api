@@ -155,7 +155,7 @@ namespace SDMM_API.Controllers
         public HttpResponseMessage updateCantidad([FromBody] CajaVo caja_vo)
         {
             TransactionResult tr = caja_service.updateCantidad(caja_vo);
-
+            
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.OK)
             {

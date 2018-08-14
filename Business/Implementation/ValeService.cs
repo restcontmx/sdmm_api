@@ -221,16 +221,16 @@ namespace Business.Implementation
             IList<int> idProductosExistentes = new List<int>();
 
             //Verificamos si ya tenemos registros de escaneo de ese vale
-            if (regsExistentes != null && regsExistentes.Count > 0)
+            if(regsExistentes != null && regsExistentes.Count > 0)
             {
-                foreach (RegistroDetalle r in regsExistentes)
+                foreach(RegistroDetalle r in regsExistentes)
                 {
                     idProductosExistentes.Add(r.producto.id);
                 }
             }
 
             //Si por alguna razón el vale que intentamos sincronizar es nulo, lo inicializamos
-            if (vAux == null)
+            if(vAux == null)
             {
                 vAux = new Vale();
             }
@@ -259,7 +259,7 @@ namespace Business.Implementation
                             }
                             if (insert)
                             {
-
+                                
                                 var tr2 = TransactionResult.CREATED;
                                 foreach (RegistroDetalleVo rvo in dvo.registros)
                                 {

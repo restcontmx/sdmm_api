@@ -17,6 +17,5 @@ namespace Data.Interface
 
         IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReporte(SalidaCombustibleReporteVo reportesalida_vo);
         IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReportePDF(SalidaCombustibleReportePDFVo reportesalidaPDF_vo);
-
     }
 }

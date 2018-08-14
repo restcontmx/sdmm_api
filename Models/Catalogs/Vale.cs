@@ -30,7 +30,6 @@ namespace Models.Catalogs
         public int fuente { get; set; }
         public string folio_fisico { get; set; }
         public int isSync { get; set; }
-
         public string observaciones { get; set; }
     }
 }

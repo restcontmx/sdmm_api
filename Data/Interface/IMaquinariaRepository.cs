@@ -19,7 +19,6 @@ namespace Data.Interface
 
         TransactionResult createCuenta(Cuenta cuenta, int maquinaria_id);
         TransactionResult updateCuenta(Cuenta cuenta);
-
         Cuenta cuentaDetail(int id);
     }
 }

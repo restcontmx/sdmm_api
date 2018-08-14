@@ -45,6 +45,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("fuente", vale.fuente));
                     command.Parameters.Add(new SqlParameter("folio_fisico", vale.folio_fisico));
                     command.Parameters.Add(new SqlParameter("observaciones", vale.observaciones));
+
                     if (vale.userAutorizo.id != 0)
                     {
                         command.Parameters.Add(new SqlParameter("userAutorizo", vale.userAutorizo.id));
@@ -175,7 +176,7 @@ namespace Data.Implementation
                     }
                     return TransactionResult.NOT_PERMITTED;
                 }
-                catch (Exception ex)
+                catch
                 {
                     if (connection != null)
                     {
@@ -287,7 +288,7 @@ namespace Data.Implementation
                     //Revisa si la autorización está vacía
                     string aux2 = row[27].ToString();
 
-                    if (aux2 == String.Empty || aux2 == null || int.Parse(row[27].ToString()) == 0)
+                    if(aux2 == String.Empty || aux2 == null || int.Parse(row[27].ToString()) == 0)
                     {
                         authEmpty = false;
                     }
@@ -418,10 +419,11 @@ namespace Data.Implementation
                             fuente = int.Parse(row[21].ToString()),
                             folio_fisico = row[22].ToString(),
                             userAutorizo = new User()
-
+                            
                         };
 
                     }
+
                 }
                 catch (Exception ex)
                 {
@@ -436,7 +438,6 @@ namespace Data.Implementation
 
         public IList<Vale> getAll()
         {
-            int idVale = 0;
             SqlConnection connection = null;
             IList<Vale> objects = new List<Vale>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
@@ -460,8 +461,6 @@ namespace Data.Implementation
                         {
                             authEmpty = false;
                         }
-
-                        idVale = int.Parse(row[0].ToString());
 
                         if (authEmpty)
                         {
@@ -555,15 +554,6 @@ namespace Data.Implementation
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine(idVale.ToString());
-                    if (connection != null)
-                    {
-                        connection.Close();
-                    }
-                    return objects;
-                }catch (Exception ex)
-                {
-                    Console.WriteLine(idVale.ToString());
                     if (connection != null)
                     {
                         connection.Close();
@@ -593,8 +583,7 @@ namespace Data.Implementation
                         objects.Add(new DetalleVale
                         {
                             id = int.Parse(row[0].ToString()),
-                            producto = new Producto
-                            {
+                            producto = new Producto {
                                 id = int.Parse(row[1].ToString()),
                                 nombre = row[2].ToString(),
                                 codigo = row[7].ToString(),
@@ -1204,6 +1193,7 @@ namespace Data.Implementation
             }
         }
 
+
         public TransactionResult cerrarVale(Vale vale)
         {
             try
@@ -1269,7 +1259,7 @@ namespace Data.Implementation
                 vale.active = 0;
                 return cerrarValeStatus(vale);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 return TransactionResult.ERROR;
             }
@@ -1340,8 +1330,7 @@ namespace Data.Implementation
                             turno = int.Parse(row[3].ToString()),
                             detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
-                            producto = new Producto
-                            {
+                            producto = new Producto {
                                 id = int.Parse(row[6].ToString()),
                                 nombre = row[7].ToString(),
                                 codigo = row[8].ToString(),

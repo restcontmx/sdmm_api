@@ -17,11 +17,11 @@ namespace SDMM_API.Modules
                   (s =>
                      s.WithIntervalInHours(24)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(13, 41))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(12, 26))
                     .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)"))
                   )
                 .Build();
-        
+
             scheduler.ScheduleJob(job, trigger);
         }
     }

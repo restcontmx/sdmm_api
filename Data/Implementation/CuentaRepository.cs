@@ -152,7 +152,7 @@ namespace Data.Implementation
                             nombre = row[1].ToString(),
                             num_categoria = row[2].ToString(),
                             numero = row[3].ToString(),
-                            tipo_producto = new TipoProducto { id = int.Parse(row[4].ToString()) },
+                            tipo_producto  = new TipoProducto { id = int.Parse(row[4].ToString()) },
                             user = new User { id = int.Parse(row[5].ToString()) },
                             timestamp = Convert.ToDateTime(row[6].ToString()),
                             updated = Convert.ToDateTime(row[7].ToString())
