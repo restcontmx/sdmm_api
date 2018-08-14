@@ -23,14 +23,33 @@ namespace Data.Implementation
             {
                 try
                 {
+                    int auxInsert = 0;
                     connection.Open();
                     SqlCommand command = new SqlCommand("sp_createBulto", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(bulto.codigo)));
                     command.Parameters.Add(new SqlParameter("producto_id", bulto.producto.id));
                     command.Parameters.Add(new SqlParameter("user_id", bulto.user.id));
-                    command.ExecuteNonQuery();
-                    return TransactionResult.CREATED;
+                    //command.ExecuteNonQuery();
+
+
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+
+                    auxInsert = int.Parse(row[0].ToString());
+
+                    if(auxInsert == 1)
+                    {
+                        return TransactionResult.CREATED;
+                    }
+                    else
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+
+                    
                 }
                 catch (SqlException ex)
                 {

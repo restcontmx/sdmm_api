@@ -241,6 +241,49 @@ namespace Data.Implementation
 
 
         /// <summary>
+        /// Update object on the db
+        /// </summary>
+        /// <param name="caja"></param>
+        /// <returns></returns>
+        public TransactionResult updateCantidad(Caja caja)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_updateCajaCantidad", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("codigo", Validations.defaultString(caja.codigo)));
+                    command.Parameters.Add(new SqlParameter("cantidad", caja.cantidad));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.OK;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        /// <summary>
         /// Create object on the db
         /// </summary>
         /// <param name="obs"></param>

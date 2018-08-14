@@ -1303,5 +1303,53 @@ namespace Data.Implementation
                 }
             }
         }
+
+        //Obtener todos los registros de salidas de un vale
+        public IList<RegistroDetalle> getAllRegistersNoEscaneableByVale(int vale_id)
+        {
+            SqlConnection connection = null;
+            IList<RegistroDetalle> objects = new List<RegistroDetalle>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getAllRegistroDetalleNoEscaneableByValeId", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("valeid", vale_id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new RegistroDetalle
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            folio = row[1].ToString(),
+                            folioCaja = row[2].ToString(),
+                            turno = int.Parse(row[3].ToString()),
+                            detallevale = new DetalleVale { id = int.Parse(row[4].ToString()) },
+                            user = new User { id = int.Parse(row[5].ToString()) },
+                            producto = new Producto {
+                                id = int.Parse(row[6].ToString()),
+                                nombre = row[7].ToString(),
+                                codigo = row[8].ToString(),
+                                tipo_producto = new TipoProducto { value = int.Parse(row[9].ToString()) }
+                            }
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
     }
 }

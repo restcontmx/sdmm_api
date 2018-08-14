@@ -284,7 +284,7 @@ namespace Data.Implementation
                     {
                         objects.Add(new DetalleFichaEntregaRecepcion
                         {
-                            litros = int.Parse(row[0].ToString()),
+                            litros = float.Parse(row[0].ToString()),
                             tanque = new Tanque
                             {
                                 id = int.Parse(row[1].ToString()),

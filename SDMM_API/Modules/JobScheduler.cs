@@ -17,8 +17,8 @@ namespace SDMM_API.Modules
                   (s =>
                      s.WithIntervalInHours(24)
                     .OnEveryDay()
-                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(06, 30))
-                    .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"))
+                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(12, 26))
+                    .InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)"))
                   )
                 .Build();
 

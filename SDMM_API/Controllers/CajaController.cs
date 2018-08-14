@@ -146,6 +146,31 @@ namespace SDMM_API.Controllers
         }
 
         /// <summary>
+        /// Update object request
+        /// </summary>
+        /// <param name="caja_vo"></param>
+        /// <returns></returns>
+        [Route("api/caja/cantidad/")]
+        [HttpPut]
+        public HttpResponseMessage updateCantidad([FromBody] CajaVo caja_vo)
+        {
+            TransactionResult tr = caja_service.updateCantidad(caja_vo);
+            
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.OK)
+            {
+                data.Add("message", "Object updated.");
+                data.Add("status", "1");
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
         /// Delete object request
         /// </summary>
         /// <param name="id"></param>

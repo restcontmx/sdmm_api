@@ -93,6 +93,9 @@ namespace SDMM_API.Controllers
             { 
                 IDictionary<string, IList<InfoInventario>> data = new Dictionary<string, IList<InfoInventario>>();
                 data.Add("data", inventario_service.getAll(DateTime.Now.ToString()));
+
+                //data.Add("data", inventario_service.getAll(DateTime.Now.AddHours(-48.0).ToString()));
+
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -210,6 +213,28 @@ namespace SDMM_API.Controllers
             else
             {
                 data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/inventario/diario/")]
+        [HttpGet]
+        public HttpResponseMessage createInventarioDiario()
+        {
+            TransactionResult tr = inventario_service.createIventarioDiario();
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.CREATED)
+            {
+                data.Add("message", "Inventario creado.");
+                return Request.CreateResponse(HttpStatusCode.Created, data);
+            }
+            else
+            {
+                data.Add("message", "Error al crear el inventario diario.");
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
         }

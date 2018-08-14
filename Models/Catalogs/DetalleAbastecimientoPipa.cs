@@ -10,7 +10,7 @@ namespace Models.Catalogs
     {
         public int id { get; set; }
         public string foto_recibo { get; set; }
-        public int litros { get; set; }
+        public float litros { get; set; }
         public Tanque tanque { get; set; }
         public Pipa pipa { get; set; }
         public AbastecimientoPipa abastecimiento { get; set; }

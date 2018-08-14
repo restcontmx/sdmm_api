@@ -18,11 +18,22 @@ namespace SDMM_API.Modules
             try
             {
                 IList<Producto> productos = getAllProductos();
-               
+
+                //Crea el objeto log para el inventario
+                Log logObject = new Log();
+                logObject.message = "Inserción iniciada en InventarioDiarioJob a las " + DateTime.Now.ToString();
+                logObject.source = "JOB";
+                createLog(logObject);
+
                 foreach (Producto p in productos)
                 {
-                    createIventarioDiario(p.id);
+                    if (true)
+                    {
+                        createIventarioDiario(p.id);
+                    }
                 }
+
+                closeCajasPasadas();
             }
             catch (Exception ex)
             {
@@ -49,6 +60,12 @@ namespace SDMM_API.Modules
                 }
                 catch (SqlException ex)
                 {
+                    //Crea el Log del Error
+                    Log logObject = new Log();
+                    logObject.message = "Error en inserción de id " + id.ToString() + " con mensaje: " + ex.Message;
+                    logObject.source = "JOB, excepción SQL";
+                    createLog(logObject);
+
                     if (connection != null)
                     {
                         connection.Close();
@@ -61,6 +78,12 @@ namespace SDMM_API.Modules
                 }
                 catch (Exception ex)
                 {
+                    //Crea el Log del Error
+                    Log logObject = new Log();
+                    logObject.message = "Error en inserción de id " + id.ToString() + " con mensaje: " + ex.Message;
+                    logObject.source = "JOB, excepción general";
+                    createLog(logObject);
+
                     if (connection != null)
                     {
                         connection.Close();
@@ -128,6 +151,136 @@ namespace SDMM_API.Modules
                         connection.Close();
                     }
                     return objects;
+                }
+            }
+        }
+
+
+        //Hace el cierre de cajas antiguas
+        public TransactionResult closeCajasPasadas()
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_closeCajasPasadas", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        //Revisa si ya existe un corte de inventario de un producto
+        public bool checkCorteInventario(int producto_id)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    int result = 0;
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_existeCorteInventario", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("producto_id", producto_id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+
+                    result = int.Parse(row[0].ToString());
+
+                    if (result == 1)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return false;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return false;
+                }
+            }
+        }
+
+        //Create Log en la tabla
+        public TransactionResult createLog(Log log)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_createLogs", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("message", log.message));
+                    command.Parameters.Add(new SqlParameter("source", log.source));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
                 }
             }
         }

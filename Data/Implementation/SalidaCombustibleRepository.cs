@@ -31,7 +31,7 @@ namespace Data.Implementation
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("odometro", salida.odometro));
                     command.Parameters.Add(new SqlParameter("foto", salida.foto));
-                    command.Parameters.Add(new SqlParameter("foto", salida.turno));
+                    command.Parameters.Add(new SqlParameter("turno", salida.turno));
                     command.Parameters.Add(new SqlParameter("maquinaria_id", salida.maquinaria.id));
                     command.Parameters.Add(new SqlParameter("compania_id", salida.compania.id));
                     command.Parameters.Add(new SqlParameter("operador_id", salida.operador.id));
@@ -337,7 +337,7 @@ namespace Data.Implementation
                     {
                         objects.Add(new DetalleSalidaCombustible
                         {
-                            litros_surtidos = int.Parse(row[0].ToString()),
+                            litros_surtidos = float.Parse(row[0].ToString()),
                             tanque = new Tanque
                             {
                                 id = int.Parse(row[1].ToString()),

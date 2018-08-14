@@ -563,6 +563,13 @@ namespace Data.Implementation
                         command.Parameters.Add(new SqlParameter("second_name", user.second_name));
                         command.Parameters.Add(new SqlParameter("email", user.email));
                         command.ExecuteNonQuery();
+
+                        SqlCommand command2 = new SqlCommand("sp_updateAuthentication", connection);
+                        command2.CommandType = CommandType.StoredProcedure;
+                        command2.Parameters.Add(new SqlParameter("user_id", user.id));
+                        command2.Parameters.Add(new SqlParameter("rol_id", user.rol.id));
+                        command2.ExecuteNonQuery();
+
                         return TransactionResult.OK;
                     }
                     else if (sistema == 2)

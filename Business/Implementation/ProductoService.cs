@@ -38,6 +38,11 @@ namespace Business.Implementation
             return producto_repository.getAll();
         }
 
+        public IList<Producto> getAllConExistencias()
+        {
+            return producto_repository.getAllConExistencias();
+        }
+
         public TransactionResult update(ProductoVo producto_vo)
         {
             return producto_repository.update(ProductoAdapter.voToObject(producto_vo));

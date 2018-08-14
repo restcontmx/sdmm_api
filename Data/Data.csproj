@@ -98,12 +98,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Implementation\AbastecimientoRepository.cs" />
+    <Compile Include="Implementation\BitacoraBarrenacionRepository.cs" />
+    <Compile Include="Implementation\BitacoraDesarrolloRepository.cs" />
     <Compile Include="Implementation\BultoRepository.cs" />
     <Compile Include="Implementation\CajaRepository.cs" />
     <Compile Include="Implementation\CategoriaRepository.cs" />
     <Compile Include="Implementation\CombustibleRepository.cs" />
     <Compile Include="Implementation\CompaniaRepository.cs" />
     <Compile Include="Implementation\CuentaRepository.cs" />
+    <Compile Include="Implementation\DemoraRepository.cs" />
     <Compile Include="Implementation\DevolucionRepository.cs" />
     <Compile Include="Implementation\DummyRepository.cs" />
     <Compile Include="Implementation\EmpleadoRepository.cs" />
@@ -121,6 +124,7 @@
     <Compile Include="Implementation\SalidaCombustibleRepository.cs" />
     <Compile Include="Implementation\SegmentoProductoRepository.cs" />
     <Compile Include="Implementation\SubNivelRepository.cs" />
+    <Compile Include="Implementation\TipoDesarrolloRepository.cs" />
     <Compile Include="Implementation\TipoEmpleadoRepository.cs" />
     <Compile Include="Implementation\TipoMaquinariaRepository.cs" />
     <Compile Include="Implementation\TipoProductoRepository.cs" />
@@ -128,12 +132,15 @@
     <Compile Include="Implementation\ValeRepository.cs" />
     <Compile Include="Interface\IAbastecimientoRepository.cs" />
     <Compile Include="Interface\IAuthenticationRepository.cs" />
+    <Compile Include="Interface\IBitacoraBarrenacionRepository.cs" />
+    <Compile Include="Interface\IBitacoraDesarrolloRepository.cs" />
     <Compile Include="Interface\IBultoRepository.cs" />
     <Compile Include="Interface\ICajaRepository.cs" />
     <Compile Include="Interface\ICategoriaRepository.cs" />
     <Compile Include="Interface\ICombustibleRepository.cs" />
     <Compile Include="Interface\ICompaniaRepository.cs" />
     <Compile Include="Interface\ICuentaRepository.cs" />
+    <Compile Include="Interface\IDemoraRepository.cs" />
     <Compile Include="Interface\IDevolucionRepository.cs" />
     <Compile Include="Interface\IDummyRepository.cs" />
     <Compile Include="Interface\IEmpleadoRepository.cs" />
@@ -151,6 +158,7 @@
     <Compile Include="Interface\ISalidaCombustibleRepository.cs" />
     <Compile Include="Interface\ISegmentoProductoRepository.cs" />
     <Compile Include="Interface\ISubNivelRepository.cs" />
+    <Compile Include="Interface\ITipoDesarrolloRepository.cs" />
     <Compile Include="Interface\ITipoEmpleadoRepository.cs" />
     <Compile Include="Interface\ITipoMaquinariaRepository.cs" />
     <Compile Include="Interface\ITipoProductoRepository.cs" />

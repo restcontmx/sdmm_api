@@ -491,7 +491,7 @@ namespace Data.Implementation
 
                         reporte.registros = new List<DetalleVale>();
 
-                        if (reporte.vale.id == 2699)
+                        if (reporte.vale.id == 4473)
                         {
                             Console.WriteLine("holi");
                         }
@@ -732,6 +732,181 @@ namespace Data.Implementation
                     return objects;
                 }
             }
+        }
+
+
+        public IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReporte(SalidaCombustibleReporteVo reportesalidavo)
+        {
+
+            DateTime rangeStart = DateTime.Parse(reportesalidavo.rangeStart);
+            DateTime rangeEnd = DateTime.Parse(reportesalidavo.rangeEnd);
+
+            SqlConnection connection = null;
+            IList<ReporteDetalleSalidaC> objects = new List<ReporteDetalleSalidaC>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_reporteAccPacCombustible", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                    command.Parameters.Add(new SqlParameter("rangeEnd", rangeEnd));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new ReporteDetalleSalidaC
+                        {
+                            salidacombustible = new SalidaCombustible
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                timestamp = Convert.ToDateTime(row[1].ToString()),
+                                maquinaria = new Maquinaria
+                                {
+                                    nombre = row[2].ToString()
+                                }
+                            },
+                            cuenta = new Cuenta
+                            {
+                                num_categoria = row[3].ToString(),
+                                numero = row[4].ToString(),
+                                tipo_producto = new TipoProducto
+                                {
+                                    id = int.Parse(row[5].ToString())
+                                }
+                            },
+                            detallesalida = new DetalleSalidaCombustible
+                            {
+                                litros_surtidos = float.Parse(row[6].ToString()),
+                                combustible = new Combustible
+                                {
+                                    codigo = row[7].ToString()
+                                }
+                            }
+
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+
+
+        }
+
+        public IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReportePDF(SalidaCombustibleReportePDFVo reportesalidaPDFvo)
+        {
+
+            DateTime rangeStart = DateTime.Parse(reportesalidaPDFvo.rangeStart);
+            //DateTime rangeEnd = DateTime.Parse(reportesalidavo.rangeEnd);
+
+            SqlConnection connection = null;
+            IList<ReporteDetalleSalidaC> objects = new List<ReporteDetalleSalidaC>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_reporteAccPacCombustiblePDF", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                    command.Parameters.Add(new SqlParameter("turno", reportesalidaPDFvo.turno));
+                    command.Parameters.Add(new SqlParameter("pipa", reportesalidaPDFvo.pipa_id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new ReporteDetalleSalidaC
+                        {
+                            salidacombustible = new SalidaCombustible
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                odometro = int.Parse(row[1].ToString()),
+                                turno = int.Parse(row[2].ToString()),
+                                timestamp = Convert.ToDateTime(row[3].ToString()),
+                                maquinaria = new Maquinaria
+                                {
+                                    nombre = row[4].ToString()
+                                },
+                                operador = new Operador
+                                {
+                                    nombre = row[5].ToString(),
+                                    ap_paterno = row[6].ToString(),
+                                    ap_materno = row[7].ToString()
+                                },
+                                despachador = new User
+                                {
+                                    first_name = row[8].ToString(),
+                                    second_name = row[9].ToString()
+                                }
+                            },
+                            pipa = new Pipa
+                            {
+                                nombre = row[10].ToString(),
+                                no_economico = row[11].ToString(),
+                                placas = row[12].ToString()
+                            },
+                            cuenta = new Cuenta
+                            {
+                                num_categoria = row[13].ToString(),
+                                numero = row[14].ToString(),
+                                tipo_producto = new TipoProducto
+                                {
+                                    id = int.Parse(row[15].ToString())
+                                }
+                            },
+                            detallesalida = new DetalleSalidaCombustible
+                            {
+                                litros_surtidos = float.Parse(row[16].ToString()),
+                                combustible = new Combustible
+                                {
+                                    codigo = row[17].ToString()
+                                }
+                            }
+
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+
+
         }
 
 

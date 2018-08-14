@@ -15,5 +15,7 @@ namespace Data.Interface
         TransactionResult create(Producto producto);
         TransactionResult update(Producto producto);
         TransactionResult delete(int id);
+
+        IList<Producto> getAllConExistencias();
     }
 }

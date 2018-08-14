@@ -63,10 +63,29 @@ namespace Business.Implementation
 
         public TransactionResult createBultosByList(IList<BultoVo> bultos_vo, User user)
         {
-            bool insertInv = true;
+            //bool insertInv = true;
+            int auxCount = 0;
+            int producto_id = 0;
+            int turno = 1;
 
             foreach (BultoVo registro in bultos_vo)
             {
+                TransactionResult tr = create(registro, user);
+                producto_id = registro.producto_id;
+
+                if (tr != TransactionResult.CREATED)
+                {
+                    if (tr != TransactionResult.EXISTS)
+                    {
+                        return TransactionResult.ERROR;
+                    }
+                }
+                else
+                {
+                    auxCount = auxCount + 1;
+                }
+
+                /*
                 //Inserta la cantidad de bultos con los datos del primer bulto
                 if (insertInv)
                 {
@@ -80,12 +99,21 @@ namespace Business.Implementation
                     bulto_repository.createInventario(inv);
 
                     insertInv = false;
-                }
+                }    
+                */
 
-                if (create(registro, user) != TransactionResult.CREATED)
+            }
+
+            if (auxCount > 0)
+            {
+                Inventario inv = new Inventario
                 {
-                    return TransactionResult.ERROR;
-                }
+                    cantidad = auxCount,
+                    producto = new Producto { id = producto_id },
+                    turno = turno
+                };
+
+                bulto_repository.createInventario(inv); 
             }
             return TransactionResult.CREATED;
         }

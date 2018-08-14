@@ -102,14 +102,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapters\AbastecimientoAdapter.cs" />
+    <Compile Include="Adapters\BarrenoAdapter.cs" />
+    <Compile Include="Adapters\BitacoraBarrenacionAdapter.cs" />
+    <Compile Include="Adapters\BitacoraDesarrolloAdapter.cs" />
     <Compile Include="Adapters\BultoAdapter.cs" />
     <Compile Include="Adapters\CajaAdapter.cs" />
     <Compile Include="Adapters\CategoriaAdapter.cs" />
     <Compile Include="Adapters\CombustibleAdapter.cs" />
     <Compile Include="Adapters\CompaniaAdapter.cs" />
     <Compile Include="Adapters\CuentaAdapter.cs" />
+    <Compile Include="Adapters\DemoraAdapter.cs" />
     <Compile Include="Adapters\DetalleAbastecimientoAdapter.cs" />
     <Compile Include="Adapters\DetalleConsumoAdapter.cs" />
+    <Compile Include="Adapters\DetalleDemoraBitacoraAdapter.cs" />
     <Compile Include="Adapters\DetalleDevByCajaAdapter.cs" />
     <Compile Include="Adapters\DetalleFichaEntregaAdapter.cs" />
     <Compile Include="Adapters\DetalleSalidaCombustibleAdapter.cs" />
@@ -118,6 +123,7 @@
     <Compile Include="Adapters\EmpleadoAdapter.cs" />
     <Compile Include="Adapters\FichaEntregaAdapter.cs" />
     <Compile Include="Adapters\InventarioAdapter.cs" />
+    <Compile Include="Adapters\LineaAdapter.cs" />
     <Compile Include="Adapters\MaquinariaAdapter.cs" />
     <Compile Include="Adapters\NivelAdapter.cs" />
     <Compile Include="Adapters\ObservacionAdapter.cs" />
@@ -133,6 +139,7 @@
     <Compile Include="Adapters\SegmentoProductoAdapter.cs" />
     <Compile Include="Adapters\SubNivelAdapter.cs" />
     <Compile Include="Adapters\TanqueAdapter.cs" />
+    <Compile Include="Adapters\TipoDesarrolloAdapter.cs" />
     <Compile Include="Adapters\TipoEmpleadoAdapter.cs" />
     <Compile Include="Adapters\TipoMaquinariaAdapter.cs" />
     <Compile Include="Adapters\TipoProductoAdapter.cs" />
@@ -140,12 +147,15 @@
     <Compile Include="Adapters\ValeAdapter.cs" />
     <Compile Include="Helpers\NInjectHelper.cs" />
     <Compile Include="Implementation\AbastecimientoService.cs" />
+    <Compile Include="Implementation\BitacoraBarrenacionService.cs" />
+    <Compile Include="Implementation\BitacoraDesarrolloService.cs" />
     <Compile Include="Implementation\BultoService.cs" />
     <Compile Include="Implementation\CajaService.cs" />
     <Compile Include="Implementation\CategoriaService.cs" />
     <Compile Include="Implementation\CombustibleService.cs" />
     <Compile Include="Implementation\CompaniaService.cs" />
     <Compile Include="Implementation\CuentaService.cs" />
+    <Compile Include="Implementation\DemoraService.cs" />
     <Compile Include="Implementation\DevolucionService.cs" />
     <Compile Include="Implementation\DummyService.cs" />
     <Compile Include="Implementation\EmpleadoService.cs" />
@@ -164,6 +174,7 @@
     <Compile Include="Implementation\SalidaCombustibleService.cs" />
     <Compile Include="Implementation\SegmentoProductoService.cs" />
     <Compile Include="Implementation\SubNivelService.cs" />
+    <Compile Include="Implementation\TipoDesarrolloService.cs" />
     <Compile Include="Implementation\TipoEmpleadoService.cs" />
     <Compile Include="Implementation\TipoMaquinariaService.cs" />
     <Compile Include="Implementation\TipoProductoService.cs" />
@@ -171,12 +182,15 @@
     <Compile Include="Implementation\ValeService.cs" />
     <Compile Include="Interface\IAbastecimientoService.cs" />
     <Compile Include="Interface\IAuthenticationService.cs" />
+    <Compile Include="Interface\IBitacoraBarrenacionService.cs" />
+    <Compile Include="Interface\IBitacoraDesarrolloService.cs" />
     <Compile Include="Interface\IBultoService.cs" />
     <Compile Include="Interface\ICajaService.cs" />
     <Compile Include="Interface\ICategoriaService.cs" />
     <Compile Include="Interface\ICombustibleService.cs" />
     <Compile Include="Interface\ICompaniaService.cs" />
     <Compile Include="Interface\ICuentaService.cs" />
+    <Compile Include="Interface\IDemoraService.cs" />
     <Compile Include="Interface\IDevolucionService.cs" />
     <Compile Include="Interface\IDummyService.cs" />
     <Compile Include="Interface\IEmpleadoService.cs" />
@@ -194,6 +208,7 @@
     <Compile Include="Interface\ISalidaCombustibleService.cs" />
     <Compile Include="Interface\ISegmentoProductoService.cs" />
     <Compile Include="Interface\ISubNivelService.cs" />
+    <Compile Include="Interface\ITipoDesarrolloService.cs" />
     <Compile Include="Interface\ITipoEmpleadoService.cs" />
     <Compile Include="Interface\ITipoMaquinariaService.cs" />
     <Compile Include="Interface\ITipoProductoService.cs" />

@@ -287,7 +287,7 @@ namespace Data.Implementation
                     {
                         objects.Add(new DetalleAbastecimientoPipa
                         {
-                            litros = int.Parse(row[0].ToString()),
+                            litros = float.Parse(row[0].ToString()),
                             foto_recibo = row[1].ToString(),
                             abastecimiento = new AbastecimientoPipa
                             {

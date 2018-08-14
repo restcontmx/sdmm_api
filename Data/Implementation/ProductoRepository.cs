@@ -218,6 +218,77 @@ namespace Data.Implementation
             }
         }
 
+        public IList<Producto> getAllConExistencias()
+        {
+            SqlConnection connection = null;
+            IList<Producto> objects = new List<Producto>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    IList<Producto> productos = getAll();
+
+                    foreach(Producto p in productos)
+                    {
+                        Producto pAux = detailInventario(p.id);
+
+                        if(pAux.id == 175)
+                        {
+                            Console.WriteLine("Holi");
+                        }
+                        if(pAux.cantidad_caja_promedio > 0)
+                        {
+                            objects.Add(pAux);
+                        }
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        public Producto detailInventario(int id)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_getExistenciasProducto", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("producto_id", id));
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+                    return new Producto
+                    {
+                        id = int.Parse(row[0].ToString()),
+                        nombre = row[1].ToString(),
+                        cantidad_caja_promedio = int.Parse(row[2].ToString())
+                    };
+
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return null;
+                }
+            }
+        }
+
         public TransactionResult update(Producto producto)
         {
             SqlConnection connection = null;
