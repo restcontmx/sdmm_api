@@ -29,7 +29,7 @@ namespace SDMM_API.Controllers
             try
             {
                 IDictionary<string, IList<Operador>> data = new Dictionary<string, IList<Operador>>();
-                data.Add("data", operador_service.getAll());
+                data.Add("data", operador_service.getAll(2));
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch (Exception e)
@@ -49,7 +49,7 @@ namespace SDMM_API.Controllers
         [HttpGet]
         public HttpResponseMessage detail(int id)
         {
-            Operador operador = operador_service.detail(id);
+            Operador operador = operador_service.detail(id,2);
             if (operador != null)
             {
                 IDictionary<string, Operador> data = new Dictionary<string, Operador>();
@@ -73,7 +73,7 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage create([FromBody] OperadorVo operador_vo)
         {
-            TransactionResult tr = operador_service.create(operador_vo);
+            TransactionResult tr = operador_service.create(operador_vo,2);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
             {
@@ -101,7 +101,7 @@ namespace SDMM_API.Controllers
         [HttpPut]
         public HttpResponseMessage update([FromBody] OperadorVo operador_vo)
         {
-            TransactionResult tr = operador_service.update(operador_vo);
+            TransactionResult tr = operador_service.update(operador_vo,2);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.OK)
             {
@@ -124,7 +124,131 @@ namespace SDMM_API.Controllers
         [HttpDelete]
         public HttpResponseMessage delete(int id)
         {
-            TransactionResult tr = operador_service.delete(id);
+            TransactionResult tr = operador_service.delete(id,2);
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.DELETED)
+            {
+                data.Add("message", "Object deleted.");
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        //-------------------------------------------------------------------------//
+        //----------- SECCIÓN PARA SOPORTE DEL SISTEMA DE EXPLOSIVOS ------------//
+        //-------------------------------------------------------------------------//
+
+        /// <summary>
+        /// Get all objects route
+        /// </summary>
+        /// <returns></returns>
+        [Route("api/explosivos/operador/")]
+        [HttpGet]
+        public HttpResponseMessage listOperadorExplosivos()
+        {
+            try
+            {
+                IDictionary<string, IList<Operador>> data = new Dictionary<string, IList<Operador>>();
+                data.Add("data", operador_service.getAll(1));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Retrieve object request
+        /// </summary>
+        /// <param name="id">primary field on the db</param>
+        /// <returns></returns>
+        [Route("api/explosivos/operador/{id}")]
+        [HttpGet]
+        public HttpResponseMessage detailOperadorExplosivos(int id)
+        {
+            Operador operador = operador_service.detail(id,1);
+            if (operador != null)
+            {
+                IDictionary<string, Operador> data = new Dictionary<string, Operador>();
+                data.Add("data", operador);
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", "Object not found.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Create object pettition
+        /// </summary>
+        /// <param name="empleado_vo"></param>
+        /// <returns></returns>
+        [Route("api/explosivos/operador/")]
+        [HttpPost]
+        public HttpResponseMessage createOperadorExplosivos([FromBody] OperadorVo operador_vo)
+        {
+            TransactionResult tr = operador_service.create(operador_vo,1);
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.CREATED)
+            {
+                data.Add("message", "Object created.");
+                return Request.CreateResponse(HttpStatusCode.Created, data);
+            }
+            else if (tr == TransactionResult.EXISTS)
+            {
+                data.Add("message", "Object already existed.");
+                return Request.CreateResponse(HttpStatusCode.Conflict, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Update object request
+        /// </summary>
+        /// <param name="empleado_vo"></param>
+        /// <returns></returns>
+        [Route("api/explosivos/operador/")]
+        [HttpPut]
+        public HttpResponseMessage updateOperadorExplosivos([FromBody] OperadorVo operador_vo)
+        {
+            TransactionResult tr = operador_service.update(operador_vo,1);
+            IDictionary<string, string> data = new Dictionary<string, string>();
+            if (tr == TransactionResult.OK)
+            {
+                data.Add("message", "Object updated.");
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            else
+            {
+                data.Add("message", "There was an error attending your request.");
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        /// <summary>
+        /// Delete object request
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [Route("api/explosivos/operador/{id}")]
+        [HttpDelete]
+        public HttpResponseMessage deleteOperadorExplosivos(int id)
+        {
+            TransactionResult tr = operador_service.delete(id,1);
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.DELETED)
             {

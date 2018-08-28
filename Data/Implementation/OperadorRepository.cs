@@ -21,10 +21,20 @@ namespace Data.Implementation
         /// </summary>
         /// <param name="empleado"></param>
         /// <returns></returns>
-        public TransactionResult create(Operador operador)
+        public TransactionResult create(Operador operador, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -61,10 +71,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -94,10 +114,20 @@ namespace Data.Implementation
             }
         }
 
-        public Operador detail(int id)
+        public Operador detail(int id, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -135,11 +165,21 @@ namespace Data.Implementation
             }
         }
 
-        public IList<Operador> getAll()
+        public IList<Operador> getAll(int sistema)
         {
-            SqlConnection connection = null;
             IList<Operador> objects = new List<Operador>();
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+            SqlConnection connection = null;
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {
@@ -180,10 +220,20 @@ namespace Data.Implementation
             }
         }
 
-        public TransactionResult update(Operador operador)
+        public TransactionResult update(Operador operador, int sistema)
         {
             SqlConnection connection = null;
-            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+
+            if (sistema == 1)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString);
+            }
+            else if (sistema == 2)
+            {
+                connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString);
+            }
+
+            using (connection)
             {
                 try
                 {

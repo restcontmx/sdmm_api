@@ -18,30 +18,30 @@ namespace Business.Implementation
             this.operador_repository = operador_repository;
         }
 
-        public TransactionResult create(OperadorVo operador_vo)
+        public TransactionResult create(OperadorVo operador_vo, int sistema)
         {
             Operador operador = OperadorAdapter.voToObject(operador_vo);
-            return operador_repository.create(operador);
+            return operador_repository.create(operador, sistema);
         }
 
-        public TransactionResult delete(int id)
+        public TransactionResult delete(int id, int sistema)
         {
-            return operador_repository.delete(id);
+            return operador_repository.delete(id, sistema);
         }
 
-        public Operador detail(int id)
+        public Operador detail(int id, int sistema)
         {
-            return operador_repository.detail(id);
+            return operador_repository.detail(id, sistema);
         }
 
-        public IList<Operador> getAll()
+        public IList<Operador> getAll(int sistema)
         {
-            return operador_repository.getAll();
+            return operador_repository.getAll(sistema);
         }
 
-        public TransactionResult update(OperadorVo operador_vo)
+        public TransactionResult update(OperadorVo operador_vo, int sistema)
         {
-            return operador_repository.update(OperadorAdapter.voToObject(operador_vo));
+            return operador_repository.update(OperadorAdapter.voToObject(operador_vo), sistema);
         }
     }
 }

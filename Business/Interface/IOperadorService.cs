@@ -7,10 +7,10 @@ namespace Business.Interface
 {
     public interface IOperadorService
     {
-        IList<Operador> getAll();
-        Operador detail(int id);
-        TransactionResult create(OperadorVo operador_vo);
-        TransactionResult update(OperadorVo operador_vo);
-        TransactionResult delete(int id);
+        IList<Operador> getAll(int sistema);
+        Operador detail(int id, int sistema);
+        TransactionResult create(OperadorVo operador_vo, int sistema);
+        TransactionResult update(OperadorVo operador_vo, int sistema);
+        TransactionResult delete(int id, int sistema);
     }
 }

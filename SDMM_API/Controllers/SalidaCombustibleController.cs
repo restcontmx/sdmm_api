@@ -102,7 +102,7 @@ namespace SDMM_API.Controllers
         /// Get all objects route
         /// </summary>
         /// <returns></returns>
-        [Route("api/salidas/reporte/")]
+        /*[Route("api/salidas/reporte/")]
         [HttpPost]
         public HttpResponseMessage listParaReporte(ReportesVo reportes_vo)
         {
@@ -129,7 +129,7 @@ namespace SDMM_API.Controllers
                 data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
-        }
+        }*/
 
         /// <summary>
         /// Create object pettition

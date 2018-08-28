@@ -20,6 +20,10 @@ namespace Business.Implementation
 
         public TransactionResult create(BitacoraDesarrolloVo bitacora_vo, User user_log)
         {
+            if (bitacora_vo.comentarios == null)
+            {
+                bitacora_vo.comentarios = "";
+            }
             BitacoraDesarrollo obj = BitacoraDesarrolloAdapter.voToObject(bitacora_vo);
             obj.user = user_log;
 
@@ -27,14 +31,17 @@ namespace Business.Implementation
             if (id > 0)
             {
                 var tr = TransactionResult.CREATED;
-                foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
+                if (bitacora_vo.demoras != null)
                 {
-                    dvo.bitacora_desarrollo_id = id;
-                    dvo.tipo_bitacora = 1;
-                    tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
-                    if (tr != TransactionResult.CREATED)
+                    foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
                     {
-                        return tr;
+                        dvo.bitacora_desarrollo_id = id;
+                        dvo.tipo_bitacora = 1;
+                        tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
+                        if (tr != TransactionResult.CREATED)
+                        {
+                            return tr;
+                        }
                     }
                 }
                 return tr;
@@ -68,22 +75,30 @@ namespace Business.Implementation
 
         public TransactionResult update(BitacoraDesarrolloVo bitacora_vo, User user_log)
         {
+            if (bitacora_vo.comentarios == null)
+            {
+                bitacora_vo.comentarios = "";
+            }
             bitacora_vo.user_id = user_log.id;
             //Eliminamos los detalles existentes
             bitacora_repository.deleteDetalleDemoraBitacora(bitacora_vo.id);
 
             //Creamos las demoras otra vez
-            if (bitacora_vo.demoras.Count > 0)
+            if (bitacora_vo.demoras != null)
             {
                 var tr = TransactionResult.CREATED;
-                foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
+
+                if (bitacora_vo.demoras != null)
                 {
-                    dvo.bitacora_desarrollo_id = bitacora_vo.id;
-                    dvo.tipo_bitacora = 1;
-                    tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
-                    if (tr != TransactionResult.CREATED)
+                    foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
                     {
-                        return tr;
+                        dvo.bitacora_desarrollo_id = bitacora_vo.id;
+                        dvo.tipo_bitacora = 1;
+                        tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
+                        if (tr != TransactionResult.CREATED)
+                        {
+                            return tr;
+                        }
                     }
                 }
             }

@@ -20,6 +20,11 @@ namespace Business.Implementation
 
         public TransactionResult create(BitacoraBarrenacionVo bitacora_vo, User user_log)
         {
+            if(bitacora_vo.comentarios == null)
+            {
+                bitacora_vo.comentarios = "";
+            }
+
             BitacoraBarrenacion obj = BitacoraBarrenacionAdapter.voToObject(bitacora_vo);
             obj.user = user_log;
 
@@ -28,33 +33,39 @@ namespace Business.Implementation
             {
                 var tr = TransactionResult.CREATED;
 
-                //Agregar demoras
-                foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
+                if (bitacora_vo.demoras != null)
                 {
-                    dvo.bitacora_barrenacion_id = id;
-                    dvo.tipo_bitacora = 2;
-                    tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
-                    if (tr != TransactionResult.CREATED)
+                    //Agregar demoras
+                    foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
                     {
-                        return tr;
+                        dvo.bitacora_barrenacion_id = id;
+                        dvo.tipo_bitacora = 2;
+                        tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
+                        if (tr != TransactionResult.CREATED)
+                        {
+                            return tr;
+                        }
                     }
                 }
 
-                //Agregar lineas
-                foreach (LineaVo lin in bitacora_vo.lineas)
+                if (bitacora_vo.lineas != null)
                 {
-                    lin.bitacora_id = id;
-                    int idL = bitacora_repository.createLineaBitacora(LineaAdapter.voToObject(lin));
-                    if (idL > 0)
+                    //Agregar lineas
+                    foreach (LineaVo lin in bitacora_vo.lineas)
                     {
-                        foreach (BarrenoVo bvo in lin.barrenos)
+                        lin.bitacora_id = id;
+                        int idL = bitacora_repository.createLineaBitacora(LineaAdapter.voToObject(lin));
+                        if (idL > 0)
                         {
-                            bvo.bitacora_id = id;
-                            bvo.linea_id = idL;
-                            tr = bitacora_repository.createBarrenoLineaBitacora(BarrenoAdapter.voToObject(bvo));
-                            if (tr != TransactionResult.CREATED)
+                            foreach (BarrenoVo bvo in lin.barrenos)
                             {
-                                return tr;
+                                bvo.bitacora_id = id;
+                                bvo.linea_id = idL;
+                                tr = bitacora_repository.createBarrenoLineaBitacora(BarrenoAdapter.voToObject(bvo));
+                                if (tr != TransactionResult.CREATED)
+                                {
+                                    return tr;
+                                }
                             }
                         }
                     }
@@ -97,44 +108,54 @@ namespace Business.Implementation
 
         public TransactionResult update(BitacoraBarrenacionVo bitacora_vo, User user_log)
         {
+            if (bitacora_vo.comentarios == null)
+            {
+                bitacora_vo.comentarios = "";
+            }
             bitacora_vo.user_id = user_log.id;
             //Eliminamos los detalles existentes
             bitacora_repository.deleteDetalleDemoraBitacora(bitacora_vo.id);
             bitacora_repository.deleteBarrenosByIdBitacora(bitacora_vo.id);
             bitacora_repository.deleteLineaByIdBitacora(bitacora_vo.id);
 
-            //Creamos las demoras otra vez
-            if (bitacora_vo.demoras.Count > 0)
+            //Creamos las demoras y lineas
+            if (bitacora_vo.demoras != null || bitacora_vo.lineas != null)
             {
                 var tr = TransactionResult.CREATED;
 
-                //Agregar demoras
-                foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
+                if (bitacora_vo.demoras != null)
                 {
-                    dvo.bitacora_barrenacion_id = bitacora_vo.id;
-                    dvo.tipo_bitacora = 2;
-                    tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
-                    if (tr != TransactionResult.CREATED)
+                    //Agregar demoras
+                    foreach (DetalleDemoraBitacoraVo dvo in bitacora_vo.demoras)
                     {
-                        return tr;
+                        dvo.bitacora_barrenacion_id = bitacora_vo.id;
+                        dvo.tipo_bitacora = 2;
+                        tr = bitacora_repository.createDetalleDemoraBitacora(DetalleDemoraBitacoraAdapter.voToObject(dvo));
+                        if (tr != TransactionResult.CREATED)
+                        {
+                            return tr;
+                        }
                     }
                 }
 
-                //Agregar lineas
-                foreach (LineaVo lin in bitacora_vo.lineas)
+                if (bitacora_vo.lineas != null)
                 {
-                    lin.bitacora_id = bitacora_vo.id;
-                    int idL = bitacora_repository.createLineaBitacora(LineaAdapter.voToObject(lin));
-                    if (idL > 0)
+                    //Agregar lineas
+                    foreach (LineaVo lin in bitacora_vo.lineas)
                     {
-                        foreach (BarrenoVo bvo in lin.barrenos)
+                        lin.bitacora_id = bitacora_vo.id;
+                        int idL = bitacora_repository.createLineaBitacora(LineaAdapter.voToObject(lin));
+                        if (idL > 0)
                         {
-                            bvo.bitacora_id = bitacora_vo.id;
-                            bvo.linea_id = idL;
-                            tr = bitacora_repository.createBarrenoLineaBitacora(BarrenoAdapter.voToObject(bvo));
-                            if (tr != TransactionResult.CREATED)
+                            foreach (BarrenoVo bvo in lin.barrenos)
                             {
-                                return tr;
+                                bvo.bitacora_id = bitacora_vo.id;
+                                bvo.linea_id = idL;
+                                tr = bitacora_repository.createBarrenoLineaBitacora(BarrenoAdapter.voToObject(bvo));
+                                if (tr != TransactionResult.CREATED)
+                                {
+                                    return tr;
+                                }
                             }
                         }
                     }

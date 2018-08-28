@@ -10,10 +10,10 @@ namespace Data.Interface
 {
     public interface IOperadorRepository
     {
-        IList<Operador> getAll();
-        Operador detail(int id);
-        TransactionResult create(Operador operador);
-        TransactionResult update(Operador operador);
-        TransactionResult delete(int id);
+        IList<Operador> getAll(int sistema);
+        Operador detail(int id, int sistema);
+        TransactionResult create(Operador operador, int sistema);
+        TransactionResult update(Operador operador, int sistema);
+        TransactionResult delete(int id, int sistema);
     }
 }

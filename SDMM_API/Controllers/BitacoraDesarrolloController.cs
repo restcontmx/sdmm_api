@@ -102,6 +102,7 @@ namespace SDMM_API.Controllers
         public HttpResponseMessage create([FromBody] BitacoraDesarrolloVo bitacora_vo)
         {
             TransactionResult tr = bitacora_service.create(bitacora_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+            //TransactionResult tr = TransactionResult.CREATED;
             IDictionary<string, string> data = new Dictionary<string, string>();
             if (tr == TransactionResult.CREATED)
             {
