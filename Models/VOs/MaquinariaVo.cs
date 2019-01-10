@@ -15,5 +15,7 @@ namespace Models.VOs
         public string updated { get; set; }
 
         public IList<DetalleConsumoMaquinariaVo> detalles { get; set; }
+
+        public IList<DetalleConsumoMaquinariaVo> detalles_máximos { get; set; }
     }
 }

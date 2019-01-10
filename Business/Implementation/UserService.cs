@@ -35,6 +35,36 @@ namespace Business.Implementation
         }
 
         /// <summary>
+        /// Get all the objects from the repostitory
+        /// </summary>
+        /// <returns></returns>
+        public IList<AuthModel> getAllWithRol(int sistema)
+        {
+            IList<User> lstUsers = user_repository.getAll(sistema);
+            IList<AuthModel> lstUsersAux = new List<AuthModel>();
+
+            foreach(User u in lstUsers)
+            {
+                AuthModel am = authentication_repository.validateUser(user_repository.detail(u.id, sistema).username, sistema);
+                if(am != null) {
+                    am.user.password = "";
+                    lstUsersAux.Add(am);
+                }
+                else
+                {
+                    u.password = "";
+                    am = new AuthModel();
+                    am.user = u;
+
+                    am.rol = new Rol { name = "SIN ASIGNAR" };
+                    lstUsersAux.Add(am);
+                }
+            }
+
+            return lstUsersAux;
+        }
+
+        /// <summary>
         /// Get object by id
         /// </summary>
         /// <param name="id"> pirmary field of the model </param>
@@ -44,7 +74,20 @@ namespace Business.Implementation
             User temp_user = user_repository.detail(id, sistema);
             if (temp_user != null)
             {
-                return authentication_repository.validateUser(user_repository.detail(id, sistema).username, sistema);
+                AuthModel am = authentication_repository.validateUser(user_repository.detail(id, sistema).username, sistema);
+
+                if(am != null)
+                {
+                    return am;
+                }
+                else
+                {
+                    am = new AuthModel();
+                    am.user = temp_user;
+                    am.rol = new Rol { id = 0, name = "SIN ASIGNAR" };
+                    return am;
+                }
+                
             } return null;
         }
 

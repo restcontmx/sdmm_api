@@ -117,6 +117,7 @@
     <Compile Include="Adapters\DetalleDemoraBitacoraAdapter.cs" />
     <Compile Include="Adapters\DetalleDevByCajaAdapter.cs" />
     <Compile Include="Adapters\DetalleFichaEntregaAdapter.cs" />
+    <Compile Include="Adapters\DetalleMaximoCombustibleMaquinariaAdapter.cs" />
     <Compile Include="Adapters\DetalleSalidaCombustibleAdapter.cs" />
     <Compile Include="Adapters\DetalleValeAdapter.cs" />
     <Compile Include="Adapters\DevolucionAdapter.cs" />

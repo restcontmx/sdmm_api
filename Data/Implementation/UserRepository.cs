@@ -108,7 +108,7 @@ namespace Data.Implementation
                             command.Parameters.Add(new SqlParameter("pipa_id", int.Parse(user.email)));
                         }else
                         {
-                            command.Parameters.Add(new SqlParameter("pipa_id", 0));
+                            command.Parameters.Add(new SqlParameter("pipa_id", int.Parse("0")));
                         }
                     }
 

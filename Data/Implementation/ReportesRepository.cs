@@ -17,8 +17,11 @@ namespace Data.Implementation
     {
         public DevolucionRepository devRepo = new DevolucionRepository();
         public ValeRepository valeRepo = new ValeRepository();
+        public BitacoraDesarrolloRepository bitacora_desarrollo_repo = new BitacoraDesarrolloRepository();
+        public BitacoraBarrenacionRepository bitacora_barrenacion_repo = new BitacoraBarrenacionRepository();
 
-        public IList<RegistroDetalle> getListaSedena(ReportesVo reportes_vo) {
+        public IList<RegistroDetalle> getListaSedena(ReportesVo reportes_vo)
+        {
 
             DateTime rangeStart = DateTime.Parse(reportes_vo.rangeStart);
             DateTime rangeEnd = DateTime.Parse(reportes_vo.rangeEnd);
@@ -49,7 +52,7 @@ namespace Data.Implementation
                             {
                                 id = int.Parse(row[4].ToString()),
                             },
-                                producto = new Producto
+                            producto = new Producto
                             {
                                 id = int.Parse(row[6].ToString()),
                                 nombre = row[9].ToString(),
@@ -57,11 +60,11 @@ namespace Data.Implementation
                                 {
                                     id = int.Parse(row[10].ToString()),
                                 },
-                                    proveedor = new Proveedor
+                                proveedor = new Proveedor
                                 {
                                     razon_social = row[11].ToString(),
                                     permiso_sedena = row[12].ToString()
-                                    
+
                                 },
                             },
                             vale = new Vale
@@ -118,7 +121,7 @@ namespace Data.Implementation
 
                         int cuentaPropia = int.Parse(row[8].ToString());
 
-                        if(cuentaPropia != 0)
+                        if (cuentaPropia != 0)
                         {
                             cuentaAux.numero = row[12].ToString();
                             cuentaAux.num_categoria = row[13].ToString();
@@ -148,7 +151,7 @@ namespace Data.Implementation
                                     numero = row[4].ToString(),
                                     num_categoria = row[5].ToString()
                                 }*/
-                                cuenta =  cuentaAux
+                                cuenta = cuentaAux
                             },
                             compania = new Compania
                             {
@@ -159,7 +162,7 @@ namespace Data.Implementation
                         };
 
 
-                        if(valeAux.updated > rangeEndAux.AddDays(1.0))
+                        if (valeAux.updated > rangeEndAux.AddDays(1.0))
                         {
                             rangeEndAux = rangeEnd.AddDays(1.0).AddHours(6.25);
                             if (valeAux.updated < rangeEndAux)
@@ -256,7 +259,8 @@ namespace Data.Implementation
                             {
                                 if (productoActivo)
                                 {
-                                    reporte.registros.Add(new DetalleVale {
+                                    reporte.registros.Add(new DetalleVale
+                                    {
                                         producto = new Producto { id = idsp[idsp.Count - 1], codigo = codigoaux },
                                         cantidad = cantidad
                                     });
@@ -300,7 +304,8 @@ namespace Data.Implementation
                                         cantidad = 0;
                                         cantidad = cantidad + 1;
                                         productoActivo = true;
-                                    }else
+                                    }
+                                    else
                                     {
                                         if (codigos.Contains(row[4].ToString()))
                                         {
@@ -357,11 +362,11 @@ namespace Data.Implementation
                                                 cantidad = cantidad + int.Parse(row[1].ToString());
                                             }
 
-                                            
+
                                         }
                                     }
                                 }
-                                
+
                             }
 
                             codigoaux = row[4].ToString();
@@ -377,7 +382,7 @@ namespace Data.Implementation
                     }
 
                     return objects;
-                        
+
                 }
                 catch (SqlException ex)
                 {
@@ -500,9 +505,9 @@ namespace Data.Implementation
 
                         foreach (Devolucion d in devolucionesVale)
                         {
-                            if(d.registros.Count == 1)
+                            if (d.registros.Count == 1)
                             {
-                                if(d.registros[0].tipodev == 3)
+                                if (d.registros[0].tipodev == 3)
                                 {
                                     devCompleta = true;
                                     break;
@@ -762,27 +767,28 @@ namespace Data.Implementation
                             salidacombustible = new SalidaCombustible
                             {
                                 id = int.Parse(row[0].ToString()),
-                                timestamp = Convert.ToDateTime(row[1].ToString()),
+                                turno = int.Parse(row[1].ToString()),
+                                timestamp = Convert.ToDateTime(row[2].ToString()),
                                 maquinaria = new Maquinaria
                                 {
-                                    nombre = row[2].ToString()
+                                    nombre = row[3].ToString()
                                 }
                             },
                             cuenta = new Cuenta
                             {
-                                num_categoria = row[3].ToString(),
-                                numero = row[4].ToString(),
+                                num_categoria = row[4].ToString(),
+                                numero = row[5].ToString(),
                                 tipo_producto = new TipoProducto
                                 {
-                                    id = int.Parse(row[5].ToString())
+                                    id = int.Parse(row[6].ToString())
                                 }
                             },
                             detallesalida = new DetalleSalidaCombustible
                             {
-                                litros_surtidos = float.Parse(row[6].ToString()),
+                                litros_surtidos = float.Parse(row[7].ToString()),
                                 combustible = new Combustible
                                 {
-                                    codigo = row[7].ToString()
+                                    codigo = row[8].ToString()
                                 }
                             }
 
@@ -1053,20 +1059,20 @@ namespace Data.Implementation
             var sMinute = sqlDateArr3[1];
             var sSecond = sqlDateArr3[2];
 
-            var dateV = new DateTime(int.Parse(sYear), 
-                                     int.Parse(sMonth), 
-                                     int.Parse(sDay), 
-                                     int.Parse(sHour), 
-                                     int.Parse(sMinute), 
+            var dateV = new DateTime(int.Parse(sYear),
+                                     int.Parse(sMonth),
+                                     int.Parse(sDay),
+                                     int.Parse(sHour),
+                                     int.Parse(sMinute),
                                      int.Parse(sSecond));
 
 
 
             var dateIni = new DateTime(int.Parse(sYear),
                                         int.Parse(sMonth),
-                                        int.Parse(sDay), 
-                                        0, 
-                                        0, 
+                                        int.Parse(sDay),
+                                        0,
+                                        0,
                                         0);
 
             var dateFin = new DateTime(int.Parse(sYear),
@@ -1094,6 +1100,346 @@ namespace Data.Implementation
 
                 //alert("fecha normal: " +convertTime);
                 return convertTime;
+            }
+        }
+
+        /******************* REPORTES BITACORAS *********************/
+
+        //Jumbos
+        public IList<ReporteJumbo> getListaReporteJumbo(ReportesVo reportesVo)
+        {
+
+            DateTime rangeStart = DateTime.Parse(reportesVo.rangeStart);
+            DateTime rangeEnd = DateTime.Parse(reportesVo.rangeEnd);
+
+            SqlConnection connection = null;
+            IList<ReporteJumbo> objects = new List<ReporteJumbo>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    SqlCommand command = null;
+
+                    if (reportesVo.id == 0)
+                    {
+                        command = new SqlCommand("sp_getReporteJumboAll", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                        command.Parameters.Add(new SqlParameter("rangeEnd", rangeEnd));
+                    }
+                    else
+                    {
+                        command = new SqlCommand("sp_getReporteJumboById", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                        command.Parameters.Add(new SqlParameter("rangeEnd", rangeEnd));
+                        command.Parameters.Add(new SqlParameter("maqId", reportesVo.id));
+                    }
+
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new ReporteJumbo
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            dia = int.Parse(row[1].ToString()),
+                            fecha_bitacora = Convert.ToDateTime(row[2].ToString()),
+                            turno = int.Parse(row[3].ToString()),
+                            maquinaria = new Maquinaria
+                            {
+                                id = int.Parse(row[4].ToString()),
+                                nombre = row[5].ToString(),
+                            },
+                            compania = new Compania
+                            {
+                                id = int.Parse(row[6].ToString()),
+                                nombre_sistema = row[7].ToString()
+                            },
+                            subnivel = new SubNivel
+                            {
+                                id = int.Parse(row[8].ToString()),
+                                nombre = row[9].ToString(),
+                                nivel = new Nivel
+                                {
+                                    nombre = row[10].ToString(),
+                                    codigo = row[11].ToString()
+                                },
+                            },
+                            zona = row[12].ToString(),
+                            tipo_desarrollo = new TipoDesarrollo
+                            {
+                                id = int.Parse(row[13].ToString()),
+                                nombre = row[14].ToString()
+                            },
+                            numero_barrenos = int.Parse(row[15].ToString()),
+                            anclas = int.Parse(row[16].ToString()),
+                            mallas = int.Parse(row[17].ToString()),
+                            operador = new Operador
+                            {
+                                id = int.Parse(row[18].ToString()),
+                                nombre = row[19].ToString(),
+                                ap_paterno = row[20].ToString(),
+                                ap_materno = row[21].ToString()
+                            },
+                            comentarios = row[22].ToString(),
+                            user = new User
+                            {
+                                id = int.Parse(row[23].ToString()),
+                                first_name = row[24].ToString(),
+                                second_name = row[25].ToString()
+                            },
+                            ayudante = new Operador
+                            {
+                                id = int.Parse(row[27].ToString()),
+                                nombre = row[28].ToString(),
+                                ap_paterno = row[29].ToString(),
+                                ap_materno = row[30].ToString()
+                            },
+                            demoras = bitacora_desarrollo_repo.getDemorasByIdBitacora(int.Parse(row[0].ToString()))
+
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        //Anclador
+        public IList<ReporteJumbo> getListaReporteAnclador(ReportesVo reportesVo)
+        {
+
+            DateTime rangeStart = DateTime.Parse(reportesVo.rangeStart);
+            DateTime rangeEnd = DateTime.Parse(reportesVo.rangeEnd);
+
+            SqlConnection connection = null;
+            IList<ReporteJumbo> objects = new List<ReporteJumbo>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    SqlCommand command = null;
+
+                    if (reportesVo.id == 0)
+                    {
+                        command = new SqlCommand("sp_getReporteAncladorAll", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                        command.Parameters.Add(new SqlParameter("rangeEnd", rangeEnd));
+                    }
+                    else
+                    {
+                        command = new SqlCommand("sp_getReporteAncladorById", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                        command.Parameters.Add(new SqlParameter("rangeEnd", rangeEnd));
+                        command.Parameters.Add(new SqlParameter("maqId", reportesVo.id));
+                    }
+
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        objects.Add(new ReporteJumbo
+                        {
+                            id = int.Parse(row[0].ToString()),
+                            dia = int.Parse(row[1].ToString()),
+                            fecha_bitacora = Convert.ToDateTime(row[2].ToString()),
+                            turno = int.Parse(row[3].ToString()),
+                            maquinaria = new Maquinaria
+                            {
+                                id = int.Parse(row[4].ToString()),
+                                nombre = row[5].ToString(),
+                            },
+                            compania = new Compania
+                            {
+                                id = int.Parse(row[6].ToString()),
+                                nombre_sistema = row[7].ToString()
+                            },
+                            subnivel = new SubNivel
+                            {
+                                id = int.Parse(row[8].ToString()),
+                                nombre = row[9].ToString(),
+                                nivel = new Nivel
+                                {
+                                    nombre = row[10].ToString(),
+                                    codigo = row[11].ToString()
+                                },
+                            },
+                            zona = row[12].ToString(),
+                            tipo_desarrollo = new TipoDesarrollo
+                            {
+                                id = int.Parse(row[13].ToString()),
+                                nombre = row[14].ToString()
+                            },
+                            numero_barrenos = int.Parse(row[15].ToString()),
+                            anclas = int.Parse(row[16].ToString()),
+                            mallas = int.Parse(row[17].ToString()),
+                            operador = new Operador
+                            {
+                                id = int.Parse(row[18].ToString()),
+                                nombre = row[19].ToString(),
+                                ap_paterno = row[20].ToString(),
+                                ap_materno = row[21].ToString()
+                            },
+                            comentarios = row[22].ToString(),
+                            user = new User
+                            {
+                                id = int.Parse(row[23].ToString()),
+                                first_name = row[24].ToString(),
+                                second_name = row[25].ToString()
+                            },
+                            ayudante = new Operador
+                            {
+                                id = int.Parse(row[27].ToString()),
+                                nombre = row[28].ToString(),
+                                ap_paterno = row[29].ToString(),
+                                ap_materno = row[30].ToString()
+                            },
+                            demoras = bitacora_desarrollo_repo.getDemorasByIdBitacora(int.Parse(row[0].ToString()))
+
+                        });
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+            }
+        }
+
+        //Solos
+        public IList<ReporteJumboSolo> getListaReporteJumboSolos(ReportesVo reportesVo)
+        {
+
+            DateTime rangeStart = DateTime.Parse(reportesVo.rangeStart);
+            DateTime rangeEnd = DateTime.Parse(reportesVo.rangeEnd);
+
+            SqlConnection connection = null;
+            IList<ReporteJumboSolo> objects = new List<ReporteJumboSolo>();
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+
+                    SqlCommand command = null;
+
+                    if (reportesVo.id == 0)
+                    {
+                        command = new SqlCommand("sp_getReporteJumboSoloAll", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                        command.Parameters.Add(new SqlParameter("rangeEnd", rangeEnd));
+                    }
+                    else
+                    {
+                        command = new SqlCommand("sp_getReporteJumboSoloById", connection);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add(new SqlParameter("rangeStart", rangeStart));
+                        command.Parameters.Add(new SqlParameter("rangeEnd", rangeEnd));
+                        command.Parameters.Add(new SqlParameter("maqId", reportesVo.id));
+                    }
+
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    foreach (DataRow row in data_set.Tables[0].Rows)
+                    {
+                        ReporteJumboSolo reporte = new ReporteJumboSolo
+                            {
+                                id = int.Parse(row[0].ToString()),
+                                maquinaria = new Maquinaria
+                                {
+                                    id = int.Parse(row[1].ToString()),
+                                    nombre = row[2].ToString(),
+                                },
+                                operador = new Operador
+                                {
+                                    id = int.Parse(row[3].ToString()),
+                                    nombre = row[4].ToString(),
+                                    ap_paterno = row[5].ToString(),
+                                    ap_materno = row[6].ToString()
+                                },
+                                turno = int.Parse(row[7].ToString()),
+                                fecha_bitacora = Convert.ToDateTime(row[8].ToString()),
+                                dia = int.Parse(row[9].ToString()),
+                                comentarios = row[10].ToString(),
+                                ayudante = new Operador
+                                {
+                                    id = int.Parse(row[12].ToString()),
+                                    nombre = row[13].ToString(),
+                                    ap_paterno = row[14].ToString(),
+                                    ap_materno = row[15].ToString()
+                                },
+                                demoras = bitacora_barrenacion_repo.getDemorasByIdBitacora(int.Parse(row[0].ToString())),
+                                lineas = bitacora_barrenacion_repo.getLineasByIdBitacora(int.Parse(row[0].ToString()))
+
+                            };
+
+                        foreach(Linea l in reporte.lineas)
+                        {
+                            l.barrenos = bitacora_barrenacion_repo.getBarrenosByIdLinea(l.id);
+                        }
+
+                        objects.Add(reporte);
+                    }
+                    return objects;
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+                catch (Exception ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
             }
         }
     }

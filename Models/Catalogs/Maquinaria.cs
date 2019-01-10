@@ -15,5 +15,7 @@ namespace Models.Catalogs
         public DateTime updated { get; set; }
 
         public IList<DetalleConsumoMaquinaria> detalles { get; set; }
+
+        public IList<DetalleMaximoCombustibleMaquinaria> detalles_maximos { get; set; }
     }
 }

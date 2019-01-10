@@ -228,20 +228,28 @@ namespace Data.Implementation
                 {
                     IList<Producto> productos = getAll();
 
-                    foreach(Producto p in productos)
+                    foreach (Producto p in productos)
                     {
                         Producto pAux = detailInventario(p.id);
 
-                        if(pAux.id == 175)
+                        if (pAux != null)
                         {
-                            Console.WriteLine("Holi");
+                            if (pAux.cantidad_caja_promedio > 0)
+                            {
+
+                                objects.Add(pAux);
+                            }
                         }
-                        if(pAux.cantidad_caja_promedio > 0)
+                        else
                         {
-                            objects.Add(pAux);
+                            objects = new List<Producto>();
+                            objects = productos;
+                            objects.Add(new Producto { id = 0, nombre = "Error"});
+                            break;
                         }
                     }
                     return objects;
+
 
                 }
                 catch (SqlException ex)
@@ -266,6 +274,7 @@ namespace Data.Implementation
                     SqlCommand command = new SqlCommand("sp_getExistenciasProducto", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("producto_id", id));
+                    command.CommandTimeout = 0;
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
                     data_adapter.Fill(data_set);

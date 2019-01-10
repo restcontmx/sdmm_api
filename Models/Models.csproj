@@ -112,11 +112,14 @@
     <Compile Include="Catalogs\DetalleConsumoMaquinaria.cs" />
     <Compile Include="Catalogs\DetalleDemoraBitacora.cs" />
     <Compile Include="Catalogs\DetalleFichaEntregaRecepcion.cs" />
+    <Compile Include="Catalogs\DetalleMaximoCombustibleMaquinaria.cs" />
     <Compile Include="Catalogs\DetalleSalidaCombustible.cs" />
     <Compile Include="Catalogs\FichaEntregaRecepcion.cs" />
     <Compile Include="Catalogs\Linea.cs" />
     <Compile Include="Catalogs\Log.cs" />
     <Compile Include="Catalogs\ReporteDetalleSalidaC.cs" />
+    <Compile Include="Catalogs\ReporteJumbo.cs" />
+    <Compile Include="Catalogs\ReporteJumboSolo.cs" />
     <Compile Include="Catalogs\SalidaCombustible.cs" />
     <Compile Include="Catalogs\Tanque.cs" />
     <Compile Include="Catalogs\TipoDesarrollo.cs" />
@@ -164,6 +167,7 @@
     <Compile Include="VOs\DetalleConsumoMaquinariaVo.cs" />
     <Compile Include="VOs\DetalleDemoraBitacoraVo.cs" />
     <Compile Include="VOs\DetalleFichaEntregaRecepcionVo.cs" />
+    <Compile Include="VOs\DetalleMaximoCombustibleMaquinariaVo.cs" />
     <Compile Include="VOs\DetalleSalidaCombustibleVo.cs" />
     <Compile Include="VOs\FichaEntregaRecepcionVo.cs" />
     <Compile Include="VOs\InfoInventarioVo.cs" />

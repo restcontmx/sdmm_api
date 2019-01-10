@@ -95,5 +95,64 @@ namespace SDMM_API.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest, data);
             }
         }
+
+        /************** REPORTES BITACORAS *******************/
+
+        //Jumbos
+        [Route("api/reporte/jumbo")]
+        [HttpPost]
+        public HttpResponseMessage reporteJumbo([FromBody] ReportesVo list)
+        {
+            try
+            {
+                IDictionary<string, IList<ReporteJumbo>> data = new Dictionary<string, IList<ReporteJumbo>>();
+                data.Add("data", reportes_service.getListaReporteJumbo(list));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        //Ancladores
+        [Route("api/reporte/anclador")]
+        [HttpPost]
+        public HttpResponseMessage reporteAnclador([FromBody] ReportesVo list)
+        {
+            try
+            {
+                IDictionary<string, IList<ReporteJumbo>> data = new Dictionary<string, IList<ReporteJumbo>>();
+                data.Add("data", reportes_service.getListaReporteAnclador(list));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
+
+        //Solos
+        [Route("api/reporte/solo")]
+        [HttpPost]
+        public HttpResponseMessage reporteSolo([FromBody] ReportesVo list)
+        {
+            try
+            {
+                IDictionary<string, IList<ReporteJumboSolo>> data = new Dictionary<string, IList<ReporteJumboSolo>>();
+                data.Add("data", reportes_service.getListaReporteJumboSolos(list));
+                return Request.CreateResponse(HttpStatusCode.OK, data);
+            }
+            catch (Exception e)
+            {
+                IDictionary<string, string> data = new Dictionary<string, string>();
+                data.Add("message", String.Format("There was an error attending the request; {0}.", e.ToString()));
+                return Request.CreateResponse(HttpStatusCode.BadRequest, data);
+            }
+        }
     }
 }

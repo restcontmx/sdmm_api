@@ -17,5 +17,10 @@ namespace Data.Interface
 
         IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReporte(SalidaCombustibleReporteVo reportesalida_vo);
         IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReportePDF(SalidaCombustibleReportePDFVo reportesalidaPDF_vo);
+
+        //***** REPORTES BITACORAS *****///
+        IList<ReporteJumbo> getListaReporteJumbo(ReportesVo reportesVo);
+        IList<ReporteJumbo> getListaReporteAnclador(ReportesVo reportesVo);
+        IList<ReporteJumboSolo> getListaReporteJumboSolos(ReportesVo reportesVo);
     }
 }

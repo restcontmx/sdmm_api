@@ -1,6 +1,7 @@
 ﻿using Models.Auth;
 using Models.Catalogs;
 using Models.VOs;
+using System;
 
 namespace Business.Adapters
 {

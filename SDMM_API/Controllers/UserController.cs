@@ -36,8 +36,9 @@ namespace SDMM_API.Controllers
             try
             {
                 //Envia el parámetro 1 por default para indicar que es el sistema de combustibles
-                IDictionary<string, IList<User>> data = new Dictionary<string, IList<User>>();
-                data.Add("data", user_service.getAll(1));
+                //IDictionary<string, IList<User>> data = new Dictionary<string, IList<User>>();
+                IDictionary<string, IList<AuthModel>> data = new Dictionary<string, IList<AuthModel>>();
+                data.Add("data", user_service.getAllWithRol(1));
                 return Request.CreateResponse(HttpStatusCode.OK, data);
             }
             catch( Exception e ){

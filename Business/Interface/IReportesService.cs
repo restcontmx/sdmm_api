@@ -15,5 +15,10 @@ namespace Business.Interface
 
         IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReporte(SalidaCombustibleReporteVo salidaComReporteVo);
         IList<ReporteDetalleSalidaC> getlistSalidaCombustibleReportePDF(SalidaCombustibleReportePDFVo reportesalidaPDFVo);
+
+        //*** REPORTES BOTACORAS **///
+        IList<ReporteJumbo> getListaReporteJumbo(ReportesVo reportesVo);
+        IList<ReporteJumbo> getListaReporteAnclador(ReportesVo reportesVo);
+        IList<ReporteJumboSolo> getListaReporteJumboSolos(ReportesVo reportesVo);
     }
 }

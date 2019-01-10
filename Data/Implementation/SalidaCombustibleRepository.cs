@@ -37,6 +37,7 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("operador_id", salida.operador.id));
                     command.Parameters.Add(new SqlParameter("subnivel_id", salida.subnivel.id));
                     command.Parameters.Add(new SqlParameter("usuario_id", salida.despachador.id));
+                    command.Parameters.Add(new SqlParameter("fecha", salida.timestamp));
 
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
                     DataSet data_set = new DataSet();
@@ -246,6 +247,7 @@ namespace Data.Implementation
 
         public IList<SalidaCombustible> getAll()
 {
+            int id = 0;
             SqlConnection connection = null;
             IList<SalidaCombustible> objects = new List<SalidaCombustible>();
             using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
@@ -260,11 +262,11 @@ namespace Data.Implementation
                     data_adapter.Fill(data_set);
                     foreach (DataRow row in data_set.Tables[0].Rows)
                     {
+                        id = int.Parse(row[0].ToString());
                         objects.Add(new SalidaCombustible
                         {
                             id = int.Parse(row[0].ToString()),
                             odometro = int.Parse(row[1].ToString()),
-                            foto = row[2].ToString(),
                             turno = int.Parse(row[3].ToString()),
                             timestamp = Convert.ToDateTime(row[4].ToString()),
                             updated = Convert.ToDateTime(row[5].ToString()),
@@ -308,6 +310,16 @@ namespace Data.Implementation
                 }
                 catch (SqlException ex)
                 {
+                    Console.WriteLine(ex.Message + id.ToString());
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return objects;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message + id.ToString());
                     if (connection != null)
                     {
                         connection.Close();
@@ -410,6 +422,66 @@ namespace Data.Implementation
                         connection.Close();
                     }
                     return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        public bool checkExists(SalidaCombustible salida)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Combustibles_DB"].ConnectionString))
+            {
+                try
+                {
+                    int auxInsert = 0;
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_checkExistsSalida", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("odometro", salida.odometro));
+                    command.Parameters.Add(new SqlParameter("turno", salida.turno));
+                    command.Parameters.Add(new SqlParameter("maquinaria_id", salida.maquinaria.id));
+                    command.Parameters.Add(new SqlParameter("compania_id", salida.compania.id));
+                    command.Parameters.Add(new SqlParameter("operador_id", salida.operador.id));
+                    command.Parameters.Add(new SqlParameter("subnivel_id", salida.subnivel.id));
+                    command.Parameters.Add(new SqlParameter("fecha", salida.timestamp));
+
+                    SqlDataAdapter data_adapter = new SqlDataAdapter(command);
+                    DataSet data_set = new DataSet();
+                    data_adapter.Fill(data_set);
+                    DataRow row = data_set.Tables[0].Rows[0];
+
+                    auxInsert = int.Parse(row[0].ToString());
+
+                    if (auxInsert == 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return false;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return false;
                 }
             }
         }

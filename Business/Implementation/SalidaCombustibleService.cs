@@ -6,6 +6,7 @@ using Models.VOs;
 using Warrior.Handlers.Enums;
 using Data.Interface;
 using Business.Adapters;
+using System;
 
 namespace Business.Implementation
 {
@@ -21,7 +22,20 @@ namespace Business.Implementation
         //Create Maquinaria
         public TransactionResult create(SalidaCombustibleVo salida_vo)
         {
-            SalidaCombustible salida = SalidaCombustibleAdapter.voToObject(salida_vo);
+            if (checkExists(salida_vo))
+            {
+                return TransactionResult.CREATED;
+            }
+
+            SalidaCombustible salida = new SalidaCombustible();
+
+            if (salida_vo.timestamp != null || salida_vo.timestamp != "")
+            {
+                salida = SalidaCombustibleAdapter.voToObject(salida_vo);
+            }else
+            {
+                salida_vo.timestamp = DateTime.Now.ToString();
+            }
             //return maquinaria_repository.create(maquina);
 
             int id = salidas_repository.create(salida);
@@ -68,6 +82,16 @@ namespace Business.Implementation
         //Actualizar Maquinaria
         public TransactionResult update(SalidaCombustibleVo salida_vo)
         {
+            SalidaCombustible salida = new SalidaCombustible();
+
+            if (salida_vo.timestamp != null || salida_vo.timestamp != "")
+            {
+                salida = SalidaCombustibleAdapter.voToObject(salida_vo);
+            }
+            else
+            {
+                salida_vo.timestamp = DateTime.Now.ToString();
+            }
             salidas_repository.deleteDetallesByIdSalida(salida_vo.id);
 
             foreach (DetalleSalidaCombustibleVo dvo in salida_vo.detalles)
@@ -82,7 +106,13 @@ namespace Business.Implementation
                 }
             }
 
-            return salidas_repository.update(SalidaCombustibleAdapter.voToObject(salida_vo));
+            return salidas_repository.update(salida);
+        }
+
+        //Verificar si ya fue registrada una salida
+        public bool checkExists(SalidaCombustibleVo salida_vo)
+        {
+            return salidas_repository.checkExists(SalidaCombustibleAdapter.voToObject(salida_vo));
         }
     }
 }

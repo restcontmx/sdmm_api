@@ -40,5 +40,23 @@ namespace Business.Implementation
             //return reportes_repository.getListVale(reportes_vo);
             return reportes_repository.getlistSalidaCombustibleReportePDF(reportesalidaPDFVo);
         }
+
+
+        //********** REPORTES BITACORAS ************//
+        public IList<ReporteJumbo> getListaReporteJumbo(ReportesVo reportesVo)
+        {
+            return reportes_repository.getListaReporteJumbo(reportesVo);
+        }
+
+        public IList<ReporteJumbo> getListaReporteAnclador(ReportesVo reportesVo)
+        {
+            return reportes_repository.getListaReporteAnclador(reportesVo);
+        }
+
+        public IList<ReporteJumboSolo> getListaReporteJumboSolos(ReportesVo reportesVo)
+        {
+            return reportes_repository.getListaReporteJumboSolos(reportesVo);
+        }
+
     }
 }

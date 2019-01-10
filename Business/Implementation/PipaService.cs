@@ -76,12 +76,23 @@ namespace Business.Implementation
 
         public TransactionResult update(PipaVo pipa_vo)
         {
+            IList<Tanque> tanquesLast = pipa_repository.getAllTanquesByIdPipa(pipa_vo.id);
 
             pipa_repository.deleteTanquesByIdPipa(pipa_vo.id);
 
             foreach (TanqueVo dvo in pipa_vo.tanques)
             {
                 dvo.pipa_id = pipa_vo.id;
+
+                foreach(Tanque t in tanquesLast)
+                {
+                    if(dvo.combustible_id == t.combustible.id)
+                    {
+                        dvo.litros = t.litros;
+                        break;
+                    }
+                }
+
                 var tr2 = TransactionResult.CREATED;
 
                 tr2 = pipa_repository.createTanque(TanqueAdapter.voToObject(dvo));

@@ -17,7 +17,7 @@ namespace SDMM_API.Modules
         {
             try
             {
-                IList<Producto> productos = getAllProductos();
+               IList<Producto> productos = getAllProductos();
 
                 //Crea el objeto log para el inventario
                 Log logObject = new Log();

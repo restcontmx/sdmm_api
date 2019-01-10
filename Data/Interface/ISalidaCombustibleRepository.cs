@@ -15,5 +15,7 @@ namespace Data.Interface
         TransactionResult createDetalle(DetalleSalidaCombustible detalle);
         TransactionResult deleteDetallesByIdSalida(int id);
         IList<DetalleSalidaCombustible> getAllDetallesBySalidaId(int id);
+
+        bool checkExists(SalidaCombustible salida);
     }
 }

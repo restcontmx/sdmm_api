@@ -9,5 +9,6 @@ namespace Models.VOs
     {
         public string rangeStart { get; set; }
         public string rangeEnd { get; set; }
+        public int id { get; set; }
     }
 }

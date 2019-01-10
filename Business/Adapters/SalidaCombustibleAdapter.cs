@@ -29,7 +29,8 @@ namespace Business.Adapters
                 compania = new Compania { id = vo.compania_id },
                 operador = new Operador { id = vo.operador_id },
                 subnivel = new SubNivel { id = vo.subnivel_id },
-                despachador = new Models.Auth.User { id = vo.despachador_id }
+                despachador = new Models.Auth.User { id = vo.despachador_id },
+                timestamp = Convert.ToDateTime(vo.timestamp)
             };
         }
     }

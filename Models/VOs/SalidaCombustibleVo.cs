@@ -16,6 +16,7 @@ namespace Models.VOs
         public int operador_id { get; set; }
         public int subnivel_id { get; set; }
         public int despachador_id { get; set; }
+        public string timestamp { get; set; }
 
         public IList<DetalleSalidaCombustibleVo> detalles { get; set; }
     }

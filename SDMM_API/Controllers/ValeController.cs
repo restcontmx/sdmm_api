@@ -681,6 +681,7 @@ namespace SDMM_API.Controllers
             if (vale.autorizo == 1)
             {
                 tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
+                //tr = vale_service.updateAutorizacion(vale, new Models.Auth.User { id = vale.user_id_autorizo });
             }
             else if (vale.autorizo == 2)
             {
@@ -762,8 +763,7 @@ namespace SDMM_API.Controllers
         [HttpPost]
         public HttpResponseMessage cerrarVale([FromBody] ValeVo vale_vo)
         {
-            IDictionary<string, string> data = new Dictionary<string, string>();          
-
+            IDictionary<string, string> data = new Dictionary<string, string>();
             TransactionResult tr = vale_service.cerrarVale(vale_vo, new Models.Auth.User { id = int.Parse(RequestContext.Principal.Identity.Name) });
 
             if (tr == TransactionResult.CREATED)

@@ -17,6 +17,12 @@ namespace Business.Interface
         IList<User> getAll(int sistema);
 
         /// <summary>
+        /// Get all objects from repository
+        /// </summary>
+        /// <returns></returns>
+        IList<AuthModel> getAllWithRol(int sistema);
+
+        /// <summary>
         /// Get object by id
         /// </summary>
         /// <param name="id"> primary field on the db</param>

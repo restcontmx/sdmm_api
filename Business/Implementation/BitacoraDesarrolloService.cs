@@ -24,6 +24,15 @@ namespace Business.Implementation
             {
                 bitacora_vo.comentarios = "";
             }
+            if (bitacora_vo.vale_acero == null)
+            {
+                bitacora_vo.vale_acero = "";
+            }
+            if (bitacora_vo.vale_explosivos == null)
+            {
+                bitacora_vo.vale_explosivos = "";
+            }
+
             BitacoraDesarrollo obj = BitacoraDesarrolloAdapter.voToObject(bitacora_vo);
             obj.user = user_log;
 

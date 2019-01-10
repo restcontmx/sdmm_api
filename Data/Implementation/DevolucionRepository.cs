@@ -275,6 +275,11 @@ namespace Data.Implementation
                     }
                     return null;
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return null;
+                }
             }
         }
 

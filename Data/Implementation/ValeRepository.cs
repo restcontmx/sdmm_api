@@ -44,12 +44,17 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("subnivel_id", vale.subnivel.id));
                     command.Parameters.Add(new SqlParameter("fuente", vale.fuente));
                     command.Parameters.Add(new SqlParameter("folio_fisico", vale.folio_fisico));
-                    command.Parameters.Add(new SqlParameter("observaciones", vale.observaciones));
+                    
 
                     if (vale.userAutorizo.id != 0)
                     {
                         command.Parameters.Add(new SqlParameter("userAutorizo", vale.userAutorizo.id));
                         command.Parameters.Add(new SqlParameter("active", vale.active));
+                        command.Parameters.Add(new SqlParameter("observaciones", "Vale creado desde Hand Held"));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("observaciones", vale.observaciones));
                     }
 
                     SqlDataAdapter data_adapter = new SqlDataAdapter(command);
@@ -70,7 +75,7 @@ namespace Data.Implementation
                     }
                     return 0;
                 }
-                catch
+                catch(Exception ex)
                 {
                     if (connection != null)
                     {
@@ -1036,7 +1041,7 @@ namespace Data.Implementation
                 try
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("sp_updateValeAutorización", connection);
+                    SqlCommand command = new SqlCommand("sp_updateValeAutorizacion", connection);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new SqlParameter("id ", vale.id));
                     command.Parameters.Add(new SqlParameter("user_id", vale.userAutorizo.id));
@@ -1055,8 +1060,9 @@ namespace Data.Implementation
                     }
                     return TransactionResult.NOT_PERMITTED;
                 }
-                catch
+                catch(Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     if (connection != null)
                     {
                         connection.Close();
@@ -1196,6 +1202,47 @@ namespace Data.Implementation
 
         public TransactionResult cerrarVale(Vale vale)
         {
+            //Sección para determinar si el vale que se cierra pertenece al día de hoy
+            bool ajustarInventario = false;
+            int diasDeAjuste = 0;
+
+            DateTime dateRoot = DateTime.Now;
+
+            DateTime dateFrom = new DateTime();
+            DateTime dateTo = new DateTime();
+
+            if (dateRoot > dateFrom)
+            {
+                dateFrom = new DateTime(dateRoot.Year, dateRoot.Month, dateRoot.Day, 6, 31, 0);
+                DateTime dateAux = new DateTime(dateRoot.Year, dateRoot.Month, dateRoot.Day);
+                dateTo = dateAux.AddDays(1).AddMinutes(-1);
+            }
+
+            DateTime fechaVale = vale.timestamp;
+
+            if (fechaVale > dateFrom && fechaVale < dateTo)
+            {
+                ajustarInventario = false;
+            }
+            else
+            {
+                ajustarInventario = true;
+                bool checkFecha = true;
+
+                while (checkFecha)
+                {
+                    DateTime dateCheck = new DateTime(fechaVale.Year, fechaVale.Month, fechaVale.Day + (diasDeAjuste + 1), fechaVale.Hour, fechaVale.Minute, fechaVale.Second);
+                    if (dateCheck > dateFrom && dateCheck < dateTo)
+                    {
+                        checkFecha = false;
+                    }else
+                    {
+                        diasDeAjuste = diasDeAjuste + 1;
+                    }
+                }
+            }
+            //Fin de sección
+
             try
             {
                 vale.detalles = getAllDetalles(vale.id);
@@ -1257,6 +1304,19 @@ namespace Data.Implementation
                 }
 
                 vale.active = 0;
+
+                if (ajustarInventario)
+                {
+                    while(diasDeAjuste >= 0)
+                    {
+                        foreach (DetalleVale dv in vale.detalles)
+                        {
+                            ajustarCantidadInventario(dv, diasDeAjuste);
+                        }
+                        diasDeAjuste = diasDeAjuste - 1;
+                    }
+                }
+
                 return cerrarValeStatus(vale);
             }
             catch(Exception ex)
@@ -1265,6 +1325,7 @@ namespace Data.Implementation
             }
         }
 
+        //Cambia el estatus del vale y lo desactiva en el sistema
         public TransactionResult cerrarValeStatus(Vale vale)
         {
             SqlConnection connection = null;
@@ -1278,6 +1339,46 @@ namespace Data.Implementation
                     command.Parameters.Add(new SqlParameter("id ", vale.id));
                     command.Parameters.Add(new SqlParameter("active", vale.active));
                     command.Parameters.Add(new SqlParameter("usuario_id", vale.user.id));
+                    command.ExecuteNonQuery();
+                    return TransactionResult.CREATED;
+                }
+                catch (SqlException ex)
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    if (ex.Number == 2627)
+                    {
+                        return TransactionResult.EXISTS;
+                    }
+                    return TransactionResult.NOT_PERMITTED;
+                }
+                catch
+                {
+                    if (connection != null)
+                    {
+                        connection.Close();
+                    }
+                    return TransactionResult.ERROR;
+                }
+            }
+        }
+
+        //Ajustar inventario por un vale cerrado que no corresponde al día actual
+        public TransactionResult ajustarCantidadInventario(DetalleVale detalle_vale, int dias)
+        {
+            SqlConnection connection = null;
+            using (connection = new SqlConnection(ConfigurationManager.ConnectionStrings["Coz_Operaciones_DB"].ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand("sp_ajustarInventario", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("producto_id ", detalle_vale.producto.id));
+                    command.Parameters.Add(new SqlParameter("dias_atras", dias));
+                    command.Parameters.Add(new SqlParameter("cantidad", detalle_vale.cantidad));
                     command.ExecuteNonQuery();
                     return TransactionResult.CREATED;
                 }

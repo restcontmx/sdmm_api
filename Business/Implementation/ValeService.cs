@@ -347,7 +347,7 @@ namespace Business.Implementation
 
         public TransactionResult updateAutorizacion(ValeVo vale_vo, User user_log)
         {
-            Vale vale = ValeAdapter.voToObject(vale_vo);
+            Vale vale = new Vale { id = vale_vo.id };
             vale.userAutorizo = user_log;
 
             return vale_repository.updateAutorizacion(vale);
@@ -361,7 +361,9 @@ namespace Business.Implementation
         public TransactionResult cerrarVale(ValeVo vale_vo, User user_log)
         {
             vale_vo.user_id = user_log.id;
-            return vale_repository.cerrarVale(ValeAdapter.voToObject(vale_vo));
+            Vale vale = ValeAdapter.voToObject(vale_vo);
+            vale.timestamp = detail(vale_vo.id).timestamp;
+            return vale_repository.cerrarVale(vale);
         }
     }
 }
